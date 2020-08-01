@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * ViewModel for ProductsFragment.
+ */
 @Singleton
 class ProductsViewModel @Inject constructor(private val productRepository: ProductRepository) :
     ViewModel() {

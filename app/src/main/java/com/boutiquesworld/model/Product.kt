@@ -4,6 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Product model. Also acts as an entity for storing product details.
+ */
 @Entity
 data class Product(
     @SerializedName("product_id") @PrimaryKey val productId: String = "-1",

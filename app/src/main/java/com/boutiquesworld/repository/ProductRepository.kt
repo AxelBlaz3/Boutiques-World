@@ -9,12 +9,19 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repository class for maintaining the products data.
+ */
 @Singleton
 class ProductRepository @Inject constructor(private val boutiqueService: BoutiqueService) {
     private val products: MutableLiveData<ArrayList<Product>> = MutableLiveData()
 
     fun getProductsLiveData(): MutableLiveData<ArrayList<Product>> = products
 
+    /**
+     * Helper method for getting the products.
+     * @param businessId: Unique businessId for getting products
+     */
     suspend fun getProductsForBusiness(businessId: Int) = withContext(Dispatchers.IO) {
         try {
             val response = boutiqueService.getProducts(businessId).execute()

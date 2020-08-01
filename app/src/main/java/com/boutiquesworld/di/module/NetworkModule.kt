@@ -10,10 +10,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * Hilt module for providing the instances of objects related to network
+ */
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
 
+    /**
+     * Provides a single instance of Retrofit object throughout app's lifecycle.
+     * @return Retrofit
+     */
     @Singleton
     @Provides
     fun provideRetrofitInstance(): Retrofit {
@@ -23,6 +30,11 @@ object NetworkModule {
             .build()
     }
 
+    /**
+     * Provides a single instance of BoutiqueService throughout the app's lifecycle.
+     * @param retrofit: Retrofit instance obtained from [provideRetrofitInstance]
+     * @return BoutiqueService
+     */
     @Singleton
     @Provides
     fun provideBoutiqueService(retrofit: Retrofit): BoutiqueService {

@@ -6,6 +6,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
+/**
+ * Interface for managing the REST API.
+ */
 private const val API_ROUTE_STAGING = "staging/API/"
 private const val API_ROUTE_MAIN = "API/"
 

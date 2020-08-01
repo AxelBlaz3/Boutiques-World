@@ -4,6 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Retailer model. Also acts as an entity. Used for maintaining the
+ * information of the currently logged in retailer.
+ */
 @Entity
 data class Retailer(
     @SerializedName("shop_id") @PrimaryKey val shopId: Int,
