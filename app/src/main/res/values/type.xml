@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Typography -->
+    <style name="TextAppearance.BoutiquesWorld.HeadLine1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.HeadLine2" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.HeadLine3" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.HeadLine4" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.HeadLine5" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.HeadLine6" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Subtitle1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Subtitle2" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Body1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Body2" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Button" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Caption" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearance.BoutiquesWorld.Overline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+</resources>

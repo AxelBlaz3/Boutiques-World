@@ -23,6 +23,8 @@ object NetworkModule {
             .build()
     }
 
+    @Singleton
+    @Provides
     fun provideBoutiqueService(retrofit: Retrofit): BoutiqueService {
         return retrofit.create(BoutiqueService::class.java)
     }

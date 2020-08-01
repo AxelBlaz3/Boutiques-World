@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.boutiquesworld.databinding.FragmentProductsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProductsFragment : Fragment() {
     private lateinit var binding: FragmentProductsBinding
+
+    @Inject
+    lateinit var productsViewModel: ProductsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,

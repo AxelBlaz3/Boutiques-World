@@ -3,7 +3,7 @@ package com.boutiquesworld.model
 import com.google.gson.annotations.SerializedName
 
 data class Product(
-    @SerializedName("product_id") val productId: Int = 0,
+    @SerializedName("product_id") val productId: String = "-1",
     @SerializedName("product_name") val productName: String,
     @SerializedName("product_type") val productType: String,
     @SerializedName("product_description") val productDescription: String,
@@ -14,7 +14,7 @@ data class Product(
     @SerializedName("product_image1") val productImage1: String,
     @SerializedName("product_image2") val productImage2: String,
     @SerializedName("product_image3") val productImage3: String,
-    @SerializedName("business_id") val businessId: Int,
+    @SerializedName("business_id") val businessId: String,
     @SerializedName("uuid") val uuid: String,
     @SerializedName("business_name") val businessName: String,
     @SerializedName("zone") val zone: String,
