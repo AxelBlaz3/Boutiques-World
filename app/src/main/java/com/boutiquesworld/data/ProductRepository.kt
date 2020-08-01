@@ -16,12 +16,15 @@ class ProductRepository @Inject constructor(private val boutiqueService: Boutiqu
     fun getProductsLiveData(): MutableLiveData<ArrayList<Product>> = products
 
     suspend fun getProductsForBusiness(businessId: Int) = withContext(Dispatchers.IO) {
-        val response = boutiqueService.getProducts(businessId).execute()
-        if (!response.isSuccessful) {
-            Log.d(this@ProductRepository.javaClass.simpleName, response.errorBody()?.string()!!)
-            return@withContext
+        try {
+            val response = boutiqueService.getProducts(businessId).execute()
+            if (!response.isSuccessful) {
+                Log.d(this@ProductRepository.javaClass.simpleName, response.errorBody()?.string()!!)
+                return@withContext
+            }
+            products.postValue(response.body())
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        products.postValue(response.body())
     }
 }
