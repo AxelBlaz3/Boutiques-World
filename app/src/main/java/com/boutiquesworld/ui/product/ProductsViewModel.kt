@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.boutiquesworld.data.ProductRepository
 import com.boutiquesworld.model.Product
+import com.boutiquesworld.repository.ProductRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package com.boutiquesworld.data
+package com.boutiquesworld.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
