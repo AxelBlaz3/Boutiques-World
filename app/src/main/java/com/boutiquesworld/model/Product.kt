@@ -1,9 +1,12 @@
 package com.boutiquesworld.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity
 data class Product(
-    @SerializedName("product_id") val productId: String = "-1",
+    @SerializedName("product_id") @PrimaryKey val productId: String = "-1",
     @SerializedName("product_name") val productName: String,
     @SerializedName("product_type") val productType: String,
     @SerializedName("product_description") val productDescription: String,

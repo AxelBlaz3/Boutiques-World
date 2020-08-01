@@ -1,9 +1,12 @@
 package com.boutiquesworld.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity
 data class Retailer(
-    @SerializedName("shop_id") val shopId: Int,
+    @SerializedName("shop_id") @PrimaryKey val shopId: Int,
     @SerializedName("username") val username: String,
     @SerializedName("mobile") val mobile: String,
     @SerializedName("email") val email: String,
