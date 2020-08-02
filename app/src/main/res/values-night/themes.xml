@@ -4,10 +4,10 @@
     <style name="Theme.BoutiquesWorld.DayNight" parent="Theme.BoutiquesWorld.Dark" />
 
     <style name="Theme.BoutiquesWorld.Dark" parent="Theme.BoutiquesWorld">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">@color/colorAccent</item>
+        <item name="colorPrimary">@color/grey_900</item>
+        <item name="colorPrimaryVariant">@color/grey_900</item>
+        <item name="colorSecondary">@color/pink_300</item>
+        <item name="colorSecondaryVariant">@color/pink_300</item>
 
         <!-- Platform attributes -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>

@@ -8,4 +8,9 @@
     <dimen name="grid_0_25">2dp</dimen>
     <dimen name="grid_0_5">4dp</dimen>
     <dimen name="grid_1_5">12dp</dimen>
+
+    <!-- Default icon dimension -->
+    <dimen name="icon_dimension">56dp</dimen>
+
+    <dimen name="margin_top_mobile_edit_text">56dp</dimen>
 </resources>
