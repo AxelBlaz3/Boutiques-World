@@ -1,7 +1,7 @@
 package com.boutiquesworld.network
 
+import com.boutiquesworld.model.LoginResponse
 import com.boutiquesworld.model.Product
-import com.boutiquesworld.model.Retailer
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,5 +18,8 @@ interface BoutiqueService {
 
     @FormUrlEncoded
     @POST("staging/API/login.php")
-    fun login(@Field("mobile") mobile: String, @Field("password") password: String): Call<Retailer>
+    fun login(
+        @Field("mobile") mobile: String,
+        @Field("password") password: String
+    ): Call<LoginResponse>
 }
