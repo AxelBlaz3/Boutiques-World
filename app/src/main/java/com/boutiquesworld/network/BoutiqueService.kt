@@ -1,22 +1,22 @@
 package com.boutiquesworld.network
 
 import com.boutiquesworld.model.Product
+import com.boutiquesworld.model.Retailer
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * Interface for managing the REST API.
  */
-private const val API_ROUTE_STAGING = "staging/API/"
-private const val API_ROUTE_MAIN = "API/"
-
 interface BoutiqueService {
 
-    @GET("${API_ROUTE_STAGING}products.php")
+    @GET("staging/API/products.php")
     fun getProducts(@Query("bid") businessId: Int): Call<ArrayList<Product>>
 
-    @POST("${API_ROUTE_STAGING}UploadProduct")
+    @POST("staging/API/upload_product.php")
     fun postProduct(product: Product): Call<Product>
+
+    @FormUrlEncoded
+    @POST("staging/API/login.php")
+    fun login(@Field("mobile") mobile: String, @Field("password") password: String): Call<Retailer>
 }
