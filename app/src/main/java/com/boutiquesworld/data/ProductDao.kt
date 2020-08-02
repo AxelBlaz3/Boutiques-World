@@ -26,6 +26,12 @@ interface ProductDao {
     fun insertProduct(product: Product)
 
     /**
+     * Inserts a list of products.
+     */
+    @Insert
+    fun insertAllProducts(products: List<Product>)
+
+    /**
      * Delete a product.
      */
     @Delete

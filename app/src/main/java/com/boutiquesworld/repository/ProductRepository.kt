@@ -2,6 +2,7 @@ package com.boutiquesworld.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.boutiquesworld.data.ProductDao
 import com.boutiquesworld.model.Product
 import com.boutiquesworld.network.BoutiqueService
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,10 @@ import javax.inject.Singleton
  * Repository class for maintaining the products data.
  */
 @Singleton
-class ProductRepository @Inject constructor(private val boutiqueService: BoutiqueService) {
+class ProductRepository @Inject constructor(
+    private val boutiqueService: BoutiqueService,
+    private val productDao: ProductDao
+) {
     private val products: MutableLiveData<ArrayList<Product>> = MutableLiveData()
 
     fun getProductsLiveData(): MutableLiveData<ArrayList<Product>> = products
@@ -29,9 +33,17 @@ class ProductRepository @Inject constructor(private val boutiqueService: Boutiqu
                 Log.d(this@ProductRepository.javaClass.simpleName, response.errorBody()?.string()!!)
                 return@withContext
             }
-            products.postValue(response.body())
+            val products = response.body()
+            // Have a local cache of products in BoutiqueDatabase
+            if (products != null)
+                insertProducts(products)
+            this@ProductRepository.products.postValue(products)
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private suspend fun insertProducts(products: ArrayList<Product>) = withContext(Dispatchers.IO) {
+        productDao.insertAllProducts(products)
     }
 }

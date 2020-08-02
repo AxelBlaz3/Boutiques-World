@@ -8,4 +8,5 @@ import com.boutiquesworld.model.Retailer
 @Database(entities = [Product::class, Retailer::class], version = 1)
 abstract class BoutiqueDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
+    abstract fun retailerDao(): RetailerDao
 }
