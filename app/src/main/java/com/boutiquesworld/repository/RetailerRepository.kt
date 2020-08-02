@@ -1,6 +1,7 @@
 package com.boutiquesworld.repository
 
 import com.boutiquesworld.data.RetailerDao
+import com.boutiquesworld.model.Retailer
 import com.boutiquesworld.network.BoutiqueService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,6 +15,23 @@ class RetailerRepository @Inject constructor(
 ) {
 
     suspend fun loginRetailer(mobile: String, password: String) = withContext(Dispatchers.IO) {
-        boutiqueService.login(mobile, password)
+        try {
+            val response = boutiqueService.login(mobile, password).execute()
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                responseBody?.apply {
+                    if (!error) {
+                        val retailer = retailer
+                        insertRetailer(retailer)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private suspend fun insertRetailer(retailer: Retailer) = withContext(Dispatchers.IO) {
+        retailerDao.insertRetailer(retailer)
     }
 }
