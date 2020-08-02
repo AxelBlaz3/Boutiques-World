@@ -9,6 +9,7 @@
         <item name="colorSecondary">@color/colorAccent</item>
         <item name="colorSecondaryVariant">@color/colorAccent</item>
 
+        <!-- Typography -->
         <item name="textAppearanceOverline">@style/TextAppearance.BoutiquesWorld.Overline</item>
         <item name="textAppearanceCaption">@style/TextAppearance.BoutiquesWorld.Caption</item>
         <item name="textAppearanceButton">@style/TextAppearance.BoutiquesWorld.Button</item>
@@ -22,6 +23,17 @@
         <item name="textAppearanceHeadline3">@style/TextAppearance.BoutiquesWorld.HeadLine3</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.BoutiquesWorld.HeadLine2</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.BoutiquesWorld.HeadLine1</item>
+
+        <!-- Shape -->
+        <item name="shapeAppearanceSmallComponent">
+            @style/ShapeAppearance.BoutiquesWorld.SmallComponent
+        </item>
+        <item name="shapeAppearanceMediumComponent">
+            @style/ShapeAppearance.BoutiquesWorld.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">
+            @style/ShapeAppearance.BoutiquesWorld.LargeComponent
+        </item>
 
         <!-- Platform attributes -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
