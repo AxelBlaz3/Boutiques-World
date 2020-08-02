@@ -9,6 +9,13 @@
         <item name="colorSecondary">@color/pink_600</item>
         <item name="colorSecondaryVariant">@color/pink_600</item>
 
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnPrimary">@color/grey_900</item>
+
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
         <!-- Typography -->
         <item name="textAppearanceOverline">@style/TextAppearance.BoutiquesWorld.Overline</item>
         <item name="textAppearanceCaption">@style/TextAppearance.BoutiquesWorld.Caption</item>

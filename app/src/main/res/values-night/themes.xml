@@ -9,6 +9,11 @@
         <item name="colorSecondary">@color/pink_300</item>
         <item name="colorSecondaryVariant">@color/pink_300</item>
 
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/grey_900</item>
+
+        <item name="android:colorBackground">@color/grey_900</item>
+
         <!-- Platform attributes -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>

@@ -16,6 +16,7 @@
             android:id="@+id/login_logo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round"
             app:layout_constraintBottom_toTopOf="@+id/materialCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -50,10 +51,11 @@
                 android:layout_marginTop="@dimen/grid_0_25"
                 android:background="@null"
                 android:hint="@string/mobile"
+                android:inputType="numberSigned"
                 android:paddingVertical="@dimen/grid_2"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/grid_2"
-                android:textAppearance="?textAppearanceBody2" />
+                android:textAppearance="?textAppearanceBody1" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -85,7 +87,7 @@
                 android:paddingVertical="@dimen/grid_2"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/grid_2"
-                android:textAppearance="?textAppearanceBody2" />
+                android:textAppearance="?textAppearanceBody1" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -97,24 +99,26 @@
             android:paddingStart="0dp"
             android:paddingEnd="@dimen/grid_2"
             android:text="@string/forgot_password"
+            android:textAppearance="?textAppearanceBody2"
             android:textColor="?colorSecondary"
-            app:layout_constraintBottom_toTopOf="@+id/materialButton"
+            app:layout_constraintBottom_toTopOf="@+id/login_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/materialButton"
+            android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/grid_4"
             android:text="@string/login"
+            android:textColor="?colorOnSecondary"
+            app:backgroundTint="?colorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:backgroundTint="@color/pink_300" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

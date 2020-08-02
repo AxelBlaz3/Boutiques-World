@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="pink_300" tools:ignore="MissingDefaultResource">#ED5F8D</color>
-    <color name="grey_900" tools:ignore="MissingDefaultResource">#121212</color>
+    <color name="grey_900">#121212</color>
+    <color name="white">#ffffff</color>
 </resources>
