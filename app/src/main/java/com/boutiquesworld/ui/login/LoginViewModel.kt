@@ -2,7 +2,7 @@ package com.boutiquesworld.ui.login
 
 import androidx.lifecycle.ViewModel
 import com.boutiquesworld.repository.RetailerRepository
-import javax.inject.Singleton
+import dagger.hilt.android.scopes.FragmentScoped
 
-@Singleton
+@FragmentScoped
 class LoginViewModel(private val retailerRepository: RetailerRepository) : ViewModel() {}
