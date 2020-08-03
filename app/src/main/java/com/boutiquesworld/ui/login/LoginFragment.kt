@@ -4,13 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
+
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,5 +31,35 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.run {
+            loginButton.setOnClickListener {
+                loginViewModel.loginRetailer(
+                    loginMobileEditText.text.toString(),
+                    loginPasswordEditText.text.toString()
+                )
+            }
+        }
+
+        loginViewModel.getIsEmailEmpty().observe(viewLifecycleOwner) {
+            if (it)
+                binding.loginMobileEditText.error = getString(R.string.empty_mobile)
+        }
+
+        loginViewModel.getIsPasswordEmpty().observe(viewLifecycleOwner) {
+            if (it)
+                binding.loginPasswordEditText.error = getString(R.string.empty_password)
+        }
+
+        loginViewModel.getIsLoginSuccessful().observe(viewLifecycleOwner) {
+            if (it)
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProductsFragment())
+            else
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.incorrect_credentials),
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
     }
 }

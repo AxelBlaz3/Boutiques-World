@@ -1,10 +1,7 @@
 package com.boutiquesworld.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.boutiquesworld.model.Retailer
 
 /**
@@ -23,7 +20,7 @@ interface RetailerDao {
     /**
      * Inserts the retailer if logged in.
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertRetailer(retailer: Retailer)
 
     /**
