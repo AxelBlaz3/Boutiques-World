@@ -26,18 +26,29 @@ class ProductRepository @Inject constructor(
      * Helper method for getting the products.
      * @param businessId: Unique businessId for getting products
      */
-    suspend fun getProductsForBusiness(businessId: Int) = withContext(Dispatchers.IO) {
-        try {
-            val response = boutiqueService.getProducts(businessId).execute()
-            if (!response.isSuccessful) {
-                Log.d(this@ProductRepository.javaClass.simpleName, response.errorBody()?.string()!!)
-                return@withContext
-            }
-            val products = response.body()
-            // Have a local cache of products in BoutiqueDatabase
-            if (products != null)
-                insertProducts(products)
-            this@ProductRepository.products.postValue(products)
+    suspend fun getProductsForBusiness(businessId: Int, forceRefresh: Boolean) =
+        withContext(Dispatchers.IO) {
+            try {
+                val cachedProducts = productDao.getAllProducts()
+                cachedProducts?.apply {
+                    if (isNotEmpty() && !forceRefresh) {
+                        this@ProductRepository.products.postValue(this as ArrayList<Product>)
+                        return@withContext
+                    }
+                }
+                val response = boutiqueService.getProducts(businessId).execute()
+                if (!response.isSuccessful) {
+                    Log.d(
+                        this@ProductRepository.javaClass.simpleName,
+                        response.errorBody()?.string()!!
+                    )
+                    return@withContext
+                }
+                val products = response.body()
+                // Have a local cache of products in BoutiqueDatabase
+                if (products != null)
+                    insertProducts(products)
+                this@ProductRepository.products.postValue(products)
         } catch (e: Exception) {
             e.printStackTrace()
         }

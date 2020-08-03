@@ -45,6 +45,10 @@ class RetailerRepository @Inject constructor(
             return@withContext false
         }
 
+    suspend fun getRetailer(): List<Retailer> = withContext(Dispatchers.IO) {
+        return@withContext retailerDao.getRetailer()
+    }
+
     private suspend fun insertRetailer(retailer: Retailer) = withContext(Dispatchers.IO) {
         retailerDao.insertRetailer(retailer)
     }
