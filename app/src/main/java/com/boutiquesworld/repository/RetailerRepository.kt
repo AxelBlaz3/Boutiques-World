@@ -9,6 +9,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repository class for maintaining retailer's data.
+ */
 @Singleton
 class RetailerRepository @Inject constructor(
     private val boutiqueService: BoutiqueService,
@@ -16,6 +19,12 @@ class RetailerRepository @Inject constructor(
     private val sessionManager: SessionManager
 ) {
 
+    /**
+     * Login the retailer.
+     * @param mobile: Phone number of the user.
+     * @param password: Secret key
+     * @return true if login is successful, false otherwise.
+     */
     suspend fun loginRetailer(mobile: String, password: String): Boolean =
         withContext(Dispatchers.IO) {
             try {
