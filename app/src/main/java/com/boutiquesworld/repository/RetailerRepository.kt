@@ -26,12 +26,12 @@ class RetailerRepository @Inject constructor(
                             return@withContext true
                         }
                     }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
             return@withContext false
-    }
+        }
 
     private suspend fun insertRetailer(retailer: Retailer) = withContext(Dispatchers.IO) {
         retailerDao.insertRetailer(retailer)
