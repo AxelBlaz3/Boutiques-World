@@ -25,6 +25,7 @@ class ProductRepository @Inject constructor(
     /**
      * Helper method for getting the products.
      * @param businessId: Unique businessId for getting products
+     * @param forceRefresh: Force data to be retrieved from Network.
      */
     suspend fun getProductsForBusiness(businessId: Int, forceRefresh: Boolean) =
         withContext(Dispatchers.IO) {
