@@ -3,6 +3,7 @@ package com.boutiquesworld.repository
 import com.boutiquesworld.data.RetailerDao
 import com.boutiquesworld.model.Retailer
 import com.boutiquesworld.network.BoutiqueService
+import com.boutiquesworld.util.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -11,7 +12,8 @@ import javax.inject.Singleton
 @Singleton
 class RetailerRepository @Inject constructor(
     private val boutiqueService: BoutiqueService,
-    private val retailerDao: RetailerDao
+    private val retailerDao: RetailerDao,
+    private val sessionManager: SessionManager
 ) {
 
     suspend fun loginRetailer(mobile: String, password: String): Boolean =
@@ -23,6 +25,7 @@ class RetailerRepository @Inject constructor(
                     responseBody?.apply {
                         if (!error) {
                             insertRetailer(retailer)
+                            sessionManager.saveSession(isLoggedIn = true)
                             return@withContext true
                         }
                     }
