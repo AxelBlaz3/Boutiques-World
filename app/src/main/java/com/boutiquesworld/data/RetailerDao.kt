@@ -1,6 +1,5 @@
 package com.boutiquesworld.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.boutiquesworld.model.Retailer
 
@@ -15,7 +14,7 @@ interface RetailerDao {
      * from the list. Size of the list is always one.
      */
     @Query("SELECT * FROM Retailer")
-    fun getRetailer(): LiveData<List<Retailer>>
+    fun getRetailer(): List<Retailer>
 
     /**
      * Inserts the retailer if logged in.

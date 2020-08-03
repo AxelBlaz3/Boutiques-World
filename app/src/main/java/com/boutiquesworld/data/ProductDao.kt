@@ -1,10 +1,6 @@
 package com.boutiquesworld.data
 
-import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.boutiquesworld.model.Product
 
 /**
@@ -17,7 +13,7 @@ interface ProductDao {
      * Get all the products maintained by the retailer.
      */
     @Query("SELECT * FROM Product")
-    fun getAllProducts(): LiveData<List<Product>>
+    fun getAllProducts(): List<Product>?
 
     /**
      * Insert a new product.
@@ -28,7 +24,7 @@ interface ProductDao {
     /**
      * Inserts a list of products.
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllProducts(products: List<Product>)
 
     /**
