@@ -53,7 +53,7 @@ class LoginFragment : Fragment() {
 
         loginViewModel.getIsLoginSuccessful().observe(viewLifecycleOwner) {
             if (it)
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProductsFragment())
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileFragment())
             else
                 Toast.makeText(
                     requireContext(),
