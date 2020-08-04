@@ -35,26 +35,21 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_logo"
-            app:shapeAppearance="?shapeAppearanceSmallComponent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/grid_2"
-                android:src="@drawable/ic_round_smartphone" />
+            app:shapeAppearance="?shapeAppearanceMediumComponent"
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="@dimen/card_stroke_width">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_mobile_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/icon_dimension"
                 android:layout_marginTop="@dimen/grid_0_25"
                 android:background="@null"
+                android:drawableStart="@drawable/ic_round_smartphone"
+                android:drawablePadding="@dimen/grid_2"
                 android:hint="@string/mobile"
                 android:inputType="numberSigned"
-                android:paddingVertical="@dimen/grid_2"
-                android:paddingStart="0dp"
-                android:paddingEnd="@dimen/grid_2"
+                android:padding="@dimen/grid_2"
                 android:textAppearance="?textAppearanceBody1" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -68,25 +63,20 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-            app:shapeAppearance="?shapeAppearanceSmallComponent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/grid_2"
-                android:src="@drawable/ic_round_vpn_key" />
+            app:shapeAppearance="?shapeAppearanceMediumComponent"
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="@dimen/card_stroke_width">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/icon_dimension"
-                android:layout_marginTop="@dimen/grid_0_25"
                 android:background="@null"
+                android:drawableStart="@drawable/ic_round_vpn_key"
+                android:drawablePadding="@dimen/grid_2"
                 android:hint="@string/password"
-                android:paddingVertical="@dimen/grid_2"
-                android:paddingStart="0dp"
-                android:paddingEnd="@dimen/grid_2"
+                android:inputType="textPassword"
+                android:padding="@dimen/grid_2"
                 android:textAppearance="?textAppearanceBody1" />
         </com.google.android.material.card.MaterialCardView>
 
