@@ -17,10 +17,13 @@
     <string name="home">Home</string>
     <string name="fabrics">Fabrics</string>
     <string name="dashboard">Dashboard</string>
+    <string name="pending">Pending</string>
 
     <!-- Menu titles -->
     <string name="notification">Notification</string>
     <string name="cart">Cart</string>
+
+    <!-- Profile -->
     <string name="likes">Likes</string>
     <string name="uploads">Uploads</string>
     <string name="visits">Visits</string>
@@ -29,5 +32,4 @@
     <string name="show_less">Show less</string>
     <string name="products">Products</string>
     <string name="about">About</string>
-    <string name="pending">Pending</string>
 </resources>

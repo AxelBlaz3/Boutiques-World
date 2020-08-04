@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentLoginBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -55,10 +55,10 @@ class LoginFragment : Fragment() {
             if (it)
                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileFragment())
             else
-                Toast.makeText(
-                    requireContext(),
+                Snackbar.make(
+                    view,
                     getString(R.string.incorrect_credentials),
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
         }
     }
