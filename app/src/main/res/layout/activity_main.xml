@@ -6,10 +6,6 @@
     <data>
 
         <import type="android.view.View" />
-
-        <variable
-            name="hideAppBar"
-            type="Boolean" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,9 +29,9 @@
             app:elevation="0dp">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/main_menu"
                 app:paddingTopSystemWindowInsets="@{true}"
                 app:title="@string/profile" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -45,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:visibility="invisible"
             app:contentInsetStart="0dp"
             app:fabCradleMargin="@dimen/grid_1"
             app:fabCradleRoundedCornerRadius="@dimen/grid_4"
@@ -55,7 +52,7 @@
                 android:layout_height="wrap_content">
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView"
+                    android:id="@+id/home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackground"
@@ -70,14 +67,14 @@
                     android:textColor="@color/color_navigation_item"
                     app:drawableTint="@color/color_navigation_item"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/checkedTextView2"
+                    app:layout_constraintEnd_toStartOf="@+id/fabrics"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView2"
+                    android:id="@+id/fabrics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/grid_1"
@@ -95,7 +92,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/blank"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/checkedTextView"
+                    app:layout_constraintStart_toEndOf="@+id/home"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckedTextView
@@ -104,7 +101,7 @@
                     android:layout_height="0dp"
                     app:layout_constraintEnd_toStartOf="@id/pending"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/checkedTextView2"
+                    app:layout_constraintStart_toEndOf="@+id/fabrics"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckedTextView
@@ -154,6 +151,7 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_round_add"
