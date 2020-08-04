@@ -1,18 +1,47 @@
 package com.boutiquesworld.util
 
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import com.boutiquesworld.R
 import com.bumptech.glide.Glide
+import com.google.android.material.button.MaterialButton
 
-@BindingAdapter("glideSrc")
-fun setGlideSrc(imageView: ImageView, oldUrl: String?, newUrl: String?) {
-    if (newUrl == oldUrl || newUrl == null)
-        return
-    Glide.with(imageView.context).load(newUrl).into(imageView)
+@BindingAdapter(value = ["glideSrc", "glideCircleCrop"], requireAll = false)
+fun setGlideSrc(
+    imageView: ImageView,
+    newUrl: String?,
+    circleCrop: Boolean = false
+) {
+    if (circleCrop)
+        Glide.with(imageView.context).load(newUrl).circleCrop().into(imageView)
+    else
+        Glide.with(imageView.context).load(newUrl).into(imageView)
+}
+
+@BindingAdapter("showLessOrMore")
+fun setMoreOrLess(materialButton: MaterialButton, description: TextView) {
+    val context = materialButton.context
+    materialButton.setOnClickListener {
+        if (materialButton.text == context.getString(R.string.show_more)) {
+            description.apply {
+                maxLines = Int.MAX_VALUE
+                ellipsize = null
+            }
+            materialButton.text = context.getString(R.string.show_less)
+        } else {
+            description.apply {
+                maxLines = 2
+                ellipsize = TextUtils.TruncateAt.END
+            }
+            materialButton.text = context.getString(R.string.show_more)
+        }
+    }
 }
 
 @BindingAdapter("layoutFullscreen")

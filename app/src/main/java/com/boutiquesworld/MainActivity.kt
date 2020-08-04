@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         navGraph.startDestination =
             if (sessionManager.getSession())
-                R.id.dashboardFragment
+                R.id.profileFragment
             else
                 R.id.loginFragment
 

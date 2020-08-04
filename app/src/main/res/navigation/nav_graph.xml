@@ -22,10 +22,17 @@
         <action
             android:id="@+id/action_loginFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.boutiquesworld.ui.dashboard.DashboardFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.boutiquesworld.ui.profile.ProfileFragment"
+        android:label="Profile" />
 </navigation>
