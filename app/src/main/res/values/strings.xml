@@ -9,4 +9,16 @@
     <string name="empty_mobile">Mobile cannot be empty</string>
     <string name="empty_password">Password cannot be empty</string>
     <string name="incorrect_credentials">Incorrect login credentials</string>
+
+    <!-- Transition -->
+    <string name="transition_detail" translatable="false">transition_%1$d</string>
+
+    <!-- Navigation titles -->
+    <string name="home">Home</string>
+    <string name="fabrics">Fabrics</string>
+    <string name="dashboard">Dashboard</string>
+
+    <!-- Menu titles -->
+    <string name="notification">Notification</string>
+    <string name="cart">Cart</string>
 </resources>

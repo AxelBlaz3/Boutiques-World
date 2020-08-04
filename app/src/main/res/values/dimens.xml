@@ -13,4 +13,5 @@
     <dimen name="icon_dimension">56dp</dimen>
 
     <dimen name="margin_top_mobile_edit_text">56dp</dimen>
+    <dimen name="card_stroke_width">1dp</dimen>
 </resources>

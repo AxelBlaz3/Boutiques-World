@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/grid_2"
+        android:paddingBottom="96dp"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView3"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="?actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="@dimen/card_stroke_width" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView4"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="@dimen/grid_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView3"
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="@dimen/card_stroke_width" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="@dimen/grid_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView4"
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="@dimen/card_stroke_width" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

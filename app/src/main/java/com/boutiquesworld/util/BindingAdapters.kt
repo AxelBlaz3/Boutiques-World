@@ -3,8 +3,17 @@ package com.boutiquesworld.util
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+
+@BindingAdapter("glideSrc")
+fun setGlideSrc(imageView: ImageView, oldUrl: String?, newUrl: String?) {
+    if (newUrl == oldUrl || newUrl == null)
+        return
+    Glide.with(imageView.context).load(newUrl).into(imageView)
+}
 
 @BindingAdapter("layoutFullscreen")
 fun View.bindLayoutFullscreen(previousFullscreen: Boolean, fullscreen: Boolean) {

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/products_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/grid_1"
+        android:paddingTop="@dimen/grid_1"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}"
+        app:spanCount="2"
+        tools:listitem="@layout/product_item" />
 </layout>

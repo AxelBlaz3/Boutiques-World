@@ -20,7 +20,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
     /**
      * Save the current session of user.
      * @param isLoggedIn: Specifies whether the login was successful or not.
-     * If [isLoggedIn] is true, then upon next launch of the app, ProductsFragment
+     * If [isLoggedIn] is true, then upon next launch of the app, DashboardFragment
      * is opened. LoginFragment otherwise.
      */
     fun saveSession(isLoggedIn: Boolean) =

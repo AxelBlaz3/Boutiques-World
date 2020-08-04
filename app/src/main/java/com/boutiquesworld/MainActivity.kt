@@ -32,11 +32,19 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         destination: NavDestination,
         arguments: Bundle?
     ) {
+        when (destination.id) {
+            R.id.loginFragment -> {
+                binding.hideAppBar = true
+            }
+            R.id.productsFragment -> {
+                binding.hideAppBar = false
+            }
+        }
     }
 
     /**
      * Handle the startDestination of NavigationGraph. Depends on whether the user's session.
-     * When logged in, upon launching will open ProductsFragment. LoginFragment otherwise.
+     * When logged in, upon launching will open DashboardFragment. LoginFragment otherwise.
      */
     private fun verifyStartDestination() {
         val navGraph =
@@ -47,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         navGraph.startDestination =
             if (sessionManager.getSession())
-                R.id.productsFragment
+                R.id.dashboardFragment
             else
                 R.id.loginFragment
 
