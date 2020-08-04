@@ -21,4 +21,13 @@
     <!-- Menu titles -->
     <string name="notification">Notification</string>
     <string name="cart">Cart</string>
+    <string name="likes">Likes</string>
+    <string name="uploads">Uploads</string>
+    <string name="visits">Visits</string>
+    <string name="profile">Profile</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+    <string name="products">Products</string>
+    <string name="about">About</string>
+    <string name="pending">Pending</string>
 </resources>

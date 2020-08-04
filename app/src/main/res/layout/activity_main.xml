@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 app:menu="@menu/main_menu"
                 app:paddingTopSystemWindowInsets="@{true}"
-                app:title="@string/dashboard" />
+                app:title="@string/profile" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -47,7 +47,8 @@
             android:layout_gravity="bottom"
             app:contentInsetStart="0dp"
             app:fabCradleMargin="@dimen/grid_1"
-            app:fabCradleRoundedCornerRadius="@dimen/grid_4">
+            app:fabCradleRoundedCornerRadius="@dimen/grid_4"
+            app:hideOnScroll="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -55,11 +56,9 @@
 
                 <CheckedTextView
                     android:id="@+id/checkedTextView"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="?actionBarSize"
                     android:background="?selectableItemBackground"
-                    android:checked="true"
                     android:clickable="true"
                     android:drawableTop="@drawable/ic_round_home"
                     android:focusable="true"
@@ -79,9 +78,9 @@
 
                 <CheckedTextView
                     android:id="@+id/checkedTextView2"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="?actionBarSize"
+                    android:layout_marginEnd="@dimen/grid_1"
                     android:background="?selectableItemBackground"
                     android:clickable="true"
                     android:drawableTop="@drawable/ic_round_whatshot"
@@ -91,10 +90,65 @@
                     android:text="@string/fabrics"
                     android:textAlignment="center"
                     android:textAppearance="?textAppearanceBody2"
+                    android:textColor="@color/color_navigation_item"
+                    app:drawableTint="@color/color_navigation_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/blank"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/checkedTextView"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckedTextView
+                    android:id="@+id/blank"
+                    android:layout_width="56dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintEnd_toStartOf="@id/pending"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/checkedTextView2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckedTextView
+                    android:id="@+id/pending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_1"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/ic_round_access_time"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/grid_2"
+                    android:paddingVertical="@dimen/grid_1"
+                    android:text="@string/pending"
+                    android:textAlignment="center"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textColor="@color/color_navigation_item"
+                    app:drawableTint="@color/color_navigation_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/profile"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/blank"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckedTextView
+                    android:id="@+id/profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
+                    android:checked="true"
+                    android:clickable="true"
+                    android:drawableTop="@drawable/ic_round_person"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/grid_2"
+                    android:paddingVertical="@dimen/grid_1"
+                    android:text="@string/profile"
+                    android:textAlignment="center"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textColor="@color/color_navigation_item"
+                    app:drawableTint="@color/color_navigation_item"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/checkedTextView"
+                    app:layout_constraintStart_toEndOf="@+id/pending"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.bottomappbar.BottomAppBar>
