@@ -15,9 +15,9 @@
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/grid_1"
         android:paddingTop="@dimen/grid_1"
+        android:paddingBottom="@dimen/recycler_view_bottom_padding"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:paddingBottomSystemWindowInsets="@{true}"
-        app:paddingTopSystemWindowInsets="@{true}"
         app:spanCount="2"
         tools:listitem="@layout/product_item" />
 </layout>

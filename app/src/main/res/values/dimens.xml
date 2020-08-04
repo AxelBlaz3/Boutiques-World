@@ -14,4 +14,5 @@
 
     <dimen name="margin_top_mobile_edit_text">56dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="recycler_view_bottom_padding">96dp</dimen>
 </resources>
