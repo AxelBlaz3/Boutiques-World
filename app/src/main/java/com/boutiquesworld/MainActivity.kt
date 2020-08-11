@@ -118,8 +118,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 updateToolbarTitle(R.string.new_product)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
-            else -> {
-            } // TODO: Handle unknown navigation
+            else -> throw RuntimeException("Unknown destination - ${destination.id}")
         }
     }
 

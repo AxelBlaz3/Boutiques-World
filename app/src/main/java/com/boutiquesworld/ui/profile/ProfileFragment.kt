@@ -1,7 +1,6 @@
 package com.boutiquesworld.ui.profile
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,8 +55,9 @@ class ProfileFragment : Fragment() {
     private fun showOrHideReadMoreAndReadLess() {
         binding.apply {
             if (description.lineCount > 2) {
+                totalLines = description.lineCount
                 description.maxLines = 2
-                description.ellipsize = TextUtils.TruncateAt.END
+                //description.ellipsize = TextUtils.TruncateAt.END
                 showMoreVisibility = true
             }
         }

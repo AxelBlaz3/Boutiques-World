@@ -1,7 +1,6 @@
 package com.boutiquesworld.util
 
 import android.graphics.Color
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
@@ -37,21 +36,15 @@ fun setBackgroundHexTint(
     imageView.setBackgroundColor(Color.parseColor(newHexColorCode))
 }
 
-@BindingAdapter("showLessOrMore")
-fun setMoreOrLess(materialButton: MaterialButton, description: TextView) {
+@BindingAdapter(value = ["showLessOrMore", "totalLines"])
+fun setMoreOrLess(materialButton: MaterialButton, description: TextView, totalLines: Int) {
     val context = materialButton.context
     materialButton.setOnClickListener {
         if (materialButton.text == context.getString(R.string.show_more)) {
-            description.apply {
-                maxLines = Int.MAX_VALUE
-                ellipsize = null
-            }
+            description.maxLines = totalLines
             materialButton.text = context.getString(R.string.show_less)
         } else {
-            description.apply {
-                maxLines = 2
-                ellipsize = TextUtils.TruncateAt.END
-            }
+            description.maxLines = 2
             materialButton.text = context.getString(R.string.show_more)
         }
     }

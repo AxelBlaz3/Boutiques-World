@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="totalLines"
+            type="Integer" />
+
+        <variable
             name="retailer"
             type="com.boutiquesworld.model.Retailer" />
 
@@ -154,13 +158,13 @@
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_3"
                 android:layout_marginTop="@dimen/grid_2"
                 android:gravity="center"
+                android:maxLines="2"
                 android:text="An artist of considerable range, Connors name taken as a placeholder for retailer name. An artist of considerable range, Connors name taken as a placeholder for retailer name."
                 android:textAppearance="?textAppearanceBody2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/view"
                 tools:text="An artist of considerable range, Connors name taken as a placeholder for retailer name." />
 
@@ -176,7 +180,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description"
-                app:showLessOrMore="@{description}" />
+                app:showLessOrMore="@{description}"
+                app:totalLines="@{totalLines}" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"

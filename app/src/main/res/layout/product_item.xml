@@ -32,7 +32,7 @@
         android:layout_margin="@dimen/grid_1"
         android:onClick="@{(view) -> listener.onProductClick(product, position)}"
         android:transitionName="@{@string/transition_detail(position)}"
-        app:cardElevation="@dimen/grid_0_25">
+        app:cardElevation="@dimen/grid_1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
