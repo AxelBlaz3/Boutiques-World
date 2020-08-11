@@ -24,6 +24,8 @@ data class Product(
     @SerializedName("product_image1") val productImage1: String,
     @SerializedName("product_image2") val productImage2: String,
     @SerializedName("product_image3") val productImage3: String,
+    @SerializedName("product_image4") val productImage4: String,
+    @SerializedName("product_image5") val productImage5: String,
     @SerializedName("business_id") val businessId: String,
     @SerializedName("uuid") val uuid: String,
     @SerializedName("business_name") val businessName: String,

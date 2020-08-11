@@ -13,11 +13,12 @@ import javax.inject.Singleton
 @Singleton
 class ProfileViewModel @Inject constructor(private val retailerRepository: RetailerRepository) :
     ViewModel() {
-    private val retailer: MutableLiveData<Retailer> = MutableLiveData()
+    private val retailer: MutableLiveData<Retailer> =
+        retailerRepository.getRetailerMutableLiveData()
 
     init {
         viewModelScope.launch {
-            retailer.value = retailerRepository.getRetailer()[0]
+            retailerRepository.updateRetailer()
         }
     }
 

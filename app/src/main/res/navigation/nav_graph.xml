@@ -35,4 +35,19 @@
         android:id="@+id/profileFragment"
         android:name="com.boutiquesworld.ui.profile.ProfileFragment"
         android:label="Profile" />
+    <fragment
+        android:id="@+id/newProductFragment"
+        android:name="com.boutiquesworld.ui.newproduct.NewProductFragment"
+        android:label="New Product">
+        <action
+            android:id="@+id/action_newProductFragment_to_bottomSheetPalette"
+            app:destination="@id/bottomSheetPalette" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_newProductFragment"
+        app:destination="@id/newProductFragment" />
+    <dialog
+        android:id="@+id/bottomSheetPalette"
+        android:name="com.boutiquesworld.ui.newproduct.palette.BottomSheetPalette"
+        android:label="BottomSheetPalette" />
 </navigation>

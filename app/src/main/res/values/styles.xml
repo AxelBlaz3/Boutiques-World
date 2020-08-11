@@ -1,1 +1,38 @@
-<resources />
+<resources>
+
+    <!-- TextInputLayout style -->
+    <style name="Widget.Boutiques.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?colorSecondary</item>
+        <item name="hintTextColor">?colorSecondary</item>
+    </style>
+
+    <style name="Widget.Boutiques.TextInputLayout.DropDown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="boxStrokeColor">?colorSecondary</item>
+        <item name="hintTextColor">?colorSecondary</item>
+        <item name="endIconTint">?colorControlHighlight</item>
+    </style>
+
+    <!-- Slider -->
+    <style name="Widget.Boutiques.Slider" parent="Widget.MaterialComponents.Slider">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Boutiques</item>
+        <item name="trackColor">?colorSecondaryVariant</item>
+        <item name="thumbColor">?colorSecondary</item>
+        <item name="tickColor">?colorSecondary</item>
+        <item name="valueTextColor">?colorSecondary</item>
+        <item name="labelStyle">@style/Widget.Boutiques.Tooltip</item>
+    </style>
+
+    <style name="ThemeOverlay.Boutiques" parent="Theme.BoutiquesWorld.DayNight">
+        <item name="colorOnPrimary">?colorOnSecondary</item>
+    </style>
+
+    <style name="Widget.Boutiques.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="shapeAppearance">@style/ShapeAppearance.Boutiques.Tooltip</item>
+        <item name="backgroundTint">?colorSecondary</item>
+    </style>
+
+    <style name="ShapeAppearance.Boutiques.Tooltip" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="palette"
+            type="com.boutiquesworld.model.Palette" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.newproduct.palette.PaletteAdapter.PaletteAdapterListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:onClick="@{() -> listener.onColorClicked(palette)}"
+        android:orientation="vertical"
+        android:padding="@dimen/grid_2">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:backgroundHexTint="@{palette.hexColorTint}"
+            app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Round"
+            tools:background="?colorSecondary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_1"
+            android:text="@{palette.colorName}"
+            android:textAppearance="?textAppearanceBody2"
+            tools:text="Pink" />
+    </LinearLayout>
+</layout>

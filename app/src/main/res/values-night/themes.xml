@@ -7,12 +7,13 @@
         <item name="colorPrimary">@color/grey_900</item>
         <item name="colorPrimaryVariant">@color/grey_900</item>
         <item name="colorSecondary">@color/pink_300</item>
-        <item name="colorSecondaryVariant">@color/pink_300</item>
+        <item name="colorSecondaryVariant">@color/pink_900</item>
+        <item name="colorSurface">@color/grey_900</item>
 
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSecondary">@color/grey_900</item>
 
-        <item name="android:colorBackground">@color/grey_900</item>
+        <item name="android:colorBackground">@color/black</item>
 
         <!-- Platform attributes -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>

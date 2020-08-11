@@ -18,6 +18,7 @@
     <string name="fabrics">Fabrics</string>
     <string name="dashboard">Dashboard</string>
     <string name="pending">Pending</string>
+    <string name="new_product">New Product</string>
 
     <!-- Menu titles -->
     <string name="notification">Notification</string>
@@ -32,4 +33,71 @@
     <string name="show_less">Show less</string>
     <string name="products">Products</string>
     <string name="about">About</string>
+
+    <!-- New Product form -->
+    <string name="form_title">Product\nDetails</string>
+    <string name="product_name">Title</string>
+    <string name="stitching_time">Time</string>
+    <string name="product_description">Description</string>
+    <string name="category">Category</string>
+    <string name="cloth_type">Cloth</string>
+    <string name="fabric_type">Fabric</string>
+    <string name="occasion_type">Occasion</string>
+    <string name="price_range">Price range</string>
+    <string name="submit">Submit</string>
+    <string name="new_product_image_desc">You can upload at most 5 images. Make sure to capture all the sides for best experience.</string>
+    <string name="empty_start_price">Start price cannot be ₹0</string>
+    <string name="choose_a_color">Pick a color for your product</string>
+    <string name="min_image_upload_error">Upload at least 2 images</string>
+    <string name="product_submitted_successfully">Success! You can now check pending status.</string>
+    <string name="some_error_occured">Some error occurred</string>
+    <string name="retry">Retry</string>
+    <string name="select_image">Select Image</string>
+
+    <string-array name="product_categories">
+        <item>Dress</item>
+        <item>Lehenga</item>
+    </string-array>
+
+    <string-array name="product_colors">
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Black</item>
+    </string-array>
+
+    <string-array name="cloth_types">
+        <item>Cotton</item>
+        <item>Silk</item>
+        <item>Linen</item>
+        <item>Nylon</item>
+        <item>Rayon</item>
+        <item>Wool</item>
+    </string-array>
+
+    <string-array name="fabric_types">
+        <item>Ikat</item>
+        <item>Kalam Kari</item>
+        <item>Block Print</item>
+        <item>Chanderi</item>
+        <item>Banaras</item>
+        <item>Madhubani</item>
+    </string-array>
+
+    <string-array name="occasion_types">
+        <item>Party wear</item>
+        <item>Casual wear</item>
+        <item>Office wear</item>
+    </string-array>
+
+    <string-array name="preparation_time_array">
+        <item>1 – 2 days</item>
+        <item>2 – 5 days</item>
+        <item>5 – 10 days</item>
+        <item>10 – 15 days</item>
+    </string-array>
+
+    <array name="price_ranges">
+        <item>0</item>
+        <item>18000</item>
+    </array>
 </resources>

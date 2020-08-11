@@ -7,7 +7,8 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorSecondary">@color/pink_600</item>
-        <item name="colorSecondaryVariant">@color/pink_600</item>
+        <item name="colorSecondaryVariant">@color/pink_100</item>
+        <item name="colorSurface">@color/white</item>
 
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorOnPrimary">@color/grey_900</item>

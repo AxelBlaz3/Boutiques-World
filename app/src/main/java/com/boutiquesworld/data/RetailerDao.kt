@@ -14,7 +14,7 @@ interface RetailerDao {
      * from the list. Size of the list is always one.
      */
     @Query("SELECT * FROM Retailer")
-    fun getRetailer(): List<Retailer>
+    fun getRetailer(): List<Retailer>?
 
     /**
      * Inserts the retailer if logged in.

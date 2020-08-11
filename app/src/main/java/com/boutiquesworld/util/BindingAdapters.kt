@@ -1,5 +1,6 @@
 package com.boutiquesworld.util
 
+import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.databinding.BindingAdapter
 import com.boutiquesworld.R
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 
 @BindingAdapter(value = ["glideSrc", "glideCircleCrop"], requireAll = false)
 fun setGlideSrc(
@@ -22,6 +24,17 @@ fun setGlideSrc(
         Glide.with(imageView.context).load(newUrl).circleCrop().into(imageView)
     else
         Glide.with(imageView.context).load(newUrl).into(imageView)
+}
+
+@BindingAdapter(value = ["backgroundHexTint"])
+fun setBackgroundHexTint(
+    imageView: ShapeableImageView,
+    oldHexColorCode: String?,
+    newHexColorCode: String?
+) {
+    if (oldHexColorCode == newHexColorCode || newHexColorCode == null)
+        return
+    imageView.setBackgroundColor(Color.parseColor(newHexColorCode))
 }
 
 @BindingAdapter("showLessOrMore")

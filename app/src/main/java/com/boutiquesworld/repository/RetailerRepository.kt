@@ -1,5 +1,6 @@
 package com.boutiquesworld.repository
 
+import androidx.lifecycle.MutableLiveData
 import com.boutiquesworld.data.RetailerDao
 import com.boutiquesworld.model.Retailer
 import com.boutiquesworld.network.BoutiqueService
@@ -18,6 +19,9 @@ class RetailerRepository @Inject constructor(
     private val retailerDao: RetailerDao,
     private val sessionManager: SessionManager
 ) {
+    private val retailer: MutableLiveData<Retailer> = MutableLiveData()
+
+    fun getRetailerMutableLiveData(): MutableLiveData<Retailer> = retailer
 
     /**
      * Login the retailer.
@@ -33,6 +37,7 @@ class RetailerRepository @Inject constructor(
                     val responseBody = response.body()
                     responseBody?.apply {
                         if (!error) {
+                            this@RetailerRepository.retailer.postValue(retailer)
                             insertRetailer(retailer)
                             sessionManager.saveSession(isLoggedIn = true)
                             return@withContext true
@@ -45,8 +50,11 @@ class RetailerRepository @Inject constructor(
             return@withContext false
         }
 
-    suspend fun getRetailer(): List<Retailer> = withContext(Dispatchers.IO) {
-        return@withContext retailerDao.getRetailer()
+    suspend fun updateRetailer() = withContext(Dispatchers.IO) {
+        if (retailer.value == null)
+            retailerDao.getRetailer()?.apply {
+                retailer.postValue(get(0))
+            }
     }
 
     private suspend fun insertRetailer(retailer: Retailer) = withContext(Dispatchers.IO) {

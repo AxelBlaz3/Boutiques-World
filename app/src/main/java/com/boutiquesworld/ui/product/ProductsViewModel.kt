@@ -21,12 +21,12 @@ class ProductsViewModel @Inject constructor(
     private val retailerRepository: RetailerRepository
 ) :
     ViewModel() {
-    private lateinit var retailer: Retailer
+    private val retailer: MutableLiveData<Retailer> =
+        retailerRepository.getRetailerMutableLiveData()
 
     init {
         viewModelScope.launch {
-            retailer =
-                retailerRepository.getRetailer()[0] // We only need first index because the size of the table is always 1.
+            retailerRepository.updateRetailer()
             getProducts(forceRefresh = false)
         }
     }
@@ -38,7 +38,9 @@ class ProductsViewModel @Inject constructor(
 
     fun getProducts(forceRefresh: Boolean) {
         viewModelScope.launch {
-            productRepository.getProductsForBusiness(retailer.shopId, forceRefresh)
+            retailer.value?.let {
+                productRepository.getProductsForBusiness(it.shopId, forceRefresh)
+            }
         }
     }
 }

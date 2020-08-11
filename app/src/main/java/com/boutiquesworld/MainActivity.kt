@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.boutiquesworld.databinding.ActivityMainBinding
+import com.boutiquesworld.ui.dashboard.DashboardFragmentDirections
 import com.boutiquesworld.util.SessionManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-        verifyStartDestination()
+        verifyStartDestination(savedInstanceState)
         findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener(this)
 
         binding.apply {
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             fabrics.setOnClickListener(this@MainActivity)
             pending.setOnClickListener(this@MainActivity)
             profile.setOnClickListener(this@MainActivity)
+            fab.setOnClickListener(this@MainActivity)
         }
     }
 
@@ -52,18 +55,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.home -> {
-                Log.d(this.javaClass.simpleName, "Home")
-            }
-            R.id.fabrics -> {
-                Log.d(this.javaClass.simpleName, "Fabrics")
-            }
-            R.id.pending -> {
-                Log.d(this.javaClass.simpleName, "Pending")
-            }
-            else -> {
-                Log.d(this.javaClass.simpleName, "Profile")
-            }
+            R.id.home -> Log.d(this.javaClass.simpleName, "Home")
+            R.id.fabrics -> Log.d(this.javaClass.simpleName, "Fabrics")
+            R.id.pending -> Log.d(this.javaClass.simpleName, "Pending")
+            R.id.profile -> Log.d(this.javaClass.simpleName, "Profile")
+            R.id.fab -> findNavController(R.id.nav_host_fragment).navigate(
+                DashboardFragmentDirections.actionGlobalNewProductFragment()
+            )
+            else -> throw RuntimeException("Unknown widget clicked $v")
         }
     }
 
@@ -89,13 +88,22 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 supportActionBar?.show()
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.dashboard)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.profileFragment -> {
                 supportActionBar?.show()
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.profile)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
+            }
+            R.id.newProductFragment -> {
+                supportActionBar?.show()
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.new_product)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
             else -> {
             } // TODO: Handle unknown navigation
@@ -106,7 +114,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
      * Handle the startDestination of NavigationGraph. Depends on whether the user's session.
      * When logged in, upon launching will open DashboardFragment. LoginFragment otherwise.
      */
-    private fun verifyStartDestination() {
+    private fun verifyStartDestination(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null)
+            return
         val navGraph =
             (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment)
                 .navController
@@ -120,6 +130,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.loginFragment
 
         findNavController(R.id.nav_host_fragment).graph = navGraph
+    }
+
+    /**
+     * Update the title of toolbar with the given string resource
+     * @param title: String resource
+     */
+    private fun updateToolbarTitle(@StringRes title: Int) {
+        supportActionBar?.title = getString(title)
     }
 
     /**
