@@ -55,10 +55,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.home -> Log.d(this.javaClass.simpleName, "Home")
-            R.id.fabrics -> Log.d(this.javaClass.simpleName, "Fabrics")
+            R.id.home -> findNavController(R.id.nav_host_fragment).navigate(
+                DashboardFragmentDirections.actionGlobalDashboardFragment()
+            )
+            R.id.fabrics -> findNavController(R.id.nav_host_fragment).navigate(
+                DashboardFragmentDirections.actionGlobalFabricsFragment()
+            )
             R.id.pending -> Log.d(this.javaClass.simpleName, "Pending")
-            R.id.profile -> Log.d(this.javaClass.simpleName, "Profile")
+            R.id.profile -> findNavController(R.id.nav_host_fragment).navigate(
+                DashboardFragmentDirections.actionGlobalProfileFragment()
+            )
             R.id.fab -> findNavController(R.id.nav_host_fragment).navigate(
                 DashboardFragmentDirections.actionGlobalNewProductFragment()
             )
@@ -78,10 +84,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 onCreateOptionsMenu(binding.toolbar.menu)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
-            R.id.productsFragment -> {
+            R.id.fabricsFragment -> {
                 supportActionBar?.show()
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.fabrics)
+                binding.fabrics.isChecked = true
+                shouldUncheckExcept(destination.id)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.dashboardFragment -> {
@@ -89,6 +98,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.dashboard)
+                binding.home.isChecked = true
+                shouldUncheckExcept(destination.id)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.profileFragment -> {
@@ -96,6 +107,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.profile)
+                binding.profile.isChecked = true
+                shouldUncheckExcept(destination.id)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.newProductFragment -> {
@@ -125,7 +138,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         navGraph.startDestination =
             if (sessionManager.getSession())
-                R.id.profileFragment
+                R.id.dashboardFragment
             else
                 R.id.loginFragment
 
@@ -175,5 +188,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 })
             }
         }
+    }
+
+    private fun shouldUncheckExcept(destinationId: Int) {
+        if (destinationId != R.id.dashboardFragment)
+            binding.home.isChecked = false
+        if (destinationId != R.id.fabricsFragment)
+            binding.fabrics.isChecked = false
+        if (destinationId != R.id.profileFragment)
+            binding.profile.isChecked = false
     }
 }

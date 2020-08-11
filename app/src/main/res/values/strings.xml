@@ -100,4 +100,9 @@
         <item>0</item>
         <item>18000</item>
     </array>
+
+    <!-- Fabrics -->
+    <string name="dupattas">Dupattas</string>
+    <string name="sarees">Sarees</string>
+    <string name="dresses">Dresses</string>
 </resources>

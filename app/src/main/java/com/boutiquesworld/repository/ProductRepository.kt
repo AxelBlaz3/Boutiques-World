@@ -3,7 +3,7 @@ package com.boutiquesworld.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.boutiquesworld.data.ProductDao
-import com.boutiquesworld.model.Product
+import com.boutiquesworld.model.BaseProduct
 import com.boutiquesworld.network.BoutiqueService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,9 +18,11 @@ class ProductRepository @Inject constructor(
     private val boutiqueService: BoutiqueService,
     private val productDao: ProductDao
 ) {
-    private val products: MutableLiveData<ArrayList<Product>> = MutableLiveData()
+    private val products: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData()
+    private val fabrics: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData()
 
-    fun getProductsLiveData(): MutableLiveData<ArrayList<Product>> = products
+    fun getProductsLiveData(): MutableLiveData<ArrayList<BaseProduct>> = products
+    fun getFabricsLiveData(): MutableLiveData<ArrayList<BaseProduct>> = fabrics
 
     /**
      * Helper method for getting the products.
@@ -33,7 +35,7 @@ class ProductRepository @Inject constructor(
                 val cachedProducts = productDao.getAllProducts()
                 cachedProducts?.apply {
                     if (isNotEmpty() && !forceRefresh) {
-                        this@ProductRepository.products.postValue(this as ArrayList<Product>)
+                        this@ProductRepository.products.postValue(this as ArrayList<BaseProduct>)
                         return@withContext
                     }
                 }
@@ -46,16 +48,49 @@ class ProductRepository @Inject constructor(
                     return@withContext
                 }
                 val products = response.body()
-                // Have a local cache of products in BoutiqueDatabase
+                // Have a local cache of fabrics in BoutiqueDatabase
                 if (products != null)
                     insertProducts(products)
-                this@ProductRepository.products.postValue(products)
+                this@ProductRepository.products.postValue(products as ArrayList<BaseProduct>)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    suspend fun getFabrics(forceRefresh: Boolean) = withContext(Dispatchers.IO) {
+        try {
+            val cachedFabrics = productDao.getAllFabrics()
+            cachedFabrics?.apply {
+                if (isNotEmpty() && !forceRefresh) {
+                    this@ProductRepository.fabrics.postValue(this as ArrayList<BaseProduct>)
+                    return@withContext
+                }
+            }
+            val response = boutiqueService.getFabrics().execute()
+            if (!response.isSuccessful) {
+                Log.d(
+                    this@ProductRepository.javaClass.simpleName,
+                    response.errorBody()?.string()!!
+                )
+                return@withContext
+            }
+            val fabrics = response.body()
+            // Have a local cache of products in BoutiqueDatabase
+            if (fabrics != null)
+                insertFabrics(fabrics)
+            this@ProductRepository.fabrics.postValue(fabrics as ArrayList<BaseProduct>)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private suspend fun insertProducts(products: ArrayList<Product>) = withContext(Dispatchers.IO) {
-        productDao.insertAllProducts(products)
-    }
+    private suspend fun insertProducts(products: ArrayList<BaseProduct.Product>) =
+        withContext(Dispatchers.IO) {
+            productDao.insertAllProducts(products)
+        }
+
+    private suspend fun insertFabrics(fabrics: ArrayList<BaseProduct.Fabric>) =
+        withContext(Dispatchers.IO) {
+            productDao.insertAllFabrics(fabrics)
+        }
 }

@@ -17,9 +17,6 @@
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
         <action
@@ -50,4 +47,17 @@
         android:id="@+id/bottomSheetPalette"
         android:name="com.boutiquesworld.ui.newproduct.palette.BottomSheetPalette"
         android:label="BottomSheetPalette" />
+    <fragment
+        android:id="@+id/fabricsFragment"
+        android:name="com.boutiquesworld.ui.fabrics.FabricsFragment"
+        android:label="Fabrics" />
+    <action
+        android:id="@+id/action_global_fabricsFragment"
+        app:destination="@id/fabricsFragment" />
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment" />
+    <action
+        android:id="@+id/action_global_dashboardFragment"
+        app:destination="@id/dashboardFragment" />
 </navigation>

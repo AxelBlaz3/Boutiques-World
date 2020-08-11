@@ -1,7 +1,7 @@
 package com.boutiquesworld.network
 
+import com.boutiquesworld.model.BaseProduct
 import com.boutiquesworld.model.LoginResponse
-import com.boutiquesworld.model.Product
 import com.boutiquesworld.model.ProductResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -14,7 +14,10 @@ import retrofit2.http.*
 interface BoutiqueService {
 
     @GET("new/API/products.php")
-    fun getProducts(@Query("bid") businessId: Int): Call<ArrayList<Product>>
+    fun getProducts(@Query("bid") businessId: Int): Call<ArrayList<BaseProduct.Product>>
+
+    @GET("/new/API/fabrics.php")
+    fun getFabrics(): Call<ArrayList<BaseProduct.Fabric>>
 
     @Multipart
     @POST("new/API/upload_product.php")
