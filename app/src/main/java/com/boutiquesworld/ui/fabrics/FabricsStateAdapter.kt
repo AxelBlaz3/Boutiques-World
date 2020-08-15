@@ -11,5 +11,4 @@ class FabricsStateAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = NUM_PAGES
 
     override fun createFragment(position: Int): Fragment = ProductsFragment(position)
-
 }

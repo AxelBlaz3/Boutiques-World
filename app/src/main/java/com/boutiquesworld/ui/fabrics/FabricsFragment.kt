@@ -13,9 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FabricsFragment : Fragment() {
     private lateinit var binding: FragmentFabricsBinding
-    private val fabricsStateAdapter by lazy {
-        FabricsStateAdapter(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,8 +26,12 @@ class FabricsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewPagerWithTabs()
+    }
+
+    private fun setupViewPagerWithTabs() {
         binding.run {
-            fabricsViewPager.adapter = fabricsStateAdapter
+            fabricsViewPager.adapter = FabricsStateAdapter(this@FabricsFragment)
             TabLayoutMediator(fabricsTabLayout, fabricsViewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> getString(R.string.fabrics)
