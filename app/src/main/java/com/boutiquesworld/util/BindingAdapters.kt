@@ -19,10 +19,34 @@ fun setGlideSrc(
     newUrl: String?,
     circleCrop: Boolean = false
 ) {
-    if (circleCrop)
-        Glide.with(imageView.context).load(newUrl).circleCrop().into(imageView)
-    else
-        Glide.with(imageView.context).load(newUrl).into(imageView)
+    newUrl?.let {
+        if (circleCrop)
+            Glide.with(imageView.context).load(newUrl).circleCrop().into(imageView)
+        else
+            Glide.with(imageView.context).load(newUrl).into(imageView)
+    }
+}
+
+@BindingAdapter(value = ["drawableForPosition"])
+fun setDrawableForType(imageView: ImageView, position: Int) {
+    when (position) {
+        0 -> imageView.setImageResource(R.drawable.ic_round_person)
+        1 -> imageView.setImageResource(R.drawable.ic_round_phone)
+        2 -> imageView.setImageResource(R.drawable.ic_round_email)
+        3 -> imageView.setImageResource(R.drawable.ic_round_place)
+        else -> throw IllegalArgumentException("Drawable requested for unknown position - $position")
+    }
+}
+
+@BindingAdapter("textForPosition")
+fun setTextForType(textView: TextView, position: Int) {
+    textView.text = when (position) {
+        0 -> textView.context.getString(R.string.name)
+        1 -> textView.context.getString(R.string.mobile)
+        2 -> textView.context.getString(R.string.email)
+        3 -> textView.context.getString(R.string.place)
+        else -> throw IllegalArgumentException("Text requested for unknown position - $position")
+    }
 }
 
 @BindingAdapter(value = ["backgroundHexTint"])
