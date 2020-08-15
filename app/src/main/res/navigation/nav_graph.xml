@@ -31,11 +31,13 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.boutiquesworld.ui.profile.ProfileFragment"
-        android:label="Profile" />
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/newProductFragment"
         android:name="com.boutiquesworld.ui.newproduct.NewProductFragment"
-        android:label="New Product">
+        android:label="New Product"
+        tools:layout="@layout/fragment_new_product">
         <action
             android:id="@+id/action_newProductFragment_to_bottomSheetPalette"
             app:destination="@id/bottomSheetPalette" />
@@ -46,11 +48,13 @@
     <dialog
         android:id="@+id/bottomSheetPalette"
         android:name="com.boutiquesworld.ui.newproduct.palette.BottomSheetPalette"
-        android:label="BottomSheetPalette" />
+        android:label="BottomSheetPalette"
+        tools:layout="@layout/fragment_bottom_sheet_palette_dialog" />
     <fragment
         android:id="@+id/fabricsFragment"
         android:name="com.boutiquesworld.ui.fabrics.FabricsFragment"
-        android:label="Fabrics" />
+        android:label="Fabrics"
+        tools:layout="@layout/fragment_fabrics" />
     <action
         android:id="@+id/action_global_fabricsFragment"
         app:destination="@id/fabricsFragment" />
@@ -60,4 +64,27 @@
     <action
         android:id="@+id/action_global_dashboardFragment"
         app:destination="@id/dashboardFragment" />
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.boutiquesworld.ui.product.ProductDetailFragment"
+        android:label="ProductDetailFragment"
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+        <argument
+            android:name="isFabric"
+            app:argType="boolean" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_productDetailFragment"
+        app:destination="@id/productDetailFragment" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.boutiquesworld.ui.cart.CartFragment"
+        android:label="CartFragment"
+        tools:layout="@layout/fragment_cart" />
+    <action
+        android:id="@+id/action_global_cartFragment"
+        app:destination="@id/cartFragment" />
 </navigation>

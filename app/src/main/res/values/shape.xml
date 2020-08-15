@@ -13,7 +13,8 @@
 
     <style name="ShapeAppearance.BoutiquesWorld.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/large_component_corner_size</item>
+        <item name="cornerSizeTopLeft">@dimen/large_component_corner_size</item>
+        <item name="cornerSizeTopRight">@dimen/large_component_corner_size</item>
     </style>
 
     <!-- ShapeAppearance Round -->
@@ -23,6 +24,6 @@
     </style>
 
     <dimen name="small_component_corner_size">4dp</dimen>
-    <dimen name="medium_component_corner_size">4dp</dimen>
+    <dimen name="medium_component_corner_size">8dp</dimen>
     <dimen name="large_component_corner_size">16dp</dimen>
 </resources>

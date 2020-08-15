@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isFabric"
+            type="Boolean" />
+
+        <variable
+            name="fabric"
+            type="com.boutiquesworld.model.BaseProduct.Fabric" />
+
+        <variable
+            name="product"
+            type="com.boutiquesworld.model.BaseProduct.Product" />
+
+        <variable
+            name="imageUrls"
+            type="java.util.ArrayList&lt;String>" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?actionBarSize"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/desc_nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/detail_image_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="408dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/product_detail_image_item" />
+
+                <TextView
+                    android:id="@+id/product_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:text="@{isFabric ? fabric.productName : product.productName}"
+                    android:textAppearance="?textAppearanceHeadline4"
+                    android:textColor="?colorOnPrimary"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_image_recycler_view"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:text="Blue Saree" />
+
+                <TextView
+                    android:id="@+id/product_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:text="Pinstriped cornflower blue cotton blouse takes you on a walk or just down the hall. Pinstriped cornflower blue cotton blouse takes you on a walk or just down the hall."
+                    app:layout_constraintTop_toBottomOf="@+id/product_title"
+                    tools:layout_editor_absoluteX="16dp" />
+
+                <TextView
+                    android:id="@+id/specification_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:text="@string/specifications"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintTop_toBottomOf="@id/product_description" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/specifications_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/grid_2"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@+id/specification_title"
+                    tools:listitem="@layout/specification_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="@{isFabric ? View.VISIBLE : View.GONE}"
+            app:cardElevation="@dimen/product_description_sticky_card_elevation"
+            app:shapeAppearance="?shapeAppearanceLargeComponent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/sticky_footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/quantity_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1_5"
+                    android:text="@string/quantity"
+                    android:textAppearance="?textAppearanceOverline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/quantity_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1_5"
+                    android:layout_marginBottom="@dimen/grid_1"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toTopOf="@+id/materialButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/quantity_text"
+                    app:strokeColor="?colorControlHighlight"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/remove"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ripple_nav_item"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="@dimen/grid_1_5"
+                            android:src="@drawable/ic_round_remove" />
+
+                        <TextView
+                            android:id="@+id/quantity_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingHorizontal="@dimen/grid_2"
+                            android:paddingVertical="@dimen/grid_1_5"
+                            android:text="1"
+                            android:textAppearance="?textAppearanceBody1" />
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ripple_nav_item"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="@dimen/grid_1_5"
+                            android:src="@drawable/ic_round_add" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:text="@{isFabric ? @string/product_price(fabric.productPrice) : @string/product_price(0)}"
+                    android:textAppearance="?textAppearanceHeadline5"
+                    app:layout_constraintBottom_toBottomOf="@+id/quantity_card"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/quantity_card"
+                    tools:text="₹100" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/materialButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:paddingVertical="@dimen/grid_1_5"
+                    android:text="@string/add_to_bag"
+                    android:textAppearance="?textAppearanceSubtitle2"
+                    android:textColor="?colorOnSecondary"
+                    app:backgroundTint="?colorSecondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</layout>

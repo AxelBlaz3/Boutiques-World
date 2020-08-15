@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import com.boutiquesworld.MainActivity
 import com.boutiquesworld.databinding.FragmentProductsBinding
 import com.boutiquesworld.model.BaseProduct
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
 
@@ -37,7 +40,7 @@ class ProductsFragment(private val position: Int = -1) : Fragment(),
 
         binding.productsRecyclerView.adapter = productsAdapter
 
-        if (position == -1)
+        if ((requireActivity() as MainActivity).profile.isChecked)
             productsViewModel.getProductsLiveData().observe(viewLifecycleOwner) {
                 productsAdapter.submitList(getListForPosition(position, it))
             }
@@ -80,7 +83,11 @@ class ProductsFragment(private val position: Int = -1) : Fragment(),
         }
     }
 
-    override fun onProductClick(product: BaseProduct.Product, position: Int) {
-        // TODO("Not yet implemented")
+    override fun onProductClick(product: BaseProduct, position: Int) {
+        val directions = ProductsFragmentDirections.actionGlobalProductDetailFragment(
+            if (product is BaseProduct.Fabric) product.productId else (product as BaseProduct.Product).productId,
+            product is BaseProduct.Fabric
+        )
+        findNavController().navigate(directions)
     }
 }

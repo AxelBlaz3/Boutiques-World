@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -37,12 +39,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         verifyStartDestination(savedInstanceState)
         findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener(this)
 
-        binding.apply {
+        binding.run {
             home.setOnClickListener(this@MainActivity)
             fabrics.setOnClickListener(this@MainActivity)
             pending.setOnClickListener(this@MainActivity)
             profile.setOnClickListener(this@MainActivity)
             fab.setOnClickListener(this@MainActivity)
+            toolbar.setNavigationOnClickListener { findNavController(R.id.nav_host_fragment).navigateUp() }
         }
     }
 
@@ -50,6 +53,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         binding.toolbar.menu.clear()
         if (menuRes != -1)
             menuInflater.inflate(menuRes, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.cart -> findNavController(R.id.nav_host_fragment).navigate(
+                DashboardFragmentDirections.actionGlobalCartFragment()
+            )
+        }
         return true
     }
 
@@ -80,12 +92,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when (destination.id) {
             R.id.loginFragment -> {
                 supportActionBar?.hide()
+                binding.toolbar.navigationIcon = null
                 menuRes = -1
                 onCreateOptionsMenu(binding.toolbar.menu)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
             R.id.fabricsFragment -> {
                 supportActionBar?.show()
+                binding.toolbar.navigationIcon = null
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.fabrics)
@@ -95,6 +109,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             R.id.dashboardFragment -> {
                 supportActionBar?.show()
+                binding.toolbar.navigationIcon = null
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.dashboard)
@@ -104,6 +119,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             R.id.profileFragment -> {
                 supportActionBar?.show()
+                binding.toolbar.navigationIcon = null
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.profile)
@@ -113,9 +129,29 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             R.id.newProductFragment -> {
                 supportActionBar?.show()
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
                 menuRes = -1
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.new_product)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
+            R.id.productDetailFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                menuRes = R.menu.main_menu
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.empty)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
+            R.id.cartFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.cart)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
             else -> throw RuntimeException("Unknown destination - ${destination.id}")

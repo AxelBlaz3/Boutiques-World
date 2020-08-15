@@ -14,7 +14,7 @@ class ProductsAdapter(
     ListAdapter<BaseProduct, ProductsAdapter.ProductViewHolder>(ProductDiffUtil) {
 
     interface ProductsAdapterListener {
-        fun onProductClick(product: BaseProduct.Product, position: Int)
+        fun onProductClick(product: BaseProduct, position: Int)
     }
 
     class ProductViewHolder(
