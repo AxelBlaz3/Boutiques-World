@@ -56,7 +56,7 @@
                 android:layout_marginHorizontal="@dimen/grid_2"
                 android:layout_marginVertical="@dimen/grid_2"
                 android:layout_marginEnd="@dimen/grid_2"
-                android:text="@{`₹` + String.valueOf(cart.productPrice)}"
+                android:text="@{@string/product_price(cart.productPrice)}"
                 android:textAppearance="?textAppearanceSubtitle1"
                 android:textColor="?colorSecondary"
                 app:layout_constraintBottom_toBottomOf="@+id/quantity_card"
