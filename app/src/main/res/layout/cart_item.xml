@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="cart"
+            type="com.boutiquesworld.model.Cart" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.cart.CartAdapter.CartAdapterListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_2"
+        android:layout_marginVertical="@dimen/grid_0_5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/grid_2"
+            android:paddingEnd="0dp"
+            android:paddingBottom="@dimen/grid_2">
+
+            <ImageView
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?actionBarItemBackground"
+                android:onClick="@{() -> listener.onDeleteButtonClick(cart)}"
+                android:padding="@dimen/grid_2"
+                android:src="@drawable/ic_round_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/cart_product_image"
+                android:layout_width="72dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/grid_2"
+                android:scaleType="centerCrop"
+                app:glideSrc="@{cart.productImage}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="?shapeAppearanceMediumComponent" />
+
+            <TextView
+                android:id="@+id/cart_product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginVertical="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:text="@{`₹` + String.valueOf(cart.productPrice)}"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textColor="?colorSecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/quantity_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+
+            <TextView
+                android:id="@+id/cart_product_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="@{cart.productName}"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintStart_toEndOf="@+id/cart_product_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quantity_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toEndOf="@+id/cart_product_image"
+                app:layout_constraintTop_toBottomOf="@+id/cart_product_title"
+                app:strokeColor="?colorControlHighlight"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_nav_item"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> listener.onRemoveButtonClick(quantityValue, cartProductPrice, cart)}"
+                        android:padding="@dimen/grid_1_5"
+                        android:src="@drawable/ic_round_remove" />
+
+                    <TextView
+                        android:id="@+id/quantity_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingHorizontal="@dimen/grid_2"
+                        android:paddingVertical="@dimen/grid_1_5"
+                        android:text="@{String.valueOf(cart.quantity)}"
+                        android:textAppearance="?textAppearanceBody1" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_nav_item"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> listener.onAddButtonClick(quantityValue, cartProductPrice, cart)}"
+                        android:padding="@dimen/grid_1_5"
+                        android:src="@drawable/ic_round_add" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

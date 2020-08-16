@@ -3,6 +3,7 @@ package com.boutiquesworld.di.module
 import android.content.Context
 import androidx.room.Room
 import com.boutiquesworld.data.BoutiqueDatabase
+import com.boutiquesworld.data.CartDao
 import com.boutiquesworld.data.ProductDao
 import com.boutiquesworld.data.RetailerDao
 import dagger.Module
@@ -21,7 +22,7 @@ object DatabaseModule {
 
     /**
      * Provides single BoutiqueDatabase instance throughout the app's lifecycle.
-     * @return BoutiqueDatabase
+     * @return []BoutiqueDatabase]
      */
     @Singleton
     @Provides
@@ -35,7 +36,7 @@ object DatabaseModule {
 
     /**
      * Provides a single instance of ProductDao throughout the app's lifecycle
-     * @return ProductDao
+     * @return []ProductDao]
      */
     @Singleton
     @Provides
@@ -45,11 +46,21 @@ object DatabaseModule {
 
     /**
      * Provides a single instance of RetailerDao throughout the app's lifecycle
-     * @return RetailerDao
+     * @return [RetailerDao]
      */
     @Singleton
     @Provides
     fun provideRetailerDao(boutiqueDatabase: BoutiqueDatabase): RetailerDao {
         return boutiqueDatabase.retailerDao()
+    }
+
+    /**
+     * Provides a single instance of CartDao throughout the app's lifecycle
+     * @return [CartDao]
+     */
+    @Singleton
+    @Provides
+    fun provideCartDao(boutiqueDatabase: BoutiqueDatabase): CartDao {
+        return boutiqueDatabase.cartDao()
     }
 }

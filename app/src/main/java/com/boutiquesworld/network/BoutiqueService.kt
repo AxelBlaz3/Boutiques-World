@@ -1,6 +1,7 @@
 package com.boutiquesworld.network
 
 import com.boutiquesworld.model.BaseProduct
+import com.boutiquesworld.model.Cart
 import com.boutiquesworld.model.LoginResponse
 import com.boutiquesworld.model.ProductResponse
 import okhttp3.MultipartBody
@@ -18,6 +19,17 @@ interface BoutiqueService {
 
     @GET("/new/API/fabrics.php")
     fun getFabrics(): Call<ArrayList<BaseProduct.Fabric>>
+
+    @FormUrlEncoded
+    @POST("/new/API/cart.php")
+    fun getCart(
+        @Field("user_id") userId: Int,
+        @Field("user_category") userCategory: String
+    ): Call<List<Cart>>
+
+    @FormUrlEncoded
+    @POST("/new/API/cart_insert_item.php")
+    fun insertCartItem(@Body cart: Cart)
 
     @Multipart
     @POST("new/API/upload_product.php")
