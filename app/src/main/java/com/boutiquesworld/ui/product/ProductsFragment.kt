@@ -7,24 +7,29 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.boutiquesworld.MainActivity
 import com.boutiquesworld.databinding.FragmentProductsBinding
 import com.boutiquesworld.model.BaseProduct
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductsFragment(private val position: Int = -1) : Fragment(),
+class ProductsFragment : Fragment(),
     ProductsAdapter.ProductsAdapterListener {
     private lateinit var binding: FragmentProductsBinding
     private val productsAdapter by lazy {
         ProductsAdapter(this)
     }
+    private var position: Int = 0
 
     @Inject
     lateinit var productsViewModel: ProductsViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            position = it.get("position") as Int
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,12 +45,12 @@ class ProductsFragment(private val position: Int = -1) : Fragment(),
 
         binding.productsRecyclerView.adapter = productsAdapter
 
-        if ((requireActivity() as MainActivity).profile.isChecked)
+        if (position == -1)
             productsViewModel.getProductsLiveData().observe(viewLifecycleOwner) {
-                productsAdapter.submitList(getListForPosition(position, it))
+                productsAdapter.submitList(getListForPosition(-1, it))
             }
         else
-            productsViewModel.getFabricsLiveData().observe(viewLifecycleOwner) {
+            productsViewModel.getFabricsLiveData().observe(viewLifecycleOwner) { it ->
                 productsAdapter.submitList(getListForPosition(position, it))
             }
     }
