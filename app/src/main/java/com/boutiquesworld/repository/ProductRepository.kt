@@ -29,32 +29,29 @@ class ProductRepository @Inject constructor(
      * @param businessId: Unique businessId for getting products
      * @param forceRefresh: Force data to be retrieved from Network.
      */
-    suspend fun getProductsForBusiness(businessId: Int, forceRefresh: Boolean) =
+    suspend fun getProductsForBusiness(businessId: Int, forceRefresh: Boolean): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 val cachedProducts = productDao.getAllProducts()
                 cachedProducts?.apply {
                     if (isNotEmpty() && !forceRefresh) {
                         this@ProductRepository.products.postValue(this as ArrayList<BaseProduct>)
-                        return@withContext
+                        return@withContext true
                     }
                 }
                 val response = boutiqueService.getProducts(businessId).execute()
-                if (!response.isSuccessful) {
-                    Log.d(
-                        this@ProductRepository.javaClass.simpleName,
-                        response.errorBody()?.string()!!
-                    )
-                    return@withContext
-                }
+
                 val products = response.body()
                 // Have a local cache of fabrics in BoutiqueDatabase
-                if (products != null)
+                if (products != null) {
                     insertProducts(products)
-                this@ProductRepository.products.postValue(products as ArrayList<BaseProduct>)
+                    this@ProductRepository.products.postValue(products as ArrayList<BaseProduct>)
+                    return@withContext true
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            return@withContext false
         }
 
     suspend fun getFabrics(forceRefresh: Boolean) = withContext(Dispatchers.IO) {

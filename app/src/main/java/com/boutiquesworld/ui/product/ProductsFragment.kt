@@ -43,11 +43,18 @@ class ProductsFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.productsRecyclerView.adapter = productsAdapter
+        binding.run {
+            productsSwipeRefresh.setOnRefreshListener {
+                productsViewModel.getProducts(forceRefresh = true)
+                productsSwipeRefresh.isRefreshing = false
+            }
+            productsRecyclerView.adapter = productsAdapter
+        }
 
-        if (position == -1)
+        // Positions -1, 4, 5 and 6 holds products related to Boutique. Fabrics otherwise.
+        if (position == -1 || position == 4 || position == 5 || position == 6)
             productsViewModel.getProductsLiveData().observe(viewLifecycleOwner) {
-                productsAdapter.submitList(getListForPosition(-1, it))
+                productsAdapter.submitList(getListForPosition(position, it))
             }
         else
             productsViewModel.getFabricsLiveData().observe(viewLifecycleOwner) { it ->
@@ -60,7 +67,7 @@ class ProductsFragment : Fragment(),
         products: ArrayList<BaseProduct>
     ): MutableList<BaseProduct>? {
         return when (position) {
-            -1 -> products
+            -1 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 1 } as MutableList<BaseProduct>
             0 -> products.filter { product ->
                 (product as BaseProduct.Fabric).productType.equals(
                     "Fabric",
@@ -79,12 +86,16 @@ class ProductsFragment : Fragment(),
                     ignoreCase = true
                 )
             } as MutableList<BaseProduct>
-            else -> products.filter { product ->
+            3 -> products.filter { product ->
                 (product as BaseProduct.Fabric).productType.equals(
                     "Dupatta",
                     ignoreCase = true
                 )
             } as MutableList<BaseProduct>
+            4 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 1 } as MutableList<BaseProduct>
+            5 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 0 } as MutableList<BaseProduct>
+            6 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 2 } as MutableList<BaseProduct>
+            else -> throw IllegalArgumentException("Unknown position $position for getting products list")
         }
     }
 

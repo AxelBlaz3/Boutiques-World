@@ -11,5 +11,6 @@
         android:id="@+id/cart"
         android:icon="@drawable/ic_round_shopping_cart"
         android:title="@string/cart"
+        app:actionLayout="@layout/action_layout_basket_badge"
         app:showAsAction="ifRoom" />
 </menu>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,117 +14,100 @@
             type="com.boutiquesworld.ui.cart.CartAdapter.CartAdapterListener" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/grid_2"
-        android:layout_marginVertical="@dimen/grid_0_5">
+        android:paddingStart="@dimen/grid_2"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/grid_2">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/imageButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/grid_2"
-            android:paddingEnd="0dp"
-            android:paddingBottom="@dimen/grid_2">
+            android:onClick="@{() -> listener.onDeleteButtonClick(cart)}"
+            android:text="@string/remove"
+            android:textAllCaps="false"
+            android:textColor="?colorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/cart_product_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cart_product_title" />
 
-            <ImageView
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?actionBarItemBackground"
-                android:onClick="@{() -> listener.onDeleteButtonClick(cart)}"
-                android:padding="@dimen/grid_2"
-                android:src="@drawable/ic_round_close"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/cart_product_image"
+            android:layout_width="88dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/grid_2"
+            android:scaleType="centerCrop"
+            app:glideSrc="@{cart.productImage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="?shapeAppearanceMediumComponent"
+            tools:src="@drawable/thumb" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/cart_product_image"
-                android:layout_width="72dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/grid_2"
-                android:scaleType="centerCrop"
-                app:glideSrc="@{cart.productImage}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="?shapeAppearanceMediumComponent" />
+        <TextView
+            android:id="@+id/cart_product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginEnd="@dimen/grid_2"
+            android:text="@{@string/product_price(cart.productPrice)}"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textColor="?colorSecondary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="₹300.00" />
 
-            <TextView
-                android:id="@+id/cart_product_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_2"
-                android:layout_marginVertical="@dimen/grid_2"
-                android:layout_marginEnd="@dimen/grid_2"
-                android:text="@{@string/product_price(cart.productPrice)}"
-                android:textAppearance="?textAppearanceSubtitle1"
-                android:textColor="?colorSecondary"
-                app:layout_constraintBottom_toBottomOf="@+id/quantity_card"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        <TextView
+            android:id="@+id/cart_product_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:text="@{cart.productName}"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/cart_product_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Pink Saree" />
 
-            <TextView
-                android:id="@+id/cart_product_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_2"
-                android:layout_marginTop="@dimen/grid_2"
-                android:text="@{cart.productName}"
-                android:textAppearance="?textAppearanceHeadline6"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                app:layout_constraintStart_toEndOf="@+id/cart_product_image"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/cart_product_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_0_5"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{cart.productDescription}"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/cart_product_image"
+            app:layout_constraintTop_toBottomOf="@+id/cart_product_title"
+            tools:text="Pinstriped cornflower blue cotton blouse takes you on a walk or just down the hall." />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/quantity_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_2"
-                android:layout_marginTop="@dimen/grid_2"
-                app:cardElevation="0dp"
-                app:layout_constraintStart_toEndOf="@+id/cart_product_image"
-                app:layout_constraintTop_toBottomOf="@+id/cart_product_title"
-                app:strokeColor="?colorControlHighlight"
-                app:strokeWidth="1dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cart_product_quantity_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            app:layout_constraintStart_toEndOf="@+id/cart_product_image"
+            app:layout_constraintTop_toBottomOf="@+id/cart_product_desc">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/remove"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ripple_nav_item"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> listener.onRemoveButtonClick(quantityValue, cartProductPrice, cart)}"
-                        android:padding="@dimen/grid_1_5"
-                        android:src="@drawable/ic_round_remove" />
-
-                    <TextView
-                        android:id="@+id/quantity_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingHorizontal="@dimen/grid_2"
-                        android:paddingVertical="@dimen/grid_1_5"
-                        android:text="@{String.valueOf(cart.quantity)}"
-                        android:textAppearance="?textAppearanceBody1" />
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ripple_nav_item"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> listener.onAddButtonClick(quantityValue, cartProductPrice, cart)}"
-                        android:padding="@dimen/grid_1_5"
-                        android:src="@drawable/ic_round_add" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/cart_product_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/quantity"
+                android:inputType="none"
+                android:textAppearance="?textAppearanceBody2"
+                android:textCursorDrawable="@null"
+                tools:text="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,7 +3,6 @@ package com.boutiquesworld
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,10 +13,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.boutiquesworld.databinding.ActivityMainBinding
+import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.dashboard.DashboardFragmentDirections
 import com.boutiquesworld.util.SessionManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.action_layout_basket_badge.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,6 +29,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    @Inject
+    lateinit var cartViewModel: CartViewModel
 
     private var menuRes = -1
 
@@ -40,19 +45,45 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener(this)
 
         binding.run {
-            home.setOnClickListener(this@MainActivity)
-            fabrics.setOnClickListener(this@MainActivity)
-            pending.setOnClickListener(this@MainActivity)
-            profile.setOnClickListener(this@MainActivity)
             fab.setOnClickListener(this@MainActivity)
             toolbar.setNavigationOnClickListener { findNavController(R.id.nav_host_fragment).navigateUp() }
+            bottomNavView.setupWithNavController(findNavController(R.id.nav_host_fragment))
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Check if same menu is assigned previously, if so, just return
+        if (binding.toolbar.menu.findItem(R.id.cart) != null && binding.toolbar.menu.findItem(R.id.notifications) != null && menuRes == R.menu.main_menu)
+            return true
+
         binding.toolbar.menu.clear()
-        if (menuRes != -1)
+        if (menuRes != -1) {
             menuInflater.inflate(menuRes, menu)
+            cartViewModel.getCart().value?.apply {
+                if (isEmpty())
+                    binding.toolbar.menu?.findItem(R.id.cart)?.actionView?.apply {
+                        setPadding(0, 0, 0, 0)
+                        action_item_basket_count?.visibility =
+                            View.INVISIBLE
+                    }
+                else
+                    binding.toolbar.menu?.findItem(R.id.cart)?.actionView?.apply {
+                        setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.grid_2), 0)
+                        action_item_basket_count?.apply {
+                            visibility = View.VISIBLE
+                            text = size.toString()
+                        }
+                    }
+            }
+        }
+
+        // Set a click listener for basket
+        menu?.findItem(R.id.cart)?.actionView?.setOnClickListener {
+            findNavController(
+                R.id.nav_host_fragment
+            ).navigate(DashboardFragmentDirections.actionGlobalCartFragment())
+        }
+
         return true
     }
 
@@ -67,16 +98,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.home -> findNavController(R.id.nav_host_fragment).navigate(
-                DashboardFragmentDirections.actionGlobalDashboardFragment()
-            )
-            R.id.fabrics -> findNavController(R.id.nav_host_fragment).navigate(
-                DashboardFragmentDirections.actionGlobalFabricsFragment()
-            )
-            R.id.pending -> Log.d(this.javaClass.simpleName, "Pending")
-            R.id.profile -> findNavController(R.id.nav_host_fragment).navigate(
-                DashboardFragmentDirections.actionGlobalProfileFragment()
-            )
             R.id.fab -> findNavController(R.id.nav_host_fragment).navigate(
                 DashboardFragmentDirections.actionGlobalNewProductFragment()
             )
@@ -103,8 +124,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.fabrics)
-                binding.fabrics.isChecked = true
-                shouldUncheckExcept(destination.id)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.dashboardFragment -> {
@@ -113,8 +132,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.dashboard)
-                binding.home.isChecked = true
-                shouldUncheckExcept(destination.id)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.profileFragment -> {
@@ -123,8 +140,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.profile)
-                binding.profile.isChecked = true
-                shouldUncheckExcept(destination.id)
+                showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
+            }
+            R.id.pendingFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon = null
+                menuRes = R.menu.main_menu
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.pending)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             R.id.newProductFragment -> {
@@ -153,6 +176,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.cart)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
+            R.id.bottomSheetPalette -> {
             }
             else -> throw RuntimeException("Unknown destination - ${destination.id}")
         }
@@ -206,7 +231,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     performShow()
                 }
             else {
-                bottomAppBar.performHide()
+                bottomAppBar.apply {
+                    performShow() // Should trigger animation listener
+                    performHide()
+                }
                 var isCancelled = false
                 bottomAppBar.animate().setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationCancel(animation: Animator?) {
@@ -223,14 +251,5 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 })
             }
         }
-    }
-
-    private fun shouldUncheckExcept(destinationId: Int) {
-        if (destinationId != R.id.dashboardFragment)
-            binding.home.isChecked = false
-        if (destinationId != R.id.fabricsFragment)
-            binding.fabrics.isChecked = false
-        if (destinationId != R.id.profileFragment)
-            binding.profile.isChecked = false
     }
 }

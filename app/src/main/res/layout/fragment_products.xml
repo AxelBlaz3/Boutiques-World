@@ -7,17 +7,23 @@
 
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/products_recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/products_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/grid_1"
-        android:paddingTop="@dimen/grid_1"
-        android:paddingBottom="@dimen/recycler_view_bottom_padding"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:paddingBottomSystemWindowInsets="@{true}"
-        app:spanCount="2"
-        tools:listitem="@layout/product_item" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/products_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/grid_1"
+            android:paddingTop="@dimen/grid_1"
+            android:paddingBottom="@dimen/recycler_view_bottom_padding"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:spanCount="2"
+            tools:listitem="@layout/product_item" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

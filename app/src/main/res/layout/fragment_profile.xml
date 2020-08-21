@@ -183,25 +183,39 @@
                 app:showLessOrMore="@{description}"
                 app:totalLines="@{totalLines}" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/show_more_less_button"
-                app:tabIconTint="@color/color_navigation_item"
-                app:tabIndicatorColor="?colorSecondary"
-                app:tabIndicatorFullWidth="false"
-                app:tabSelectedTextColor="?colorSecondary"
-                app:tabTextAppearance="?textAppearanceSubtitle2"
-                app:tabTextColor="?colorControlNormal" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <View
+                android:id="@+id/view2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="@dimen/grid_3"
+                android:layout_marginTop="@dimen/grid_1"
+                android:background="?colorControlHighlight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/show_more_less_button" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="@string/seller_details"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/about_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingBottom="96dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/textView10"
+                tools:listitem="@layout/about_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

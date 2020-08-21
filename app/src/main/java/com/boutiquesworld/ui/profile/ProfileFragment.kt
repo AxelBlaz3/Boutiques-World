@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
-import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentProfileBinding
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -18,6 +16,10 @@ class ProfileFragment : Fragment() {
 
     @Inject
     lateinit var profileViewModel: ProfileViewModel
+
+    private val aboutAdapter by lazy {
+        AboutAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,18 +39,19 @@ class ProfileFragment : Fragment() {
                 showOrHideReadMoreAndReadLess()
             }
 
-            // Set adapter for ViewPager
-            pager.adapter = ProfileStateAdapter(this@ProfileFragment)
-            TabLayoutMediator(tabLayout, pager) { tab, position ->
-                if (position == 0)
-                    tab.text = getString(R.string.products)
-                else
-                    tab.text = getString(R.string.about)
-            }.attach()
-        }
+            aboutRecyclerView.adapter = aboutAdapter
 
-        profileViewModel.getRetailer().observe(viewLifecycleOwner) {
-            binding.retailer = it
+            profileViewModel.getRetailer().observe(viewLifecycleOwner) {
+                retailer = it
+                val retailerInformation =
+                    ArrayList<String>().apply {
+                        add(it.username)
+                        add(it.mobile)
+                        add(it.email)
+                        add(it.zone)
+                    }
+                aboutAdapter.submitList(retailerInformation)
+            }
         }
     }
 

@@ -17,6 +17,8 @@ import javax.inject.Singleton
 class CartViewModel @Inject constructor(private val cartRepository: CartRepository) : ViewModel() {
     private val cartItems: MutableLiveData<ArrayList<Cart>> =
         cartRepository.getCartItemsMutableLiveData()
+    private val areCartItemsLoaded: MutableLiveData<Boolean> = MutableLiveData()
+    private val isNewCartItemPosted: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         updateCart(2, "B", forceRefresh = false)
@@ -24,25 +26,34 @@ class CartViewModel @Inject constructor(private val cartRepository: CartReposito
 
     fun getCart(): LiveData<ArrayList<Cart>> = cartItems
 
+    fun getIsNewCartItemPosted(): LiveData<Boolean?> = isNewCartItemPosted
+
+    fun resetIsNewCartItemPosted() {
+        isNewCartItemPosted.value = null
+    }
+
+    fun getAreCartItemsLoaded(): LiveData<Boolean> = areCartItemsLoaded
+
+    fun setAreCartItemsLoaded(newValue: Boolean) {
+        areCartItemsLoaded.value = newValue
+    }
+
     fun updateCart(userId: Int, userCategory: String, forceRefresh: Boolean) {
         viewModelScope.launch {
-            cartRepository.updateCart(userId, userCategory, forceRefresh = forceRefresh)
+            areCartItemsLoaded.value =
+                cartRepository.updateCart(userId, userCategory, forceRefresh = forceRefresh)
         }
     }
 
-    fun insertNewCartItem(cartItems: List<Cart>) {
+    fun postCartItem(cart: List<Cart>) {
         viewModelScope.launch {
-            cartRepository.insertCartItem(cartItems)
+            isNewCartItemPosted.value = cartRepository.postCartItem(cart)
         }
     }
 
-    fun updateCartItem(cart: Cart, shouldAdd: Boolean) {
+    fun updateCartItem(newCartItem: Cart) {
         viewModelScope.launch {
-            val newCart = cart.copy(
-                quantity = getQuantity(cart, shouldAdd),
-                productPrice = getPrice(cart.quantity, cart.productPrice, shouldAdd)
-            )
-            cartRepository.updateCartItem(cart, newCart)
+            cartRepository.updateCartItem(newCartItem)
         }
     }
 
@@ -59,10 +70,10 @@ class CartViewModel @Inject constructor(private val cartRepository: CartReposito
             cart.quantity - 1
     }
 
-    private fun getPrice(quantity: Int, productPrice: Int, shouldAdd: Boolean): Int {
+    private fun getPrice(quantity: Int, productPrice: String, shouldAdd: Boolean): String {
         return if (shouldAdd)
-            productPrice + (productPrice / quantity)
+            String.format("%.2f", productPrice.toFloat() + (productPrice.toFloat() / quantity))
         else
-            productPrice - (productPrice / quantity)
+            String.format("%.2f", productPrice.toFloat() - (productPrice.toFloat() / quantity))
     }
 }

@@ -7,20 +7,23 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pending_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/about_recycler_view"
+            android:id="@+id/product_status_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingBottom="96dp"
+            android:paddingHorizontal="@dimen/grid_1"
+            android:paddingTop="@dimen/grid_1"
+            android:paddingBottom="@dimen/recycler_view_bottom_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toTopOf="parent"
             app:paddingBottomSystemWindowInsets="@{true}"
-            tools:listitem="@layout/about_item" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:spanCount="2"
+            tools:listitem="@layout/product_status_item" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

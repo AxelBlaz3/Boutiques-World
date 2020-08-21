@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="?actionBarSize"
+        android:animateLayoutChanges="true"
         app:paddingBottomSystemWindowInsets="@{true}"
         app:paddingTopSystemWindowInsets="@{true}">
 
@@ -43,7 +44,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/detail_image_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="408dp"
+                    android:layout_height="@dimen/product_detail_image_height"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -100,12 +101,13 @@
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/sticky_footer_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="@{isFabric ? View.VISIBLE : View.GONE}"
             app:cardElevation="@dimen/product_description_sticky_card_elevation"
-            app:shapeAppearance="?shapeAppearanceLargeComponent">
+            app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Footer">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/sticky_footer"
@@ -130,7 +132,7 @@
                     android:layout_marginTop="@dimen/grid_1_5"
                     android:layout_marginBottom="@dimen/grid_1"
                     app:cardElevation="0dp"
-                    app:layout_constraintBottom_toTopOf="@+id/materialButton"
+                    app:layout_constraintBottom_toTopOf="@+id/add_to_bag"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/quantity_text"
                     app:strokeColor="?colorControlHighlight"
@@ -147,7 +149,7 @@
                             android:background="@drawable/ripple_nav_item"
                             android:clickable="true"
                             android:focusable="true"
-                            android:padding="@dimen/grid_1_5"
+                            android:padding="@dimen/grid_1"
                             android:src="@drawable/ic_round_remove" />
 
                         <TextView
@@ -156,7 +158,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:paddingHorizontal="@dimen/grid_2"
-                            android:paddingVertical="@dimen/grid_1_5"
+                            android:paddingVertical="@dimen/grid_1"
                             android:text="1"
                             android:textAppearance="?textAppearanceBody1" />
 
@@ -167,12 +169,13 @@
                             android:background="@drawable/ripple_nav_item"
                             android:clickable="true"
                             android:focusable="true"
-                            android:padding="@dimen/grid_1_5"
+                            android:padding="@dimen/grid_1"
                             android:src="@drawable/ic_round_add" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/grid_2"
@@ -184,7 +187,7 @@
                     tools:text="₹100" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/materialButton"
+                    android:id="@+id/add_to_bag"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/grid_2"
@@ -192,7 +195,7 @@
                     android:text="@string/add_to_bag"
                     android:textAppearance="?textAppearanceSubtitle2"
                     android:textColor="?colorOnSecondary"
-                    app:backgroundTint="?colorSecondary"
+                    app:backgroundTint="@color/color_material_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

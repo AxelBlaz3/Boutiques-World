@@ -27,9 +27,16 @@ interface BoutiqueService {
         @Field("user_category") userCategory: String
     ): Call<List<Cart>>
 
+    @POST("/new/API/cart_insert_update_item.php")
+    fun insertCartItem(@Body cart: List<Cart>): Call<Any>
+
     @FormUrlEncoded
-    @POST("/new/API/cart_insert_item.php")
-    fun insertCartItem(@Body cart: Cart)
+    @POST("/new/API/cart_delete_item.php")
+    fun deleteCartItem(
+        @Field("user_id") userId: Int,
+        @Field("product_id") productId: Int,
+        @Field("user_category") userCategory: String
+    ): Call<Any>
 
     @Multipart
     @POST("new/API/upload_product.php")

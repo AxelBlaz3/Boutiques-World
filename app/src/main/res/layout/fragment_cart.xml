@@ -5,16 +5,84 @@
 
     <data>
 
+        <variable
+            name="total"
+            type="String" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cart_recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="64dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:paddingBottomSystemWindowInsets="@{true}"
-        app:paddingTopSystemWindowInsets="@{true}"
-        tools:listitem="@layout/cart_item" />
+        android:layout_height="match_parent">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/cart_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cart_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="64dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/cart_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:cardElevation="@dimen/product_description_sticky_card_elevation"
+            app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Footer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/grid_2">
+
+                <TextView
+                    android:id="@+id/order_total_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:text="@string/total"
+                    android:textAppearance="?textAppearanceCaption"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/materialButton"
+                    tools:text="Total" />
+
+                <TextView
+                    android:id="@+id/order_total"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:text="@{total}"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/materialButton"
+                    app:layout_constraintEnd_toStartOf="@+id/materialButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/order_total_text"
+                    tools:text="₹900.00" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/materialButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:text="@string/checkout"
+                    android:textAllCaps="false"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textColor="?colorOnSecondary"
+                    app:backgroundTint="?colorSecondary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/order_total"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 </layout>

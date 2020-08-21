@@ -108,13 +108,32 @@
     <string name="dresses">Dresses</string>
 
     <!-- Product detail -->
-    <string name="product_price">₹%1$d</string>
+    <string name="product_price">₹%1$s</string>
     <string name="quantity">Quantity</string>
     <string name="add_to_bag">Add to Bag</string>
     <string name="specifications">Specifications</string>
+    <string name="quantity_in_meters">%1$dm</string>
+    <string name="quantity_in_units">%1$d units</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="in_bag">Check your bag</string>
 
     <!-- About -->
     <string name="email">Email</string>
     <string name="place">Place</string>
     <string name="name">Name</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="item_s_total">Item(s) total</string>
+    <string name="checkout">Checkout</string>
+    <string name="total">Total</string>
+    <string name="cancelled">Cancelled</string>
+
+    <!-- Pending -->
+    <string name="in_progress">In Progress</string>
+    <string name="progress">Progress</string>
+    <string name="approved">Approved</string>
+    <string name="seller_details">Seller Details</string>
+    <string name="live">Live</string>
+    <string name="remove">Remove</string>
+
+    <style name="cancelled">Cancelled</style>
 </resources>

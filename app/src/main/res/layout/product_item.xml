@@ -42,7 +42,7 @@
                 android:id="@+id/product_logo"
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 app:glideSrc="@{isFabric ? fabric.productThumb : product.productThumb}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

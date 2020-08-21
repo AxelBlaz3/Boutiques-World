@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingTop="?actionBarSize"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/pendingTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIconTint="@color/color_navigation_item"
+            app:tabIndicatorColor="?colorSecondary"
+            app:tabIndicatorFullWidth="false"
+            app:tabSelectedTextColor="?colorSecondary"
+            app:tabTextAppearance="?textAppearanceSubtitle2"
+            app:tabTextColor="?colorControlNormal" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pendingViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+</layout>

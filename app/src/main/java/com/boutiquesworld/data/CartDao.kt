@@ -15,14 +15,20 @@ interface CartDao {
     /**
      * Add new item to cart.
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCartItems(cartItems: List<Cart>)
 
     /**
      * Delete item from the cart.
      */
-    @Delete
-    fun removeItemFromCart(cart: Cart)
+    @Query("DELETE FROM Cart WHERE productId=:productId")
+    fun removeItemFromCart(productId: Int): Int
+
+    /**
+     * Truncate cart table.
+     */
+    @Query("DELETE FROM Cart")
+    fun truncateCartTable(): Int
 
     /**
      * Update item in cart.

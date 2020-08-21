@@ -52,8 +52,8 @@ class RetailerRepository @Inject constructor(
 
     suspend fun updateRetailer() = withContext(Dispatchers.IO) {
         if (retailer.value == null)
-            retailerDao.getRetailer()?.apply {
-                retailer.postValue(get(0))
+            retailerDao.getRetailer()?.let {
+                retailer.postValue(it[0])
             }
     }
 
