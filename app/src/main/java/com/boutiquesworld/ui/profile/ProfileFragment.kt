@@ -43,12 +43,14 @@ class ProfileFragment : Fragment() {
 
             profileViewModel.getRetailer().observe(viewLifecycleOwner) {
                 retailer = it
+                isBoutique = it.businessCategory == "B"
                 val retailerInformation =
                     ArrayList<String>().apply {
                         add(it.username)
                         add(it.mobile)
                         add(it.email)
-                        add(it.zone)
+                        if (it.businessCategory == "B")
+                            add(it.zone)
                     }
                 aboutAdapter.submitList(retailerInformation)
             }

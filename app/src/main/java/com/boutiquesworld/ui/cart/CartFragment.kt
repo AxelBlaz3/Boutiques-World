@@ -46,7 +46,7 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
         binding.run {
             cartSwipeRefresh.setOnRefreshListener {
                 profileViewModel.getRetailer().value?.let {
-                    cartViewModel.updateCart(it.shopId, "B", forceRefresh = true)
+                    cartViewModel.updateCart(it.shopId, it.businessCategory, forceRefresh = true)
                 }
                 cartSwipeRefresh.isRefreshing = false
             }

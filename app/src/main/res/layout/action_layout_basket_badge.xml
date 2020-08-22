@@ -28,5 +28,6 @@
         app:layout_constraintEnd_toEndOf="@+id/action_item_basket"
         app:layout_constraintStart_toEndOf="@+id/action_item_basket"
         app:layout_constraintTop_toTopOf="@+id/action_item_basket"
-        tools:text="4" />
+        tools:text="4"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

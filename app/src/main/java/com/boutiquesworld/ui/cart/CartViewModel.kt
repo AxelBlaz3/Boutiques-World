@@ -14,15 +14,13 @@ import javax.inject.Singleton
  * ViewModel for managing cart.
  */
 @Singleton
-class CartViewModel @Inject constructor(private val cartRepository: CartRepository) : ViewModel() {
+class CartViewModel @Inject constructor(
+    private val cartRepository: CartRepository
+) : ViewModel() {
     private val cartItems: MutableLiveData<ArrayList<Cart>> =
         cartRepository.getCartItemsMutableLiveData()
-    private val areCartItemsLoaded: MutableLiveData<Boolean> = MutableLiveData()
+    private val areCartItemsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isNewCartItemPosted: MutableLiveData<Boolean> = MutableLiveData()
-
-    init {
-        updateCart(2, "B", forceRefresh = false)
-    }
 
     fun getCart(): LiveData<ArrayList<Cart>> = cartItems
 

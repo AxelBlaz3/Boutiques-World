@@ -134,6 +134,7 @@
     <string name="seller_details">Seller Details</string>
     <string name="live">Live</string>
     <string name="remove">Remove</string>
+    <string name="orders">Orders</string>
 
     <style name="cancelled">Cancelled</style>
 </resources>

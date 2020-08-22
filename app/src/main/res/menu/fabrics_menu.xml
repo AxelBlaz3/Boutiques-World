@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fabricsHomeFragment"
+        android:icon="@drawable/ic_round_home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/fabricsOrdersFragment"
+        android:icon="@drawable/ic_round_assignment"
+        android:title="@string/orders" />
+    <item android:title="" />
+    <item
+        android:id="@+id/fabricsProductsFragment"
+        android:icon="@drawable/ic_cloth"
+        android:title="@string/products" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_round_person"
+        android:title="@string/profile" />
+</menu>

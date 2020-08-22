@@ -9,6 +9,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -17,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.boutiquesworld.databinding.ActivityMainBinding
 import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.dashboard.DashboardFragmentDirections
+import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.boutiquesworld.util.SessionManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.action_layout_basket_badge.view.*
@@ -31,9 +33,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var sessionManager: SessionManager
 
     @Inject
+    lateinit var profileViewModel: ProfileViewModel
+
+    @Inject
     lateinit var cartViewModel: CartViewModel
 
     private var menuRes = -1
+    private var isCartBadgeInitialized = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +54,20 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             fab.setOnClickListener(this@MainActivity)
             toolbar.setNavigationOnClickListener { findNavController(R.id.nav_host_fragment).navigateUp() }
             bottomNavView.setupWithNavController(findNavController(R.id.nav_host_fragment))
+
+            profileViewModel.getRetailer().observe(this@MainActivity) {
+                if (it.businessCategory == "B") {
+                    bottomNavView.inflateMenu(R.menu.boutiques_nav_menu)
+                    cartViewModel.updateCart(it.shopId, it.businessCategory, forceRefresh = false)
+                } else if (it.businessCategory == "F")
+                    bottomNavView.inflateMenu(R.menu.fabrics_menu)
+            }
+
+            cartViewModel.getAreCartItemsLoaded().observe(this@MainActivity) { areCartItemsLoaded ->
+                if (!areCartItemsLoaded || isCartBadgeInitialized)
+                    return@observe
+                initCartBadge()
+            }
         }
     }
 
@@ -59,22 +79,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         binding.toolbar.menu.clear()
         if (menuRes != -1) {
             menuInflater.inflate(menuRes, menu)
-            cartViewModel.getCart().value?.apply {
-                if (isEmpty())
-                    binding.toolbar.menu?.findItem(R.id.cart)?.actionView?.apply {
-                        setPadding(0, 0, 0, 0)
-                        action_item_basket_count?.visibility =
-                            View.INVISIBLE
-                    }
-                else
-                    binding.toolbar.menu?.findItem(R.id.cart)?.actionView?.apply {
-                        setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.grid_2), 0)
-                        action_item_basket_count?.apply {
-                            visibility = View.VISIBLE
-                            text = size.toString()
-                        }
-                    }
-            }
+            initCartBadge()
         }
 
         // Set a click listener for basket
@@ -250,6 +255,26 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
                 })
             }
+        }
+    }
+
+    private fun initCartBadge() {
+        cartViewModel.getCart().value?.let {
+            if (it.isEmpty())
+                binding.toolbar.menu?.findItem(R.id.cart)?.actionView?.apply {
+                    setPadding(0, 0, 0, 0)
+                    action_item_basket_count?.visibility =
+                        View.INVISIBLE
+                }
+            else
+                binding.toolbar.menu?.findItem(R.id.cart)?.actionView?.let { actionView ->
+                    actionView.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.grid_2), 0)
+                    actionView.action_item_basket_count?.let { basketCount ->
+                        basketCount.visibility = View.VISIBLE
+                        basketCount.text = it.size.toString()
+                    }
+                }
+            isCartBadgeInitialized = cartViewModel.getAreCartItemsLoaded().value!!
         }
     }
 }

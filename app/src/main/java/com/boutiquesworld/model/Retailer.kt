@@ -18,5 +18,5 @@ data class Retailer(
     @SerializedName("business_logo") val businessLogo: String,
     @SerializedName("zone") val zone: String,
     @SerializedName("uuid") val uuid: String,
-    @SerializedName("business_category") val business_category: String
+    @SerializedName("business_category") val businessCategory: String
 )

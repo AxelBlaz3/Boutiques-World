@@ -37,9 +37,9 @@ class RetailerRepository @Inject constructor(
                     val responseBody = response.body()
                     responseBody?.apply {
                         if (!error) {
-                            this@RetailerRepository.retailer.postValue(retailer)
                             insertRetailer(retailer)
                             sessionManager.saveSession(isLoggedIn = true)
+                            this@RetailerRepository.retailer.postValue(retailer)
                             return@withContext true
                         }
                     }
@@ -53,7 +53,8 @@ class RetailerRepository @Inject constructor(
     suspend fun updateRetailer() = withContext(Dispatchers.IO) {
         if (retailer.value == null)
             retailerDao.getRetailer()?.let {
-                retailer.postValue(it[0])
+                if (it.isNotEmpty())
+                    retailer.postValue(it[0])
             }
     }
 
