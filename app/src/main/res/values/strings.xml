@@ -135,6 +135,12 @@
     <string name="live">Live</string>
     <string name="remove">Remove</string>
     <string name="orders">Orders</string>
+    <string name="save">Save</string>
+    <string name="delivery_time">Delivery time</string>
+    <string name="price">Price (₹)</string>
+    <string name="price_cannot_be_zero">Price cannot be empty or zero</string>
+    <string name="hint_quantity_in_meters">Quantity (meters)</string>
+    <string name="hint_quantity_in_units">Quantity (units)</string>
 
     <style name="cancelled">Cancelled</style>
 </resources>

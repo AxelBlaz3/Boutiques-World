@@ -11,7 +11,7 @@
         android:title="@string/orders" />
     <item android:title="" />
     <item
-        android:id="@+id/fabricsProductsFragment"
+        android:id="@+id/fabricProductsFragment"
         android:icon="@drawable/ic_cloth"
         android:title="@string/products" />
     <item

@@ -103,9 +103,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.fab -> findNavController(R.id.nav_host_fragment).navigate(
-                DashboardFragmentDirections.actionGlobalNewProductFragment()
-            )
+            R.id.fab -> profileViewModel.getRetailer().value?.let {
+                if (it.businessCategory == "B")
+                    findNavController(R.id.nav_host_fragment).navigate(
+                        DashboardFragmentDirections.actionGlobalNewProductFragment()
+                    )
+                else if (it.businessCategory == "F")
+                    findNavController(R.id.nav_host_fragment).navigate(
+                        DashboardFragmentDirections.actionGlobalFabricNewProductFragment()
+                    )
+            }
             else -> throw RuntimeException("Unknown widget clicked $v")
         }
     }
@@ -155,7 +162,24 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 updateToolbarTitle(R.string.pending)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
+            R.id.fabricProductsFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon = null
+                menuRes = R.menu.main_menu
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.products)
+                showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
+            }
             R.id.newProductFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.new_product)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
+            R.id.fabricNewProductFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon =
                     ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)

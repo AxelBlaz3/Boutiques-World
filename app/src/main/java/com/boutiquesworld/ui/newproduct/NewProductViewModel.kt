@@ -1,5 +1,6 @@
 package com.boutiquesworld.ui.newproduct
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,9 +43,13 @@ class NewProductViewModel @Inject constructor(
     private val isBusinessNameEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isUuidEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isZoneEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isDeliveryTimeEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isQuantityEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isProductPriceEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
 
     // Know if the product submission is successful
     private val isProductSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
+    private val isFabricSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
 
     // RequestBody PartMap for BoutiqueService
     private val formDataMap = HashMap<String, RequestBody>()
@@ -65,6 +70,12 @@ class NewProductViewModel @Inject constructor(
     fun getIsStartPriceZero(): LiveData<Boolean> = isStartPriceZero
     fun getIsProductSubmissionSuccessful(): LiveData<Boolean> = isProductSubmissionSuccessful
 
+    // Fabrics
+    fun getIsProductPriceEmpty(): LiveData<Boolean> = isProductPriceEmpty
+    fun getIsDeliveryTimeEmpty(): LiveData<Boolean> = isDeliveryTimeEmpty
+    fun getIsQuantityEmpty(): LiveData<Boolean> = isQuantityEmpty
+    fun getIsFabricSubmissionSuccessful(): LiveData<Boolean> = isFabricSubmissionSuccessful
+
     fun submitProduct(
         productType: String,
         productName: String,
@@ -84,7 +95,7 @@ class NewProductViewModel @Inject constructor(
     ) {
         try {
             retailer.value?.let {
-                val isDataValid = isDataValid(
+                val isDataValid = isProductDataValid(
                     productType,
                     productName,
                     productCloth,
@@ -132,7 +143,75 @@ class NewProductViewModel @Inject constructor(
         }
     }
 
-    private fun isDataValid(
+    fun submitFabric(
+        productType: String,
+        productName: String,
+        productCloth: String,
+        productFabric: String,
+        deliveryTime: String,
+        productQuantity: String,
+        productColor: String,
+        productDescription: String,
+        productImage1: File?,
+        productImage2: File?,
+        productImage3: File?,
+        productImage4: File?,
+        productImage5: File?,
+        productPrice: String
+    ) {
+        try {
+            retailer.value?.let {
+                val isDataValid = isFabricDataValid(
+                    productType,
+                    productName,
+                    productCloth,
+                    productFabric,
+                    deliveryTime,
+                    productQuantity,
+                    productColor,
+                    productDescription,
+                    productImage1,
+                    productImage2,
+                    productImage3,
+                    productImage4,
+                    productImage5,
+                    productPrice,
+                    it.shopId.toString(),
+                    it.businessName,
+                    it.uuid
+                )
+                if (isDataValid) {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        try {
+                            Log.d(
+                                this@NewProductViewModel.javaClass.simpleName,
+                                "submitFabric() try {}"
+                            )
+                            val response =
+                                boutiqueService.postFabric(formDataMap, imageFiles).execute()
+                            if (response.isSuccessful) {
+                                isFabricSubmissionSuccessful.postValue(true)
+                                productImage1?.delete()
+                                productImage2?.delete()
+                                productImage3?.delete()
+                                productImage4?.delete()
+                                productImage5?.delete()
+                            } else
+                                isFabricSubmissionSuccessful.postValue(false)
+                        } catch (e: Exception) {
+                            isFabricSubmissionSuccessful.postValue(false)
+                            e.printStackTrace()
+                        }
+                    }
+                } else
+                    return
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun isProductDataValid(
         productType: String,
         productName: String,
         productCloth: String,
@@ -233,6 +312,107 @@ class NewProductViewModel @Inject constructor(
         if (isZoneEmpty.value!!)
             return false
         tempDataMap["zone"] = getFormRequestBody(zone)
+
+        formDataMap.putAll(tempDataMap)
+
+        // Clear temporary maps
+        tempDataMap.clear()
+        return true
+    }
+
+    private fun isFabricDataValid(
+        productType: String,
+        productName: String,
+        productCloth: String,
+        productFabric: String,
+        deliveryTime: String,
+        productQuantity: String,
+        productColor: String,
+        productDescription: String,
+        productImage1: File?,
+        productImage2: File?,
+        productImage3: File?,
+        productImage4: File?,
+        productImage5: File?,
+        productPrice: String,
+        businessId: String,
+        businessName: String,
+        uuid: String
+    ): Boolean {
+        val tempDataMap = HashMap<String, RequestBody>()
+
+        isProductNameEmpty.value = productName.isEmpty()
+        if (isProductNameEmpty.value!!)
+            return false
+        tempDataMap["product_name"] = getFormRequestBody(productName)
+
+        isProductTypeEmpty.value = productType.isEmpty()
+        if (isProductTypeEmpty.value!!)
+            return false
+        tempDataMap["product_type"] = getFormRequestBody(productType)
+
+        isProductClothEmpty.value = productCloth.isEmpty()
+        if (isProductClothEmpty.value!!)
+            return false
+        tempDataMap["product_cloth"] = getFormRequestBody(productCloth)
+
+        isProductFabricEmpty.value = productFabric.isEmpty()
+        if (isProductFabricEmpty.value!!)
+            return false
+        tempDataMap["product_fabric"] = getFormRequestBody(productFabric)
+
+        isDeliveryTimeEmpty.value = deliveryTime.isEmpty()
+        if (isDeliveryTimeEmpty.value!!)
+            return false
+        tempDataMap["delivery_time"] = getFormRequestBody(deliveryTime)
+
+        isProductColorEmpty.value = productColor.isEmpty()
+        if (isProductColorEmpty.value!!)
+            return false
+        tempDataMap["product_colour"] = getFormRequestBody(productColor)
+
+        isProductDescriptionEmpty.value = productDescription.isEmpty()
+        if (isProductDescriptionEmpty.value!!)
+            return false
+        tempDataMap["product_description"] = getFormRequestBody(productDescription)
+
+        isProductImage1LengthZero.value = productImage1 == null || productImage1.length() == 0L
+        if (isProductImage1LengthZero.value!!)
+            return false
+
+        isProductImage2LengthZero.value = productImage2 == null || productImage2.length() == 0L
+        if (isProductImage2LengthZero.value!!)
+            return false
+        addFileMultiPartBody("product_image1", productImage1)
+        addFileMultiPartBody("product_image2", productImage2)
+        addFileMultiPartBody("product_image3", productImage3)
+        addFileMultiPartBody("product_image4", productImage4)
+        addFileMultiPartBody("product_image5", productImage5)
+
+        isProductPriceEmpty.value = productPrice.isEmpty()
+        if (isProductPriceEmpty.value!!)
+            return false
+        tempDataMap["product_price"] = getFormRequestBody(productPrice)
+
+        isQuantityEmpty.value = productQuantity.isEmpty()
+        if (isQuantityEmpty.value!!)
+            return false
+        tempDataMap["available_meters"] = getFormRequestBody(productQuantity)
+
+        isBusinessIdEmpty.value = businessId.isEmpty()
+        if (isBusinessIdEmpty.value!!)
+            return false
+        tempDataMap["business_id"] = getFormRequestBody(businessId)
+
+        isBusinessNameEmpty.value = businessName.isEmpty()
+        if (isBusinessNameEmpty.value!!)
+            return false
+        tempDataMap["business_name"] = getFormRequestBody(businessName)
+
+        isUuidEmpty.value = uuid.isEmpty()
+        if (isUuidEmpty.value!!)
+            return false
+        tempDataMap["uuid"] = getFormRequestBody(uuid)
 
         formDataMap.putAll(tempDataMap)
 

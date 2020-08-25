@@ -21,6 +21,13 @@ interface BoutiqueService {
     fun getFabrics(): Call<ArrayList<BaseProduct.Fabric>>
 
     @FormUrlEncoded
+    @POST("/new/API/update_fabric.php")
+    fun updateFabric(
+        @Field("product_id") productId: Int,
+        @Field("available_meters") availableMeters: Int
+    ): Call<Any>
+
+    @FormUrlEncoded
     @POST("/new/API/cart.php")
     fun getCart(
         @Field("user_id") userId: Int,
@@ -41,6 +48,13 @@ interface BoutiqueService {
     @Multipart
     @POST("new/API/upload_product.php")
     fun postProduct(
+        @PartMap formDataMap: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part imageFiles: List<MultipartBody.Part>
+    ): Call<ProductResponse>
+
+    @Multipart
+    @POST("new/API/upload_fabric.php")
+    fun postFabric(
         @PartMap formDataMap: Map<String, @JvmSuppressWildcards RequestBody>,
         @Part imageFiles: List<MultipartBody.Part>
     ): Call<ProductResponse>

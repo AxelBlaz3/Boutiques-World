@@ -36,8 +36,8 @@
                 android:drawablePadding="@dimen/grid_2"
                 android:text="@string/new_product_image_desc"
                 android:textAppearance="?textAppearanceBody2"
-                app:layout_constraintTop_toTopOf="parent"
                 app:drawableStartCompat="@drawable/ic_round_info"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="16dp" />
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -184,7 +184,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
-                app:layout_constraintEnd_toStartOf="@+id/product_occasion_text_input_layout"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_category_text_input_layout">
@@ -199,46 +199,26 @@
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/product_occasion_text_input_layout"
-                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/grid_2"
-                android:layout_marginTop="@dimen/grid_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/product_fabric_text_input_layout"
-                app:layout_constraintTop_toBottomOf="@+id/product_category_text_input_layout">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/product_occasion"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/occasion_type"
-                    android:inputType="none"
-                    android:textAppearance="?textAppearanceBody2"
-                    android:textCursorDrawable="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/product_quantity_text_input_layout"
-                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
-                android:layout_width="wrap_content"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
+                app:layout_constraintEnd_toStartOf="@+id/color_palette"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_fabric_text_input_layout">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/preparation_time"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/quantity"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/stitching_time"
+                    android:hint="@string/hint_quantity_in_meters"
                     android:inputType="none"
                     android:textAppearance="?textAppearanceBody2"
-                    android:textCursorDrawable="@null" />
+                    android:textCursorDrawable="@null"
+                    tools:text="50" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
@@ -247,6 +227,8 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="@dimen/grid_2"
                 app:layout_constraintBottom_toBottomOf="@+id/product_quantity_text_input_layout"
+                app:layout_constraintEnd_toStartOf="@+id/color_name_text"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/product_quantity_text_input_layout"
                 app:layout_constraintTop_toTopOf="@+id/product_quantity_text_input_layout"
                 app:srcCompat="@drawable/ic_round_palette" />
@@ -260,36 +242,54 @@
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/color_palette"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/color_palette"
                 app:layout_constraintTop_toTopOf="@+id/color_palette"
                 tools:text="Red"
                 tools:visibility="visible" />
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/rangeSlider"
-                style="@style/Widget.Boutiques.Slider"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_delivery_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                app:layout_constraintEnd_toStartOf="@+id/product_price_text_input_layout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_quantity_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/delivery_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/delivery_time"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_price_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/grid_2"
-                android:stepSize="100"
                 android:layout_marginTop="@dimen/grid_2"
-                android:valueFrom="0"
-                android:valueTo="18000"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toBottomOf="@+id/product_quantity_text_input_layout"
-                app:minSeparation="100dp"
-                app:values="@array/price_ranges" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_delivery_text_input_layout"
+                app:layout_constraintTop_toBottomOf="@+id/product_quantity_text_input_layout">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/price_range"
-                android:textAppearance="?textAppearanceSubtitle2"
-                app:layout_constraintBottom_toBottomOf="@+id/rangeSlider"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rangeSlider" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/price"
+                    android:inputType="number"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/product_description_text_input_layout"
@@ -297,7 +297,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
-                app:layout_constraintTop_toBottomOf="@+id/rangeSlider">
+                app:layout_constraintTop_toBottomOf="@+id/product_delivery_text_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/product_description"

@@ -22,8 +22,6 @@
             android:paddingTop="@dimen/grid_1"
             android:paddingBottom="@dimen/recycler_view_bottom_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:paddingBottomSystemWindowInsets="@{true}"
-            app:spanCount="2"
             tools:listitem="@layout/product_status_item" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

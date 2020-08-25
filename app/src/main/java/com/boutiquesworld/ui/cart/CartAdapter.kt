@@ -1,6 +1,5 @@
 package com.boutiquesworld.ui.cart
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -78,7 +77,6 @@ class CartAdapter(private val listener: CartAdapterListener) :
             String.format("%.2f", newQuantity * (productPrice.toFloat() / quantity))
 
         private fun updateQuantityAndPrice(binding: CartItemBinding, cart: Cart, newQuantity: Int) {
-            Log.d(this.javaClass.simpleName, cart.productName)
             binding.run {
                 val newCart = cart.copy(
                     productPrice = getPrice(

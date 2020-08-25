@@ -64,7 +64,7 @@
         tools:layout="@layout/fragment_bottom_sheet_palette_dialog" />
     <fragment
         android:id="@+id/fabricsFragment"
-        android:name="com.boutiquesworld.ui.fabrics.FabricsFragment"
+        android:name="com.boutiquesworld.ui.fabrics.boutiques.FabricsFragment"
         android:label="Fabrics"
         tools:layout="@layout/fragment_fabrics" />
     <action
@@ -131,4 +131,23 @@
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
         app:popExitAnim="@anim/fragment_close_exit" />
+    <fragment
+        android:id="@+id/fabricProductsFragment"
+        android:name="com.boutiquesworld.ui.fabrics.FabricProductsFragment"
+        android:label="FabricProductsFragment"
+        tools:layout="@layout/fragment_fabric_products" />
+    <action
+        android:id="@+id/action_global_fabricProductsFragment"
+        app:destination="@id/fabricProductsFragment" />
+    <fragment
+        android:id="@+id/fabricNewProductFragment"
+        android:name="com.boutiquesworld.ui.fabrics.newproduct.FabricNewProductFragment"
+        android:label="FabricNewProductFragment">
+        <action
+            android:id="@+id/action_fabricNewProductFragment_to_bottomSheetPalette"
+            app:destination="@id/bottomSheetPalette" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_fabricNewProductFragment"
+        app:destination="@id/fabricNewProductFragment" />
 </navigation>

@@ -55,4 +55,10 @@ class ProductsViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateFabric(productId: Int, quantity: Int) {
+        viewModelScope.launch {
+            productRepository.updateFabric(productId, quantity)
+        }
+    }
 }

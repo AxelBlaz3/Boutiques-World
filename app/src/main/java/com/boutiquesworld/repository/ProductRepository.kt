@@ -81,6 +81,17 @@ class ProductRepository @Inject constructor(
         }
     }
 
+    suspend fun updateFabric(productId: Int, quantity: Int) = withContext(Dispatchers.IO) {
+        try {
+            val response = boutiqueService.updateFabric(productId, quantity).execute()
+            if (response.isSuccessful) {
+                // TODO("Handle when the fabric is uploaded to server")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private suspend fun insertProducts(products: ArrayList<BaseProduct.Product>) =
         withContext(Dispatchers.IO) {
             productDao.insertAllProducts(products)

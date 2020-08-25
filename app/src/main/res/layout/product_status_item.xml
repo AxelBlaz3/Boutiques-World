@@ -5,14 +5,25 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="product"
-            type="com.boutiquesworld.model.BaseProduct.Product" />
+            name="fabric"
+            type="com.boutiquesworld.model.BaseProduct.Fabric" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.fabrics.ProductStatusAdapter.ProductStatusAdapterListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/grid_2">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/shapeableImageView"
@@ -20,8 +31,8 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/grid_2"
             android:scaleType="centerCrop"
-            app:glideSrc="@{product.productImage1}"
-            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:glideSrc="@{fabric.productImage1}"
+            app:layout_constraintBottom_toBottomOf="@+id/product_status_quantity_text_input_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView6"
             app:shapeAppearance="?shapeAppearanceMediumComponent"
@@ -35,9 +46,11 @@
             android:layout_marginTop="@dimen/grid_2"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{product.productName}"
+            android:text="@{fabric.productName}"
             android:textAppearance="?textAppearanceHeadline6"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textView7"
+            app:layout_constraintEnd_toStartOf="@+id/textView8"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Pink Saree" />
@@ -50,27 +63,37 @@
             android:layout_marginTop="@dimen/grid_0_5"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{product.productDescription}"
+            android:text="@{fabric.productDescription}"
             android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintBottom_toTopOf="@+id/product_status_quantity_text_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
             app:layout_constraintTop_toBottomOf="@+id/textView6"
             tools:text="Some weird description for a weird product." />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/product_status_quantity_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/grid_2"
-            android:text="@{@string/product_price(product.startPrice) + ` - ` + @string/product_price(product.endPrice)}"
-            android:textAppearance="?textAppearanceSubtitle1"
-            android:textColor="?colorSecondary"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView8"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
             app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
-            tools:text="₹300 - ₹500" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/product_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="@{fabric.productStatus == 1 ? true : false}"
+                android:hint="@string/quantity"
+                android:inputType="number"
+                android:text="@{String.valueOf(fabric.availableMeters)}"
+                android:textAppearance="?textAppearanceBody2"
+                android:textCursorDrawable="@null"
+                tools:text="3" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView8"
@@ -78,11 +101,27 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/grid_2"
             android:layout_marginEnd="@dimen/grid_2"
-            android:text="@{product.productStatus == 0 ? @string/in_progress : @string/cancelled}"
+            android:text="@{@string/product_price(fabric.productPrice)}"
+            android:textAppearance="?textAppearanceSubtitle1"
             android:textColor="?colorSecondary"
-            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView9"
-            tools:text="In Progress" />
+            app:layout_constraintTop_toTopOf="@+id/textView6"
+            tools:text="₹300" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> listener.onSaveButtonClick(fabric.productId, productStatus)}"
+            android:paddingStart="@dimen/grid_2"
+            android:paddingEnd="0dp"
+            android:text="@string/save"
+            android:textColor="?colorSecondary"
+            android:visibility="@{fabric.productStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/product_status_quantity_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/product_status_quantity_text_input_layout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

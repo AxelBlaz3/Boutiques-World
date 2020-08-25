@@ -1,4 +1,4 @@
-package com.boutiquesworld.ui.fabrics
+package com.boutiquesworld.ui.fabrics.boutiques
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,7 +31,8 @@ class FabricsFragment : Fragment() {
 
     private fun setupViewPagerWithTabs() {
         binding.run {
-            fabricsViewPager.adapter = FabricsStateAdapter(this@FabricsFragment)
+            fabricsViewPager.adapter =
+                FabricsStateAdapter(this@FabricsFragment)
             TabLayoutMediator(fabricsTabLayout, fabricsViewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> getString(R.string.fabrics)

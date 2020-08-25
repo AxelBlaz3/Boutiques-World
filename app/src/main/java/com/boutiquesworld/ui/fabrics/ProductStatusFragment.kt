@@ -1,6 +1,7 @@
-package com.boutiquesworld.ui.pending
+package com.boutiquesworld.ui.fabrics
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +12,15 @@ import com.boutiquesworld.model.BaseProduct
 import com.boutiquesworld.ui.decoration.CustomDividerItemDecoration
 import com.boutiquesworld.ui.product.ProductsViewModel
 import com.boutiquesworld.ui.profile.ProfileViewModel
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductStatusFragment : Fragment() {
+class ProductStatusFragment : Fragment(), ProductStatusAdapter.ProductStatusAdapterListener {
     private lateinit var binding: FragmentProductStatusBinding
     private val statusAdapter by lazy {
-        ProductStatusAdapter()
+        ProductStatusAdapter(this)
     }
     private var position = -1
 
@@ -50,7 +52,8 @@ class ProductStatusFragment : Fragment() {
         binding.run {
             pendingSwipeRefresh.setOnRefreshListener {
                 profileViewModel.getRetailer().value?.let {
-                    productsViewModel.getProducts(forceRefresh = true)
+                    productsViewModel.getFabrics(forceRefresh = true)
+                    pendingSwipeRefresh.isRefreshing = false
                 }
             }
             productStatusRecyclerView.apply {
@@ -60,7 +63,7 @@ class ProductStatusFragment : Fragment() {
         }
 
         profileViewModel.getRetailer().observe(viewLifecycleOwner) {
-            productsViewModel.getProductsLiveData().observe(viewLifecycleOwner) {
+            productsViewModel.getFabricsLiveData().observe(viewLifecycleOwner) {
                 statusAdapter.submitList(getListForPosition(position, it))
             }
         }
@@ -69,11 +72,20 @@ class ProductStatusFragment : Fragment() {
     private fun getListForPosition(
         position: Int,
         products: ArrayList<BaseProduct>
-    ): List<BaseProduct.Product> {
+    ): List<BaseProduct.Fabric> {
         return when (position) {
-            0 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 0 } as MutableList<BaseProduct.Product>
-            1 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 2 } as MutableList<BaseProduct.Product>
+            0 -> products.filter { fabric -> (fabric as BaseProduct.Fabric).productStatus == 1 } as MutableList<BaseProduct.Fabric>
+            1 -> products.filter { fabric -> (fabric as BaseProduct.Fabric).productStatus == 0 } as MutableList<BaseProduct.Fabric>
+            2 -> products.filter { fabric -> (fabric as BaseProduct.Fabric).productStatus == 2 } as MutableList<BaseProduct.Fabric>
             else -> throw IllegalArgumentException("${this.javaClass.simpleName}: Unknown position - $position for getting list of products")
+        }
+    }
+
+    override fun onSaveButtonClick(productId: String, productQuantityEditText: TextInputEditText) {
+        val newQuantity = productQuantityEditText.text.toString()
+        if (newQuantity.isNotEmpty()) {
+            Log.d(this.javaClass.simpleName, newQuantity)
+            productsViewModel.updateFabric(productId.toInt(), newQuantity.toInt())
         }
     }
 }

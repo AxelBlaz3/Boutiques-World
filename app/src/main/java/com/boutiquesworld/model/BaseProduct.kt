@@ -64,6 +64,6 @@ sealed class BaseProduct {
         @SerializedName("upid") val upid: String,
         @SerializedName("likes") val likes: Int,
         @SerializedName("date") val date: String,
-        @SerializedName("product_status") val productStatus: Int
+        @SerializedName("product_status") val productStatus: Int = 0
     ) : BaseProduct()
 }
