@@ -141,6 +141,27 @@
     <string name="price_cannot_be_zero">Price cannot be empty or zero</string>
     <string name="hint_quantity_in_meters">Quantity (meters)</string>
     <string name="hint_quantity_in_units">Quantity (units)</string>
+    <string name="pincode">Pincode</string>
+    <string name="flat_no">Flat no.</string>
+    <string name="company">Company</string>
+    <string name="building">Building</string>
+    <string name="area">Area</string>
+    <string name="colony">Colony</string>
+    <string name="street">Street</string>
+    <string name="sector">Sector</string>
+    <string name="village">Village</string>
+    <string name="landmark">Landmark</string>
+    <string name="town">Town/City</string>
+    <string name="state">State</string>
+    <string name="apartment">Apartment</string>
+    <string name="flat_no_house_no">Flat/House no.</string>
+    <string name="area_street">Area/Street</string>
+    <string name="add_a_new_address">Add a new address</string>
+    <string name="address">Address</string>
+    <string name="cart_items_updated">Cart items have been updated based on the availability. Verify and checkout again.</string>
 
     <style name="cancelled">Cancelled</style>
+
+    <string name="address_description">%1$s, %2$s, %3$s, %4$s, %5$s\n%6$s</string>
+    <string name="proceed">Proceed</string>
 </resources>

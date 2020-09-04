@@ -21,10 +21,20 @@ class CartViewModel @Inject constructor(
         cartRepository.getCartItemsMutableLiveData()
     private val areCartItemsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isNewCartItemPosted: MutableLiveData<Boolean> = MutableLiveData()
+    private val isCartCheckoutClicked: MutableLiveData<Boolean> = MutableLiveData(false)
+    var cartTotal: Int = 0
+    var orderId: String = ""
+    var finalCartToCheckout = ArrayList<Cart>()
 
     fun getCart(): LiveData<ArrayList<Cart>> = cartItems
 
     fun getIsNewCartItemPosted(): LiveData<Boolean?> = isNewCartItemPosted
+
+    fun getIsCartCheckoutClicked(): LiveData<Boolean> = isCartCheckoutClicked
+
+    fun setIsCartCheckoutClicked(newValue: Boolean) {
+        isCartCheckoutClicked.value = newValue
+    }
 
     fun resetIsNewCartItemPosted() {
         isNewCartItemPosted.value = null
@@ -43,9 +53,10 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun postCartItem(cart: List<Cart>) {
+    fun postCartItem(userId: Int, userCategory: String, forceRefresh: Boolean, cart: List<Cart>) {
         viewModelScope.launch {
-            isNewCartItemPosted.value = cartRepository.postCartItem(cart)
+            isNewCartItemPosted.value =
+                cartRepository.postCartItem(userId, userCategory, forceRefresh, cart)
         }
     }
 
@@ -59,19 +70,5 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch {
             cartRepository.deleteCartItem(cart)
         }
-    }
-
-    private fun getQuantity(cart: Cart, shouldAdd: Boolean): Int {
-        return if (shouldAdd)
-            cart.quantity + 1
-        else
-            cart.quantity - 1
-    }
-
-    private fun getPrice(quantity: Int, productPrice: String, shouldAdd: Boolean): String {
-        return if (shouldAdd)
-            String.format("%.2f", productPrice.toFloat() + (productPrice.toFloat() / quantity))
-        else
-            String.format("%.2f", productPrice.toFloat() - (productPrice.toFloat() / quantity))
     }
 }

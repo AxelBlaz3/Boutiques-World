@@ -14,6 +14,7 @@
 
     <dimen name="margin_top_mobile_edit_text">56dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
     <dimen name="recycler_view_bottom_padding">96dp</dimen>
     <dimen name="product_description_sticky_card_elevation">16dp</dimen>
     <dimen name="divider_left_margin">120dp</dimen>

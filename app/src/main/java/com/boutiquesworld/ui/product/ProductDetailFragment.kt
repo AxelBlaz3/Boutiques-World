@@ -45,7 +45,7 @@ class ProductDetailFragment : Fragment() {
     private var fabric: BaseProduct.Fabric? = null
 
     private var mProductQuantity: Int = 1
-    private var mProductPrice: Float = 0F
+    private var mProductPrice: Int = 0
 
     private val disableBackAction: OnBackPressedCallback =
         object : OnBackPressedCallback(false) {
@@ -77,6 +77,7 @@ class ProductDetailFragment : Fragment() {
         return binding.root
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -156,16 +157,13 @@ class ProductDetailFragment : Fragment() {
                             // Assign binding variables
                             this.imageUrls = imageUrls
                             this.fabric = it.copy(
-                                productPrice = String.format(
-                                    "%.2f",
-                                    it.productPrice.toFloat()
-                                )
+                                productPrice =
+                                it.productPrice
                             )
                             isFabric = true
 
                             // Set OnClickListeners
-                            mProductQuantity = it.availableMeters
-                            mProductPrice = it.productPrice.toFloat()
+                            mProductPrice = it.productPrice.toInt()
                             addToBag.setOnClickListener { addNewProductToBag() }
                             add.setOnClickListener { _ -> increaseQuantityByOne(it) }
                             remove.setOnClickListener { _ -> reduceQuantityByOne(it) }
@@ -175,7 +173,7 @@ class ProductDetailFragment : Fragment() {
                             quantityValue.text =
                                 getString(
                                     R.string.quantity_in_meters,
-                                    if (it.availableMeters == 0) 1 else it.availableMeters
+                                    1
                                 )
 
                             // Finally submit lists to the adapters.
@@ -316,7 +314,7 @@ class ProductDetailFragment : Fragment() {
             productId = fabric.productId.toInt(),
             productName = fabric.productName,
             productDescription = fabric.productDescription,
-            productPrice = String.format("%.2f", mProductPrice),
+            productPrice = mProductPrice.toString(),
             productType = fabric.productType,
             quantity = mProductQuantity,
             maxQuantity = fabric.availableMeters,
@@ -369,9 +367,13 @@ class ProductDetailFragment : Fragment() {
             add.isEnabled = false
             remove.isEnabled = false
             fabric?.let {
-                cartViewModel.postCartItem(ArrayList<Cart>().apply {
-                    add(getCartFromFabric(it))
-                })
+                profileViewModel.getRetailer().value?.let { retailer ->
+                    cartViewModel.postCartItem(retailer.shopId,
+                        retailer.businessCategory,
+                        forceRefresh = true, cart = ArrayList<Cart>().apply {
+                            add(getCartFromFabric(it))
+                        })
+                }
             }
         }
     }
@@ -382,15 +384,11 @@ class ProductDetailFragment : Fragment() {
     private fun reduceQuantityByOne(fabric: BaseProduct.Fabric) {
         binding.run {
             if (fabric.availableMeters > 1 && mProductQuantity > 1) {
-                mProductPrice -= mProductPrice / mProductQuantity
+                mProductPrice -= fabric.productPrice.toInt()
                 mProductQuantity -= 1
                 quantityValue.text =
                     getString(R.string.quantity_in_meters, mProductQuantity)
-                price.text = getString(
-                    R.string.product_price, String.format(
-                        "%.2f", mProductPrice
-                    )
-                )
+                price.text = getString(R.string.product_price, mProductPrice.toString())
             }
         }
     }
@@ -402,11 +400,11 @@ class ProductDetailFragment : Fragment() {
         binding.run {
             if (mProductQuantity == fabric.availableMeters)
                 return
-            mProductPrice += mProductPrice / mProductQuantity
+            mProductPrice += fabric.productPrice.toInt()
             mProductQuantity += 1
             quantityValue.text =
                 getString(R.string.quantity_in_meters, mProductQuantity)
-            price.text = getString(R.string.product_price, String.format("%.2f", mProductPrice))
+            price.text = getString(R.string.product_price, mProductPrice.toString())
         }
     }
 }

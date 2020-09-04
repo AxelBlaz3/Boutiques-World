@@ -16,17 +16,20 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.boutiquesworld.databinding.ActivityMainBinding
+import com.boutiquesworld.ui.address.AddressViewModel
 import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.dashboard.DashboardFragmentDirections
 import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.boutiquesworld.util.SessionManager
+import com.razorpay.PaymentData
+import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.action_layout_basket_badge.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
-    View.OnClickListener {
+    View.OnClickListener, PaymentResultWithDataListener {
     private lateinit var binding: ActivityMainBinding
 
     @Inject
@@ -37,6 +40,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     @Inject
     lateinit var cartViewModel: CartViewModel
+
+    @Inject
+    lateinit var addressViewModel: AddressViewModel
 
     private var menuRes = -1
     private var isCartBadgeInitialized = false
@@ -64,10 +70,24 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             cartViewModel.getAreCartItemsLoaded().observe(this@MainActivity) { areCartItemsLoaded ->
+                if (areCartItemsLoaded)
+                    addressViewModel.resetIsPaymentCaptured()
                 if (!areCartItemsLoaded || isCartBadgeInitialized)
                     return@observe
                 initCartBadge()
             }
+
+            addressViewModel.getIsPaymentCaptured()
+                .observe(this@MainActivity) { isPaymentCaptured ->
+                    if (isPaymentCaptured)
+                        profileViewModel.getRetailer().value?.let {
+                            cartViewModel.updateCart(
+                                it.shopId,
+                                it.businessCategory,
+                                forceRefresh = true
+                            )
+                        }
+                }
         }
     }
 
@@ -206,6 +226,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 updateToolbarTitle(R.string.cart)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
+            R.id.addressFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.address)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
             R.id.bottomSheetPalette -> {
             }
             else -> throw RuntimeException("Unknown destination - ${destination.id}")
@@ -299,6 +328,31 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
                 }
             isCartBadgeInitialized = cartViewModel.getAreCartItemsLoaded().value!!
+        }
+    }
+
+    override fun onPaymentError(errorCode: Int, response: String?, paymentData: PaymentData?) {
+        addressViewModel.resetRazorPayOrderId()
+    }
+
+    override fun onPaymentSuccess(razorPayPaymentId: String?, paymentData: PaymentData?) {
+        addressViewModel.resetRazorPayOrderId()
+        paymentData?.let {
+            val razorPayOrderId = it.orderId
+            val paymentId = it.paymentId
+            val signature = it.signature
+            val orderId = cartViewModel.orderId
+            val cartCount = cartViewModel.getCart().value!!.size
+            val amount = cartViewModel.cartTotal
+
+            addressViewModel.verifyAndCapturePayment(
+                razorPayOrderId,
+                paymentId,
+                signature,
+                orderId,
+                cartCount,
+                amount.toString()
+            )
         }
     }
 }

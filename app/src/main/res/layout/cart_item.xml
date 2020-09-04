@@ -56,10 +56,9 @@
             android:text="@{@string/product_price(cart.productPrice)}"
             android:textAppearance="?textAppearanceSubtitle1"
             android:textColor="?colorSecondary"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="₹300.00" />
+            tools:text="₹300" />
 
         <TextView
             android:id="@+id/cart_product_title"

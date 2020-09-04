@@ -75,7 +75,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/product_status_quantity_text_input_layout"
             style="@style/Widget.Boutiques.TextInputLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/grid_2"
             android:layout_marginTop="@dimen/grid_2"

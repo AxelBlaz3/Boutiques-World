@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="address"
+            type="com.boutiquesworld.model.Address" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.address.AddressAdapter.AddressAdapterListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_0_5"
+        android:layout_marginVertical="@dimen/grid_0_25"
+        android:onClick="@{() -> listener.onAddressCardClick(position)}"
+        app:cardElevation="@dimen/card_elevation"
+        app:strokeColor="?colorControlHighlight"
+        app:strokeWidth="@dimen/card_stroke_width">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/grid_2"
+            android:paddingStart="@dimen/grid_2"
+            android:paddingEnd="0dp">
+
+            <TextView
+                android:id="@+id/address_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:text="@{address.fullName}"
+                android:textAppearance="@style/TextAppearance.BoutiquesWorld.Subtitle1"
+                app:layout_constraintEnd_toStartOf="@+id/address_radio_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Ali Connors" />
+
+            <TextView
+                android:id="@+id/address_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:text="@{@string/address_description(address.flat, address.area, address.landmark, address.city, address.state, address.pincode)}"
+                app:layout_constraintEnd_toStartOf="@+id/address_radio_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_name"
+                tools:text="61 /, Aram Ngr,  Bunglows, Andheri (w), Mumbai, Maharashtra, 400061." />
+
+            <TextView
+                android:id="@+id/address_mobile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:text="@{address.mobile}"
+                android:textAppearance="@style/TextAppearance.BoutiquesWorld.Subtitle1"
+                app:layout_constraintEnd_toStartOf="@+id/address_radio_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/address_desc"
+                tools:text="+919876543210" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/address_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{address.checked}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

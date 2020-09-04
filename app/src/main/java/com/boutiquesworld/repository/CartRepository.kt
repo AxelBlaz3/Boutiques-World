@@ -30,11 +30,13 @@ class CartRepository @Inject constructor(
     suspend fun updateCart(userId: Int, userCategory: String, forceRefresh: Boolean): Boolean =
         withContext(Dispatchers.IO) {
             try {
-                val cachedCartItems = cartDao.getCartItems()
-                cachedCartItems?.let {
-                    if (it.isNotEmpty() && !forceRefresh) {
-                        cartItems.postValue(it as ArrayList<Cart>)
-                        return@withContext true
+                if (!forceRefresh) {
+                    val cachedCartItems = cartDao.getCartItems()
+                    cachedCartItems?.let {
+                        if (it.isNotEmpty()) {
+                            cartItems.postValue(it as ArrayList<Cart>)
+                            return@withContext true
+                        }
                     }
                 }
                 val response = boutiqueService.getCart(userId, userCategory).execute()
@@ -44,8 +46,7 @@ class CartRepository @Inject constructor(
                             cartDao.truncateCartTable()
                             insertCartItem(it)
                         } else
-                            cartDao.truncateCartTable() // If list is empty, truncate the cart table.
-
+                            cartDao.truncateCartTable() // If new list is empty, truncate the current cart table.
                         cartItems.postValue(it as ArrayList<Cart>)
                         return@withContext true
                     }
@@ -59,15 +60,17 @@ class CartRepository @Inject constructor(
             return@withContext false
         }
 
-    suspend fun postCartItem(cart: List<Cart>): Boolean = withContext(Dispatchers.IO) {
+    suspend fun postCartItem(
+        userId: Int,
+        userCategory: String,
+        forceRefresh: Boolean,
+        cart: List<Cart>
+    ): Boolean = withContext(Dispatchers.IO) {
         try {
             val response = boutiqueService.insertCartItem(cart).execute()
             if (response.isSuccessful) {
                 insertCartItem(cart)
-                this@CartRepository.cartItems.value?.let {
-                    it.addAll(cart)
-                    this@CartRepository.cartItems.postValue(it)
-                }
+                updateCart(userId, userCategory, forceRefresh)
                 return@withContext true
             }
         } catch (e: Exception) {

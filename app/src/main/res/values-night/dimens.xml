@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="card_stroke_width">0dp</dimen>
-    <dimen name="product_description_sticky_card_elevation">2dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="product_description_sticky_card_elevation">0dp</dimen>
 </resources>

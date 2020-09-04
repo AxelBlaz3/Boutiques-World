@@ -111,7 +111,11 @@
         android:id="@+id/cartFragment"
         android:name="com.boutiquesworld.ui.cart.CartFragment"
         android:label="CartFragment"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_cartFragment"
         app:destination="@id/cartFragment"
@@ -150,4 +154,15 @@
     <action
         android:id="@+id/action_global_fabricNewProductFragment"
         app:destination="@id/fabricNewProductFragment" />
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.boutiquesworld.ui.address.AddressFragment"
+        android:label="AddressFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
 </navigation>

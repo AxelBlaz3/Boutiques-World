@@ -1,6 +1,5 @@
 package com.boutiquesworld.ui.newproduct
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -183,10 +182,6 @@ class NewProductViewModel @Inject constructor(
                 if (isDataValid) {
                     viewModelScope.launch(Dispatchers.IO) {
                         try {
-                            Log.d(
-                                this@NewProductViewModel.javaClass.simpleName,
-                                "submitFabric() try {}"
-                            )
                             val response =
                                 boutiqueService.postFabric(formDataMap, imageFiles).execute()
                             if (response.isSuccessful) {

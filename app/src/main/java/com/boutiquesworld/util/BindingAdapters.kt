@@ -1,17 +1,31 @@
 package com.boutiquesworld.util
 
+import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import com.boutiquesworld.R
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
+
+@BindingAdapter("cardBackgroundColorAttr")
+fun setCardBackgroundColorAttr(cardView: MaterialCardView, shouldCheck: Boolean) {
+    cardView.setCardBackgroundColor(
+        if (shouldCheck)
+            getResourceForAttr(cardView.context, R.attr.colorSecondaryVariant)
+        else
+            getResourceForAttr(cardView.context, R.attr.colorSurface)
+    )
+}
 
 @BindingAdapter(value = ["glideSrc", "glideCircleCrop"], requireAll = false)
 fun setGlideSrc(
@@ -215,4 +229,11 @@ fun View.requestApplyInsetsWhenAttached() {
             override fun onViewDetachedFromWindow(v: View) = Unit
         })
     }
+}
+
+@ColorInt
+fun getResourceForAttr(context: Context, attr: Int): Int {
+    val typedValue = TypedValue()
+    context.theme.resolveAttribute(attr, typedValue, true)
+    return typedValue.data
 }
