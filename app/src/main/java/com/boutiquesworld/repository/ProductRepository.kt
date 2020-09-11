@@ -1,7 +1,10 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.boutiquesworld.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.boutiquesworld.data.BoutiqueDatabase
 import com.boutiquesworld.data.ProductDao
 import com.boutiquesworld.model.BaseProduct
 import com.boutiquesworld.network.BoutiqueService
@@ -16,11 +19,14 @@ import javax.inject.Singleton
 @Singleton
 class ProductRepository @Inject constructor(
     private val boutiqueService: BoutiqueService,
+    private val boutiqueDatabase: BoutiqueDatabase,
     private val productDao: ProductDao
 ) {
     private val products: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData()
     private val fabrics: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData()
+    private val sketches: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData(ArrayList())
 
+    fun getSketchesMutableLiveData(): MutableLiveData<ArrayList<BaseProduct>> = sketches
     fun getProductsLiveData(): MutableLiveData<ArrayList<BaseProduct>> = products
     fun getFabricsLiveData(): MutableLiveData<ArrayList<BaseProduct>> = fabrics
 
@@ -81,6 +87,35 @@ class ProductRepository @Inject constructor(
         }
     }
 
+    suspend fun getSketches(businessId: Int, forceRefresh: Boolean): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                if (!forceRefresh) {
+                    boutiqueDatabase.sketchDao().getSketches()?.let {
+                        if (it.isNotEmpty()) {
+                            sketches.postValue(it as ArrayList<BaseProduct>)
+                            return@withContext true
+                        }
+                    }
+                }
+
+                val response = boutiqueService.getSketches(businessId).execute()
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        boutiqueDatabase.sketchDao().apply {
+                            truncateSketches()
+                            insertSketches(it)
+                        }
+                        sketches.postValue(it as ArrayList<BaseProduct>)
+                        return@withContext true
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return@withContext false
+        }
+
     suspend fun updateFabric(productId: Int, quantity: Int) = withContext(Dispatchers.IO) {
         try {
             val response = boutiqueService.updateFabric(productId, quantity).execute()
@@ -97,8 +132,8 @@ class ProductRepository @Inject constructor(
             productDao.insertAllProducts(products)
         }
 
-    private suspend fun insertFabrics(fabrics: ArrayList<BaseProduct.Fabric>) =
+    private suspend fun insertFabrics(stores: ArrayList<BaseProduct.Store>) =
         withContext(Dispatchers.IO) {
-            productDao.insertAllFabrics(fabrics)
+            productDao.insertAllFabrics(stores)
         }
 }

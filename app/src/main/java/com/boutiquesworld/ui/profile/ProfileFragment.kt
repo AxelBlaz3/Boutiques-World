@@ -62,7 +62,6 @@ class ProfileFragment : Fragment() {
             if (description.lineCount > 2) {
                 totalLines = description.lineCount
                 description.maxLines = 2
-                //description.ellipsize = TextUtils.TruncateAt.END
                 showMoreVisibility = true
             }
         }

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity
-data class Cart(
+data class Order(
     @SerializedName("id") @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @SerializedName("product_id") val productId: Int,
     @SerializedName("product_name") val productName: String,

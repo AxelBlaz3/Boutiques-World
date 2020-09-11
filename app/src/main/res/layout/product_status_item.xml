@@ -9,7 +9,7 @@
 
         <variable
             name="fabric"
-            type="com.boutiquesworld.model.BaseProduct.Fabric" />
+            type="com.boutiquesworld.model.BaseProduct.Store" />
 
         <variable
             name="position"
@@ -89,7 +89,7 @@
                 android:enabled="@{fabric.productStatus == 1 ? true : false}"
                 android:hint="@string/quantity"
                 android:inputType="number"
-                android:text="@{String.valueOf(fabric.availableMeters)}"
+                android:text="@{String.valueOf(fabric.availableQuantity)}"
                 android:textAppearance="?textAppearanceBody2"
                 android:textCursorDrawable="@null"
                 tools:text="3" />

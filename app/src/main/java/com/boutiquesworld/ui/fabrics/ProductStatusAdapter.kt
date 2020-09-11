@@ -12,7 +12,7 @@ import com.google.android.material.textfield.TextInputEditText
 class ProductStatusAdapter(
     private val listener: ProductStatusAdapterListener
 ) :
-    ListAdapter<BaseProduct.Fabric, ProductStatusAdapter.ProductViewHolder>(FabricDiffUtil) {
+    ListAdapter<BaseProduct.Store, ProductStatusAdapter.ProductViewHolder>(StoreDiffUtil) {
 
     interface ProductStatusAdapterListener {
         fun onSaveButtonClick(productId: String, productQuantityEditText: TextInputEditText)
@@ -23,9 +23,9 @@ class ProductStatusAdapter(
         private val listener: ProductStatusAdapterListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(fabric: BaseProduct.Fabric, position: Int) {
+        fun bind(store: BaseProduct.Store, position: Int) {
             binding.run {
-                this.fabric = fabric
+                this.fabric = store
                 this.position = position
                 this.listener = this@ProductViewHolder.listener
                 executePendingBindings()
@@ -33,16 +33,16 @@ class ProductStatusAdapter(
         }
     }
 
-    object FabricDiffUtil : DiffUtil.ItemCallback<BaseProduct.Fabric>() {
+    object StoreDiffUtil : DiffUtil.ItemCallback<BaseProduct.Store>() {
         override fun areItemsTheSame(
-            oldItem: BaseProduct.Fabric,
-            newItem: BaseProduct.Fabric
+            oldItem: BaseProduct.Store,
+            newItem: BaseProduct.Store
         ): Boolean =
             oldItem.productId == newItem.productId
 
         override fun areContentsTheSame(
-            oldItem: BaseProduct.Fabric,
-            newItem: BaseProduct.Fabric
+            oldItem: BaseProduct.Store,
+            newItem: BaseProduct.Store
         ): Boolean {
             return oldItem.businessId == newItem.businessId &&
                     oldItem.businessName == newItem.businessName &&
@@ -55,7 +55,10 @@ class ProductStatusAdapter(
                     oldItem.productDescription == newItem.productDescription &&
                     oldItem.productName == newItem.productName &&
                     oldItem.productFabric == newItem.productFabric &&
-                    oldItem.availableMeters == newItem.availableMeters &&
+                    oldItem.availableQuantity == newItem.availableQuantity &&
+                    oldItem.businessCategory == newItem.businessCategory &&
+                    oldItem.businessCategoryType == newItem.businessCategoryType &&
+                    oldItem.minimumQuantity == newItem.minimumQuantity &&
                     oldItem.upid == newItem.upid &&
                     oldItem.uuid == newItem.uuid &&
                     oldItem.productImage1 == newItem.productImage1 &&

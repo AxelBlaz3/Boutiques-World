@@ -11,11 +11,11 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.boutiquesworld.MainActivity
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentProductDetailBinding
 import com.boutiquesworld.model.BaseProduct
 import com.boutiquesworld.model.Cart
+import com.boutiquesworld.ui.MainActivity
 import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.google.android.material.button.MaterialButton
@@ -32,8 +32,8 @@ class ProductDetailFragment : Fragment() {
     private val productId by lazy {
         args.productId
     }
-    private val isFabric by lazy {
-        args.isFabric
+    private val businessCategory by lazy {
+        args.businessCategory
     }
     private val productDetailAdapter by lazy {
         ProductDetailImageAdapter()
@@ -42,7 +42,7 @@ class ProductDetailFragment : Fragment() {
         SpecificationAdapter()
     }
 
-    private var fabric: BaseProduct.Fabric? = null
+    private var store: BaseProduct.Store? = null
 
     private var mProductQuantity: Int = 1
     private var mProductPrice: Int = 0
@@ -94,6 +94,7 @@ class ProductDetailFragment : Fragment() {
             detailImageRecyclerView.apply {
                 LinearSnapHelper().attachToRecyclerView(this)
                 adapter = productDetailAdapter
+                indicator.attachToRecyclerView(this)
             }
             specificationsRecyclerView.adapter = specificationAdapter
 
@@ -124,13 +125,13 @@ class ProductDetailFragment : Fragment() {
                     return@observe
 
                 val imageUrls: ArrayList<String?> = ArrayList()
-                if (this@ProductDetailFragment.isFabric)
+                if (this@ProductDetailFragment.businessCategory == "F" || this@ProductDetailFragment.businessCategory == "Y")
                     productsViewModel.getFabricsLiveData().observe(viewLifecycleOwner) {
-                        this@ProductDetailFragment.fabric =
-                            (it as ArrayList<BaseProduct.Fabric>).first { fabric -> fabric.productId == this@ProductDetailFragment.productId }
+                        this@ProductDetailFragment.store =
+                            (it as ArrayList<BaseProduct.Store>).first { fabric -> fabric.productId == this@ProductDetailFragment.productId && fabric.businessCategory == this@ProductDetailFragment.businessCategory }
 
                         // Set a listener to hide or show sticky footer card
-                        descNestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+                        descNestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
                             stickyFooterCard.visibility =
                                 if (oldScrollY < scrollY)
                                     View.GONE
@@ -140,15 +141,15 @@ class ProductDetailFragment : Fragment() {
 
                         // Check if the product is already in cart
                         // If so, disable the click actions on views.
-                        this@ProductDetailFragment.fabric?.let {
+                        this@ProductDetailFragment.store?.let {
                             updateViewsIfNewItemIsPosted(
                                 isPosted = cartItems.isNotEmpty() && cartItems.contains(
-                                    getCartFromFabric(it).productId
+                                    getCartFromFabric(it)?.productId
                                 ),
                                 addToBag = addToBag,
                                 add = add,
                                 remove = remove,
-                                isSoldOut = it.availableMeters == 0
+                                isSoldOut = it.availableQuantity == 0
                             )
 
                             imageUrls.clear()
@@ -160,7 +161,6 @@ class ProductDetailFragment : Fragment() {
                                 productPrice =
                                 it.productPrice
                             )
-                            isFabric = true
 
                             // Set OnClickListeners
                             mProductPrice = it.productPrice.toInt()
@@ -179,14 +179,11 @@ class ProductDetailFragment : Fragment() {
                             // Finally submit lists to the adapters.
                             productDetailAdapter.submitList(imageUrls)
                             specificationAdapter.submitList(
-                                getSpecifications(
-                                    isFabric = true,
-                                    product = it
-                                )
+                                getSpecifications(product = it)
                             )
                         }
                     }
-                else
+                else if (this@ProductDetailFragment.businessCategory == "B")
                     productsViewModel.getProductsLiveData().observe(viewLifecycleOwner) {
                         val product =
                             (it as ArrayList<BaseProduct.Product>).first { product -> product.productId == this@ProductDetailFragment.productId }
@@ -196,15 +193,28 @@ class ProductDetailFragment : Fragment() {
                         // Assign binding variables.
                         this.product = product
                         this.imageUrls = imageUrls
-                        isFabric = false
 
                         // Finally submit lists to the adapters.
                         productDetailAdapter.submitList(imageUrls)
                         specificationAdapter.submitList(
-                            getSpecifications(
-                                isFabric = false,
-                                product = product
-                            )
+                            getSpecifications(product = product)
+                        )
+                    }
+                else
+                    productsViewModel.getSketchesLiveData().observe(viewLifecycleOwner) {
+                        val sketch =
+                            (it as ArrayList<BaseProduct.Sketch>).first { product -> product.productId == this@ProductDetailFragment.productId }
+                        imageUrls.clear()
+                        addImages(imageUrls, sketch)
+
+                        // Assign binding variables.
+                        this.sketch = sketch
+                        this.imageUrls = imageUrls
+
+                        // Finally submit lists to the adapters.
+                        productDetailAdapter.submitList(imageUrls)
+                        specificationAdapter.submitList(
+                            getSpecifications(product = sketch)
                         )
                     }
             }
@@ -236,12 +246,12 @@ class ProductDetailFragment : Fragment() {
 
     /**
      * Add the imagesUrls from product to display them in RecyclerView.
-     * @param product: Model class holding either a [com.boutiquesworld.model.BaseProduct.Product] or [com.boutiquesworld.model.BaseProduct.Fabric]
+     * @param product: Model class holding either a [com.boutiquesworld.model.BaseProduct.Product] or [com.boutiquesworld.model.BaseProduct.Store]
      * @param imageUrls: List where the urls need to be added.
      */
     private fun addImages(imageUrls: ArrayList<String?>, product: BaseProduct) {
-        if (product is BaseProduct.Fabric)
-            imageUrls.apply {
+        when (product) {
+            is BaseProduct.Store -> imageUrls.apply {
                 add(product.productImage1)
                 add(product.productImage2)
                 if (product.productImage3.isNotEmpty())
@@ -255,9 +265,8 @@ class ProductDetailFragment : Fragment() {
                 if (product.productImage5.isNotEmpty())
                     add(product.productImage5)
             }
-        else
-            imageUrls.apply {
-                add((product as BaseProduct.Product).productImage1)
+            is BaseProduct.Product -> imageUrls.apply {
+                add(product.productImage1)
                 add(product.productImage2)
                 if (product.productImage3.isNotEmpty())
                     add(product.productImage3)
@@ -270,59 +279,87 @@ class ProductDetailFragment : Fragment() {
                 if (product.productImage5.isNotEmpty())
                     add(product.productImage5)
             }
+            else -> imageUrls.apply {
+                add((product as BaseProduct.Sketch).productImage1)
+                add(product.productImage2)
+                if (product.productImage3.isNotEmpty())
+                    add(product.productImage3)
+                else
+                    return@apply
+                if (product.productImage4.isNotEmpty())
+                    add(product.productImage4)
+                else
+                    return@apply
+                if (product.productImage5.isNotEmpty())
+                    add(product.productImage5)
+            }
+        }
     }
 
     /**
      * Get the specifications for the given product.
-     * @param isFabric: Whether the product is [com.boutiquesworld.model.BaseProduct.Fabric], [com.boutiquesworld.model.BaseProduct.Product] otherwise.
      * @param product: [com.boutiquesworld.model.BaseProduct]
      * @return: List<Pair<String, String>>, A list holding the specifications in Key-Value format.
      */
     private fun getSpecifications(
-        isFabric: Boolean,
         product: BaseProduct
     ): ArrayList<Pair<String, String>> {
         val specifications = ArrayList<Pair<String, String>>()
-        if (isFabric) {
-            specifications.add(Pair("Type", (product as BaseProduct.Fabric).productType))
-            specifications.add(Pair("Cloth", product.productCloth))
-            specifications.add(Pair("Color", product.productColor))
-            specifications.add(Pair("Fabric", product.productFabric))
-            specifications.add(
-                Pair(
-                    "Quantity",
-                    getString(R.string.quantity_in_meters, product.availableMeters)
+        when (product) {
+            is BaseProduct.Store -> {
+                specifications.add(Pair("Type", product.productType))
+                specifications.add(Pair("Cloth", product.productCloth))
+                specifications.add(Pair("Color", product.productColor))
+                specifications.add(Pair("Fabric", product.productFabric))
+                specifications.add(
+                    Pair(
+                        "Quantity",
+                        getString(R.string.quantity_in_meters, product.availableQuantity)
+                    )
                 )
-            )
-            specifications.add(Pair("Delivery time", product.deliveryTime ?: "Unknown"))
-        } else {
-            specifications.add(Pair("Type", (product as BaseProduct.Product).productType))
-            specifications.add(Pair("Cloth", product.productCloth ?: "Unknown"))
-            specifications.add(Pair("Color", product.productColor ?: "Unknown"))
-            specifications.add(Pair("Fabric", product.productFabric ?: "Unknown"))
-            specifications.add(Pair("Occasion", product.productOccasion + ""))
-            specifications.add(Pair("Stitching time", product.preparationTime ?: "Unknown"))
+                specifications.add(Pair("Delivery time", product.deliveryTime ?: "Unknown"))
+            }
+            is BaseProduct.Product -> {
+                specifications.add(Pair("Type", product.productType))
+                specifications.add(Pair("Cloth", product.productCloth ?: "Unknown"))
+                specifications.add(Pair("Color", product.productColor ?: "Unknown"))
+                specifications.add(Pair("Fabric", product.productFabric ?: "Unknown"))
+                specifications.add(Pair("Occasion", product.productOccasion + ""))
+                specifications.add(Pair("Stitching time", product.preparationTime ?: "Unknown"))
+            }
+            else -> {
+                specifications.add(Pair("Type", (product as BaseProduct.Sketch).productType))
+                specifications.add(Pair("Cloth", product.productCloth ?: "Unknown"))
+                specifications.add(Pair("Color", product.productColor ?: "Unknown"))
+                specifications.add(Pair("Fabric", product.productFabric ?: "Unknown"))
+                specifications.add(Pair("Occasion", product.productOccasion + ""))
+                specifications.add(Pair("Stitching time", product.preparationTime ?: "Unknown"))
+            }
         }
         return specifications
     }
 
     /**
-     * Grab the required fields from [com.boutiquesworld.model.BaseProduct.Fabric] and use them in [com.boutiquesworld.model.Cart] constructor.
+     * Grab the required fields from [com.boutiquesworld.model.BaseProduct.Store] and use them in [com.boutiquesworld.model.Cart] constructor.
      */
-    private fun getCartFromFabric(fabric: BaseProduct.Fabric) =
-        Cart(
-            productId = fabric.productId.toInt(),
-            productName = fabric.productName,
-            productDescription = fabric.productDescription,
-            productPrice = mProductPrice.toString(),
-            productType = fabric.productType,
-            quantity = mProductQuantity,
-            maxQuantity = fabric.availableMeters,
-            productImage = fabric.productThumb,
-            businessId = fabric.businessId.toInt(),
-            userId = profileViewModel.getRetailer().value?.shopId!!,
-            userCategory = "B"
-        )
+    private fun getCartFromFabric(store: BaseProduct.Store) =
+        profileViewModel.getRetailer().value?.let {
+            Cart(
+                productId = store.productId.toInt(),
+                productName = store.productName,
+                productDescription = store.productDescription,
+                productPrice = mProductPrice.toString(),
+                productType = store.productType,
+                quantity = mProductQuantity,
+                maxQuantity = store.availableQuantity,
+                productImage = store.productThumb,
+                businessId = store.businessId.toInt(),
+                userId = it.shopId,
+                userCategory = it.businessCategory,
+                productCategory = store.productType
+            )
+        }
+
 
     /**
      * Enable/Disable views and change the text on MaterialButton if the new cart item is posted or sold out or just normal (Not in cart, Available).
@@ -371,7 +408,7 @@ class ProductDetailFragment : Fragment() {
                     cartViewModel.postCartItem(retailer.shopId,
                         retailer.businessCategory,
                         forceRefresh = true, cart = ArrayList<Cart>().apply {
-                            add(getCartFromFabric(it))
+                            getCartFromFabric(it)?.let { cart -> add(cart) }
                         })
                 }
             }
@@ -381,10 +418,10 @@ class ProductDetailFragment : Fragment() {
     /**
      * Reduces the quantity of product by one in the cart.
      */
-    private fun reduceQuantityByOne(fabric: BaseProduct.Fabric) {
+    private fun reduceQuantityByOne(store: BaseProduct.Store) {
         binding.run {
-            if (fabric.availableMeters > 1 && mProductQuantity > 1) {
-                mProductPrice -= fabric.productPrice.toInt()
+            if (store.availableQuantity > 1 && mProductQuantity > 1) {
+                mProductPrice -= store.productPrice.toInt()
                 mProductQuantity -= 1
                 quantityValue.text =
                     getString(R.string.quantity_in_meters, mProductQuantity)
@@ -396,11 +433,11 @@ class ProductDetailFragment : Fragment() {
     /**
      * Increases the quantity of product by one in the cart.
      */
-    private fun increaseQuantityByOne(fabric: BaseProduct.Fabric) {
+    private fun increaseQuantityByOne(store: BaseProduct.Store) {
         binding.run {
-            if (mProductQuantity == fabric.availableMeters)
+            if (mProductQuantity == store.availableQuantity)
                 return
-            mProductPrice += fabric.productPrice.toInt()
+            mProductPrice += store.productPrice.toInt()
             mProductQuantity += 1
             quantityValue.text =
                 getString(R.string.quantity_in_meters, mProductQuantity)

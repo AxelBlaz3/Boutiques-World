@@ -11,11 +11,11 @@
 
         <variable
             name="fabric"
-            type="com.boutiquesworld.model.BaseProduct.Fabric" />
+            type="com.boutiquesworld.model.BaseProduct.Store" />
 
         <variable
-            name="isFabric"
-            type="Boolean" />
+            name="sketch"
+            type="com.boutiquesworld.model.BaseProduct.Sketch" />
 
         <variable
             name="listener"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/grid_1"
-        android:onClick="@{(view) -> listener.onProductClick(isFabric ? fabric : product, position)}"
+        android:onClick="@{(view) -> listener.onProductClick(product ?? (fabric ?? sketch), position)}"
         android:transitionName="@{@string/transition_detail(position)}"
         app:cardElevation="@dimen/grid_1">
 
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
                 android:scaleType="centerCrop"
-                app:glideSrc="@{isFabric ? fabric.productThumb : product.productThumb}"
+                app:glideSrc="@{product != null ? product.productThumb : (fabric != null ? fabric.productThumb : sketch.productThumb)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
                 android:layout_marginTop="@dimen/grid_1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{isFabric ? fabric.productName : product.productName}"
+                android:text="@{product != null ? product.productName : (fabric != null ? fabric.productName : sketch.productName)}"
                 android:textAppearance="?textAppearanceSubtitle1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

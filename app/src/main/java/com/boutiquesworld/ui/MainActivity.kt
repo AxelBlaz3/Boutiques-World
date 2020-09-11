@@ -1,4 +1,4 @@
-package com.boutiquesworld
+package com.boutiquesworld.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -15,6 +15,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.boutiquesworld.R
 import com.boutiquesworld.databinding.ActivityMainBinding
 import com.boutiquesworld.ui.address.AddressViewModel
 import com.boutiquesworld.ui.cart.CartViewModel
@@ -62,11 +63,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             bottomNavView.setupWithNavController(findNavController(R.id.nav_host_fragment))
 
             profileViewModel.getRetailer().observe(this@MainActivity) {
-                if (it.businessCategory == "B") {
-                    bottomNavView.inflateMenu(R.menu.boutiques_nav_menu)
-                    cartViewModel.updateCart(it.shopId, it.businessCategory, forceRefresh = false)
-                } else if (it.businessCategory == "F")
-                    bottomNavView.inflateMenu(R.menu.fabrics_menu)
+                when (it.businessCategory) {
+                    "B", "D" -> {
+                        bottomNavView.inflateMenu(R.menu.boutiques_nav_menu)
+                        cartViewModel.updateCart(
+                            it.shopId,
+                            it.businessCategory,
+                            forceRefresh = false
+                        )
+                    }
+                    "F", "Y" -> bottomNavView.inflateMenu(R.menu.fabrics_menu)
+                }
             }
 
             cartViewModel.getAreCartItemsLoaded().observe(this@MainActivity) { areCartItemsLoaded ->
@@ -93,7 +100,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Check if same menu is assigned previously, if so, just return
-        if (binding.toolbar.menu.findItem(R.id.cart) != null && binding.toolbar.menu.findItem(R.id.notifications) != null && menuRes == R.menu.main_menu)
+        if (binding.toolbar.menu.findItem(R.id.cart) != null && binding.toolbar.menu.findItem(
+                R.id.notifications
+            ) != null && menuRes == R.menu.main_menu
+        )
             return true
 
         binding.toolbar.menu.clear()
@@ -193,7 +203,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             R.id.newProductFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_round_arrow_back
+                    )
                 menuRes = -1
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.new_product)
@@ -202,7 +215,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             R.id.fabricNewProductFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_round_arrow_back
+                    )
                 menuRes = -1
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.new_product)
@@ -211,7 +227,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             R.id.productDetailFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_round_arrow_back
+                    )
                 menuRes = R.menu.main_menu
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.empty)
@@ -220,7 +239,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             R.id.cartFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_round_arrow_back
+                    )
                 menuRes = -1
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.cart)
@@ -229,13 +251,24 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             R.id.addressFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(this, R.drawable.ic_round_arrow_back)
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_round_arrow_back
+                    )
                 menuRes = -1
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.address)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
             R.id.bottomSheetPalette -> {
+            }
+            R.id.orderFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon = null
+                menuRes = R.menu.main_menu
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.orders)
+                showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
             else -> throw RuntimeException("Unknown destination - ${destination.id}")
         }

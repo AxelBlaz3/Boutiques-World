@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/fabricsHomeFragment"
+        android:id="@+id/youngTalentsHomeFragment"
         android:icon="@drawable/ic_round_home"
         android:title="@string/home" />
     <item
@@ -11,7 +11,7 @@
         android:title="@string/orders" />
     <item android:title="" />
     <item
-        android:id="@+id/fabricProductsFragment"
+        android:id="@+id/pendingFragment"
         android:icon="@drawable/ic_cloth"
         android:title="@string/products" />
     <item

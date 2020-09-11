@@ -18,14 +18,14 @@ interface ProductDao {
     /**
      * Get all fabrics.
      */
-    @Query("SELECT * FROM Fabric")
-    fun getAllFabrics(): List<BaseProduct.Fabric>?
+    @Query("SELECT * FROM Store")
+    fun getAllFabrics(): List<BaseProduct.Store>?
 
     /**
      * Inserts a list of fabrics.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllFabrics(fabrics: List<BaseProduct.Fabric>)
+    fun insertAllFabrics(stores: List<BaseProduct.Store>)
 
     /**
      * Insert a new product.

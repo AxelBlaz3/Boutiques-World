@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import com.boutiquesworld.MainActivity
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentAddressBinding
+import com.boutiquesworld.ui.MainActivity
 import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -72,7 +72,7 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
             addressRecyclerView.adapter = addressAdapter
 
             profileViewModel.getRetailer().observe(viewLifecycleOwner) {
-                addressViewModel.updateAddressList(it.shopId)
+                addressViewModel.updateAddressList(it.shopId, forceRefresh = false)
             }
 
             addressViewModel.getAddressList().observe(viewLifecycleOwner) {
@@ -127,7 +127,10 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
                         addNewAddress.visibility = View.VISIBLE
                         addressRecyclerView.visibility = View.VISIBLE
                         resetAddressFields()
-                        addressViewModel.updateAddressList(profileViewModel.getRetailer().value!!.shopId)
+                        addressViewModel.updateAddressList(
+                            profileViewModel.getRetailer().value!!.shopId,
+                            forceRefresh = true
+                        )
                     } else
                         Snackbar.make(
                             view,

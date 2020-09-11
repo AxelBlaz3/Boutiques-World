@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST")
 @AndroidEntryPoint
 class ProductStatusFragment : Fragment(), ProductStatusAdapter.ProductStatusAdapterListener {
     private lateinit var binding: FragmentProductStatusBinding
@@ -72,11 +73,11 @@ class ProductStatusFragment : Fragment(), ProductStatusAdapter.ProductStatusAdap
     private fun getListForPosition(
         position: Int,
         products: ArrayList<BaseProduct>
-    ): List<BaseProduct.Fabric> {
+    ): List<BaseProduct.Store> {
         return when (position) {
-            0 -> products.filter { fabric -> (fabric as BaseProduct.Fabric).productStatus == 1 } as MutableList<BaseProduct.Fabric>
-            1 -> products.filter { fabric -> (fabric as BaseProduct.Fabric).productStatus == 0 } as MutableList<BaseProduct.Fabric>
-            2 -> products.filter { fabric -> (fabric as BaseProduct.Fabric).productStatus == 2 } as MutableList<BaseProduct.Fabric>
+            0 -> products.filter { fabric -> (fabric as BaseProduct.Store).productStatus == 1 } as MutableList<BaseProduct.Store>
+            1 -> products.filter { fabric -> (fabric as BaseProduct.Store).productStatus == 0 } as MutableList<BaseProduct.Store>
+            2 -> products.filter { fabric -> (fabric as BaseProduct.Store).productStatus == 2 } as MutableList<BaseProduct.Store>
             else -> throw IllegalArgumentException("${this.javaClass.simpleName}: Unknown position - $position for getting list of products")
         }
     }

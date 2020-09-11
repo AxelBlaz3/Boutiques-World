@@ -140,6 +140,7 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
                 isCheckoutClicked && !areDifferent -> { // No changes in cart, navigate to billing
                     profileViewModel.getRetailer().value?.let { retailer ->
                         Handler(requireContext().mainLooper).post {
+                            // Generate a random 10 digit OrderID
                             cartViewModel.orderId = (1000000000..9999999999).random().toString()
                             findNavController().navigate(
                                 CartFragmentDirections.actionCartFragmentToAddressFragment(

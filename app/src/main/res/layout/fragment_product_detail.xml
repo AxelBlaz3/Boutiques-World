@@ -8,16 +8,16 @@
         <import type="android.view.View" />
 
         <variable
-            name="isFabric"
-            type="Boolean" />
-
-        <variable
             name="fabric"
-            type="com.boutiquesworld.model.BaseProduct.Fabric" />
+            type="com.boutiquesworld.model.BaseProduct.Store" />
 
         <variable
             name="product"
             type="com.boutiquesworld.model.BaseProduct.Product" />
+
+        <variable
+            name="sketch"
+            type="com.boutiquesworld.model.BaseProduct.Sketch" />
 
         <variable
             name="imageUrls"
@@ -27,8 +27,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?actionBarSize"
         android:animateLayoutChanges="true"
+        android:paddingTop="?actionBarSize"
         app:paddingBottomSystemWindowInsets="@{true}"
         app:paddingTopSystemWindowInsets="@{true}">
 
@@ -52,16 +52,28 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/product_detail_image_item" />
 
+
+                <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_image_recycler_view"
+                    app:spi_dotColor="?colorSecondaryVariant"
+                    app:spi_dotSelectedColor="?colorSecondary" />
+
                 <TextView
                     android:id="@+id/product_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/grid_2"
                     android:layout_marginTop="@dimen/grid_2"
-                    android:text="@{isFabric ? fabric.productName : product.productName}"
+                    android:text="@{product != null ? product.productName : (fabric != null ? fabric.productName : sketch.productName)}"
                     android:textAppearance="?textAppearanceHeadline4"
                     android:textColor="?colorOnPrimary"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_image_recycler_view"
+                    app:layout_constraintTop_toBottomOf="@+id/indicator"
                     tools:layout_editor_absoluteX="16dp"
                     tools:text="Blue Saree" />
 
@@ -105,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:visibility="@{isFabric ? View.VISIBLE : View.GONE}"
+            android:visibility="@{product != null ? View.GONE : (fabric != null ? View.VISIBLE : View.GONE)}"
             app:cardElevation="@dimen/product_description_sticky_card_elevation"
             app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Footer">
 
@@ -179,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/grid_2"
-                    android:text="@{isFabric ? @string/product_price(fabric.productPrice) : @string/product_price(0)}"
+                    android:text="@{product != null ? @string/product_price(product.startPrice) + `-` + @string/product_price(product.endPrice) : (fabric != null ? @string/product_price(fabric.productPrice) : @string/product_price(sketch.startPrice) + `-` + @string/product_price(sketch.endPrice))}"
                     android:textAppearance="?textAppearanceHeadline5"
                     app:layout_constraintBottom_toBottomOf="@+id/quantity_card"
                     app:layout_constraintEnd_toEndOf="parent"

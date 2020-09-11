@@ -12,6 +12,5 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/product_detail_image_height"
-        app:glideSrc="@{imageUrl}"
-        app:shapeAppearance="?shapeAppearanceMediumComponent" />
+        app:glideSrc="@{imageUrl}" />
 </layout>

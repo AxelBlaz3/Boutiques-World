@@ -27,8 +27,13 @@ class ProductsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             retailerRepository.updateRetailer()
-            getProducts(forceRefresh = false)
-            getFabrics(forceRefresh = false)
+            retailer.value?.let {
+                if (it.businessCategory == "B")
+                    getProducts(forceRefresh = false)
+                else if (it.businessCategory == "D")
+                    getSketches(forceRefresh = false)
+                getFabrics(forceRefresh = false)
+            }
         }
     }
 
@@ -36,9 +41,12 @@ class ProductsViewModel @Inject constructor(
         productRepository.getProductsLiveData()
     private val fabrics: MutableLiveData<ArrayList<BaseProduct>> =
         productRepository.getFabricsLiveData()
+    private val sketches: MutableLiveData<ArrayList<BaseProduct>> =
+        productRepository.getSketchesMutableLiveData()
 
     fun getProductsLiveData(): LiveData<ArrayList<BaseProduct>> = products
     fun getFabricsLiveData(): LiveData<ArrayList<BaseProduct>> = fabrics
+    fun getSketchesLiveData(): LiveData<ArrayList<BaseProduct>> = sketches
 
     fun getProducts(forceRefresh: Boolean) {
         viewModelScope.launch {
@@ -52,6 +60,14 @@ class ProductsViewModel @Inject constructor(
         viewModelScope.launch {
             retailer.value?.let {
                 productRepository.getFabrics(forceRefresh)
+            }
+        }
+    }
+
+    fun getSketches(forceRefresh: Boolean) {
+        viewModelScope.launch {
+            retailer.value?.let {
+                productRepository.getSketches(it.shopId, forceRefresh)
             }
         }
     }

@@ -102,9 +102,9 @@ class AddressViewModel @Inject constructor(
         }
     }
 
-    fun updateAddressList(userId: Int) {
+    fun updateAddressList(userId: Int, forceRefresh: Boolean) {
         viewModelScope.launch {
-            addressRepository.updateAddressList(userId)
+            addressRepository.updateAddressList(userId, forceRefresh)
         }
     }
 

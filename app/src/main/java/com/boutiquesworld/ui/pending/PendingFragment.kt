@@ -7,12 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentPendingBinding
+import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PendingFragment : Fragment() {
     private lateinit var binding: FragmentPendingBinding
+
+    @Inject
+    lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +36,10 @@ class PendingFragment : Fragment() {
 
     private fun setupViewPagerWithTabs() {
         binding.run {
-            pendingViewPager.adapter = PendingStateAdapter(this@PendingFragment)
+            pendingViewPager.adapter = PendingStateAdapter(
+                this@PendingFragment,
+                profileViewModel.getRetailer().value?.businessCategory
+            )
             TabLayoutMediator(pendingTabLayout, pendingViewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> getString(R.string.live)

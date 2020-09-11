@@ -1,6 +1,7 @@
 package com.boutiquesworld.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.boutiquesworld.data.BoutiqueDatabase
 import com.boutiquesworld.model.Address
 import com.boutiquesworld.network.BoutiqueService
 import com.google.gson.internal.LinkedTreeMap
@@ -10,27 +11,43 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AddressRepository @Inject constructor(private val boutiqueService: BoutiqueService) {
+class AddressRepository @Inject constructor(
+    private val boutiqueService: BoutiqueService,
+    private val boutiqueDatabase: BoutiqueDatabase
+) {
     private val addressList: MutableLiveData<ArrayList<Address>> = MutableLiveData(ArrayList())
     private val razorPayOrderId: MutableLiveData<String> = MutableLiveData()
 
     fun getRazorPayOrderIdMutableLiveData(): MutableLiveData<String> = razorPayOrderId
     fun getAddressMutableLiveData(): MutableLiveData<ArrayList<Address>> = addressList
 
-    suspend fun updateAddressList(userId: Int): Boolean = withContext(Dispatchers.IO) {
-        try {
-            val response = boutiqueService.getAddress(userId).execute()
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    addressList.postValue(it)
-                    return@withContext true
+    suspend fun updateAddressList(userId: Int, forceRefresh: Boolean): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                if (!forceRefresh) {
+                    boutiqueDatabase.addressDao().getAddressList()?.let {
+                        if (it.isNotEmpty()) {
+                            addressList.postValue(it as ArrayList<Address>)
+                            return@withContext true
+                        }
+                    }
                 }
+                val response = boutiqueService.getAddress(userId).execute()
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        boutiqueDatabase.addressDao().apply {
+                            truncateAddressList()
+                            insertAddress(it)
+                        }
+                        addressList.postValue(it)
+                        return@withContext true
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+            return@withContext false
         }
-        return@withContext false
-    }
 
     @Suppress("UNCHECKED_CAST")
     suspend fun genRazorPayOrderIdAndUpdateCartWithOrderId(
