@@ -3,15 +3,23 @@ package com.boutiquesworld.ui.fabrics
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.boutiquesworld.ui.order.OrderFragment
 
-private const val NUM_PAGES = 3
+private const val NUM_PAGES_DEFAULT = 3
+private const val NUM_PAGES_ORDERS = 4
 
-class FabricProductsStateAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class FabricProductsStateAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int =
-        NUM_PAGES
+        if (fragment is FabricProductsFragment)
+            NUM_PAGES_DEFAULT
+        else
+            NUM_PAGES_ORDERS
 
     override fun createFragment(position: Int): Fragment =
-        ProductStatusFragment()
-            .apply { arguments = bundleOf("position" to position) }
+        if (fragment is FabricProductsFragment)
+            ProductStatusFragment()
+                .apply { arguments = bundleOf("position" to position) }
+        else
+            OrderFragment().apply { arguments = bundleOf("position" to position) }
 }

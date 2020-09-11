@@ -262,7 +262,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             R.id.bottomSheetPalette -> {
             }
-            R.id.orderFragment -> {
+            R.id.baseOrderFragment -> {
                 supportActionBar?.show()
                 binding.toolbar.navigationIcon = null
                 menuRes = R.menu.main_menu

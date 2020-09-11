@@ -162,4 +162,8 @@
     <!-- Order -->
     <string name="order_id">Order Id - %1$s</string>
     <string name="order_quantity"><b>Quantity</b> - %1$d</string>
+    <string name="received">Received</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="dispatched">Dispatched</string>
+    <string name="completed">Completed</string>
 </resources>

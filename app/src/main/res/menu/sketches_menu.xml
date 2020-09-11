@@ -6,9 +6,9 @@
         android:icon="@drawable/ic_round_home"
         android:title="@string/home" />
     <item
-        android:id="@+id/orderFragment"
-        android:icon="@drawable/ic_round_assignment"
-        android:title="@string/orders" />
+        android:id="@+id/fabricsFragment"
+        android:icon="@drawable/ic_round_whatshot"
+        android:title="@string/fabrics" />
     <item android:title="" />
     <item
         android:id="@+id/pendingFragment"

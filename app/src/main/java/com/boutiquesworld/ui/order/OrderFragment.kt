@@ -27,6 +27,15 @@ class OrderFragment : Fragment(), OrderAdapter.OrderAdapterListener {
         OrderAdapter(this)
     }
 
+    private var position = -1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            position = it.get("position") as Int
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,8 +66,17 @@ class OrderFragment : Fragment(), OrderAdapter.OrderAdapterListener {
             }
 
             orderViewModel.getOrders().observe(viewLifecycleOwner) {
-                orderAdapter.submitList(it)
+                orderAdapter.submitList(getListForPosition(position, it))
             }
+        }
+    }
+
+    private fun getListForPosition(position: Int, orders: ArrayList<Order>): List<Order> {
+        return when (position) {
+            0 -> orders.filter { order -> order.orderStatus == 0 }
+            1 -> orders.filter { order -> order.orderStatus == 1 }
+            2 -> orders.filter { order -> order.orderStatus == 2 }
+            else -> orders.filter { order -> order.orderStatus == 3 }
         }
     }
 

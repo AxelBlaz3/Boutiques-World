@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_round_home"
         android:title="@string/home" />
     <item
-        android:id="@+id/orderFragment"
+        android:id="@+id/baseOrderFragment"
         android:icon="@drawable/ic_round_assignment"
         android:title="@string/orders" />
     <item android:title="" />
