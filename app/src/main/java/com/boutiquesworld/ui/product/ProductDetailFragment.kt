@@ -234,11 +234,8 @@ class ProductDetailFragment : Fragment() {
                         remove = remove,
                         isSoldOut = false
                     )
-                    if (it) {
+                    if (it)
                         cartViewModel.resetIsNewCartItemPosted()
-
-
-                    }
                 }
             }
         }
@@ -342,7 +339,7 @@ class ProductDetailFragment : Fragment() {
     /**
      * Grab the required fields from [com.boutiquesworld.model.BaseProduct.Store] and use them in [com.boutiquesworld.model.Cart] constructor.
      */
-    private fun getCartFromFabric(store: BaseProduct.Store) =
+    private fun getCartFromFabric(store: BaseProduct.Store): Cart? =
         profileViewModel.getRetailer().value?.let {
             Cart(
                 productId = store.productId.toInt(),
@@ -351,11 +348,11 @@ class ProductDetailFragment : Fragment() {
                 productPrice = mProductPrice.toString(),
                 productType = store.productType,
                 quantity = mProductQuantity,
-                maxQuantity = store.availableQuantity,
+                availableQuantity = store.availableQuantity,
                 productImage = store.productThumb,
                 businessId = store.businessId.toInt(),
                 userId = it.shopId,
-                userCategory = it.businessCategory,
+                businessCategory = it.businessCategory,
                 productCategory = store.productType
             )
         }
@@ -406,7 +403,6 @@ class ProductDetailFragment : Fragment() {
             fabric?.let {
                 profileViewModel.getRetailer().value?.let { retailer ->
                     cartViewModel.postCartItem(retailer.shopId,
-                        retailer.businessCategory,
                         forceRefresh = true, cart = ArrayList<Cart>().apply {
                             getCartFromFabric(it)?.let { cart -> add(cart) }
                         })

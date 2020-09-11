@@ -46,17 +46,17 @@ class CartViewModel @Inject constructor(
         areCartItemsLoaded.value = newValue
     }
 
-    fun updateCart(userId: Int, userCategory: String, forceRefresh: Boolean) {
+    fun updateCart(userId: Int, forceRefresh: Boolean) {
         viewModelScope.launch {
             areCartItemsLoaded.value =
-                cartRepository.updateCart(userId, userCategory, forceRefresh = forceRefresh)
+                cartRepository.updateCart(userId, forceRefresh = forceRefresh)
         }
     }
 
-    fun postCartItem(userId: Int, userCategory: String, forceRefresh: Boolean, cart: List<Cart>) {
+    fun postCartItem(userId: Int, forceRefresh: Boolean, cart: List<Cart>) {
         viewModelScope.launch {
             isNewCartItemPosted.value =
-                cartRepository.postCartItem(userId, userCategory, forceRefresh, cart)
+                cartRepository.postCartItem(userId, forceRefresh, cart)
         }
     }
 

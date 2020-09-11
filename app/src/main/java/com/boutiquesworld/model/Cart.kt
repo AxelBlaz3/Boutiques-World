@@ -14,10 +14,11 @@ data class Cart(
     @SerializedName("product_type") val productType: String,
     @SerializedName("product_image") val productImage: String,
     @SerializedName("quantity") var quantity: Int,
-    @SerializedName("max_quantity") val maxQuantity: Int,
+    @SerializedName("available_quantity") val availableQuantity: Int,
     @SerializedName("product_price") var productPrice: String,
     @SerializedName("business_id") val businessId: Int,
     @SerializedName("user_id") val userId: Int,
     @SerializedName("order_id") val orderId: String? = "-1",
-    @SerializedName("user_category") val userCategory: String
+    @SerializedName("business_category") val businessCategory: String,
+    @SerializedName("user_category") val userCategory: String? = "R"
 )

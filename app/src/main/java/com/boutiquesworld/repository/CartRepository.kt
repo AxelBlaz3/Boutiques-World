@@ -24,10 +24,9 @@ class CartRepository @Inject constructor(
     /**
      * Update the cart.
      * @param userId: Update cart of User having id - userId.
-     * @param userCategory: Category of user (B - Boutiques, F - Fabrics, U - Users)
      * @param forceRefresh: Whether to force refresh cart
      */
-    suspend fun updateCart(userId: Int, userCategory: String, forceRefresh: Boolean): Boolean =
+    suspend fun updateCart(userId: Int, forceRefresh: Boolean): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 if (!forceRefresh) {
@@ -39,7 +38,7 @@ class CartRepository @Inject constructor(
                         }
                     }
                 }
-                val response = boutiqueService.getCart(userId, userCategory).execute()
+                val response = boutiqueService.getCart(userId, "R").execute()
                 if (response.isSuccessful) {
                     response.body()?.let {
                         if (it.isNotEmpty()) {
@@ -62,7 +61,6 @@ class CartRepository @Inject constructor(
 
     suspend fun postCartItem(
         userId: Int,
-        userCategory: String,
         forceRefresh: Boolean,
         cart: List<Cart>
     ): Boolean = withContext(Dispatchers.IO) {
@@ -70,7 +68,7 @@ class CartRepository @Inject constructor(
             val response = boutiqueService.insertCartItem(cart).execute()
             if (response.isSuccessful) {
                 insertCartItem(cart)
-                updateCart(userId, userCategory, forceRefresh)
+                updateCart(userId, forceRefresh)
                 return@withContext true
             }
         } catch (e: Exception) {
@@ -94,7 +92,7 @@ class CartRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val response =
-                    boutiqueService.deleteCartItem(cart.userId, cart.productId, cart.userCategory)
+                    boutiqueService.deleteCartItem(cart.userId, cart.productId, cart.userCategory!!)
                         .execute()
                 if (response.isSuccessful) {
                     cartDao.removeItemFromCart(cart.productId)

@@ -51,7 +51,7 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
                 profileViewModel.getRetailer().value?.let {
                     cartViewModel.run {
                         setIsCartCheckoutClicked(false)
-                        updateCart(it.shopId, it.businessCategory, forceRefresh = true)
+                        updateCart(it.shopId, forceRefresh = true)
                     }
                 }
                 cartSwipeRefresh.isRefreshing = false
@@ -71,7 +71,6 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
                     profileViewModel.getRetailer().value?.let { retailer ->
                         cartViewModel.postCartItem(
                             retailer.shopId,
-                            retailer.businessCategory,
                             forceRefresh = true,
                             cart = cartViewModel.finalCartToCheckout
                         )

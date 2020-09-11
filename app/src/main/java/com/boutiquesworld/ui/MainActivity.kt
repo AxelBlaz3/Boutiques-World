@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         bottomNavView.inflateMenu(R.menu.boutiques_nav_menu)
                         cartViewModel.updateCart(
                             it.shopId,
-                            it.businessCategory,
                             forceRefresh = false
                         )
                     }
@@ -86,14 +85,20 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             addressViewModel.getIsPaymentCaptured()
                 .observe(this@MainActivity) { isPaymentCaptured ->
-                    if (isPaymentCaptured)
-                        profileViewModel.getRetailer().value?.let {
-                            cartViewModel.updateCart(
-                                it.shopId,
-                                it.businessCategory,
-                                forceRefresh = true
+                    isPaymentCaptured?.let {
+                        if (isPaymentCaptured)
+                            profileViewModel.getRetailer().value?.let {
+                                cartViewModel.updateCart(
+                                    it.shopId,
+                                    forceRefresh = true
+                                )
+                            }
+                        val directions =
+                            DashboardFragmentDirections.actionGlobalOrderSuccessFragment(
+                                isOrderSuccess = isPaymentCaptured
                             )
-                        }
+                        findNavController(R.id.nav_host_fragment).navigate(directions)
+                    }
                 }
         }
     }
@@ -270,6 +275,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 updateToolbarTitle(R.string.orders)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
+            R.id.orderSuccessFragment -> {
+                supportActionBar?.hide()
+                binding.toolbar.navigationIcon = null
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.orders)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
             else -> throw RuntimeException("Unknown destination - ${destination.id}")
         }
     }
@@ -365,7 +378,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun onPaymentError(errorCode: Int, response: String?, paymentData: PaymentData?) {
-        addressViewModel.resetRazorPayOrderId()
+        addressViewModel.apply {
+            setIsPaymentCaptured(false)
+            resetRazorPayOrderId()
+        }
     }
 
     override fun onPaymentSuccess(razorPayPaymentId: String?, paymentData: PaymentData?) {

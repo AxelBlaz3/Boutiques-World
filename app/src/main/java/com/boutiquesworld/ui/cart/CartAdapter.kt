@@ -40,9 +40,9 @@ class CartAdapter(private val listener: CartAdapterListener) :
                     oldItem.productDescription == newItem.productDescription &&
                     oldItem.productPrice == newItem.productPrice &&
                     oldItem.quantity == newItem.quantity &&
-                    oldItem.maxQuantity == newItem.maxQuantity &&
+                    oldItem.availableQuantity == newItem.availableQuantity &&
                     oldItem.userId == newItem.userId &&
-                    oldItem.userCategory == newItem.userCategory &&
+                    oldItem.businessCategory == newItem.businessCategory &&
                     oldItem.productType == newItem.productType
 
             areTwoListsSame = areTwoListsSame && areContentsTheSame
@@ -66,8 +66,8 @@ class CartAdapter(private val listener: CartAdapterListener) :
                 this.cart = cart
                 this.listener = this@CartViewHolder.listener
                 cartProductQuantity.run {
-                    if (cart.maxQuantity < cart.quantity)
-                        cart.quantity = cart.maxQuantity
+                    if (cart.availableQuantity < cart.quantity)
+                        cart.quantity = cart.availableQuantity
                     setText(cart.quantity.toString(), false)
                     onItemClickListener =
                         AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -77,7 +77,7 @@ class CartAdapter(private val listener: CartAdapterListener) :
                         ArrayAdapter(
                             binding.root.context,
                             android.R.layout.simple_spinner_dropdown_item,
-                            (1..cart.maxQuantity).toList()
+                            (1..cart.availableQuantity).toList()
                         )
                     )
                 }

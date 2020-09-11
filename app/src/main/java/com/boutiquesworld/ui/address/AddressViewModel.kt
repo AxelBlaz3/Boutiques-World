@@ -30,7 +30,7 @@ class AddressViewModel @Inject constructor(
         addressRepository.getRazorPayOrderIdMutableLiveData()
 
     private val retailer = retailerRepository.getRetailerMutableLiveData()
-    private val isPaymentCaptured: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isPaymentCaptured: MutableLiveData<Boolean?> = MutableLiveData()
 
     // Variables for verifying whether fields are empty
     private val addressNameEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -41,7 +41,7 @@ class AddressViewModel @Inject constructor(
     private val addressLandmarkEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val addressTownEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val addressStateEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val isAddressPosted: MutableLiveData<Boolean?> = MutableLiveData()
+    private val isAddressPosted: MutableLiveData<Boolean?> = MutableLiveData(null)
 
     // Map for posting address to server
     private val addressMap: HashMap<String, RequestBody> = HashMap()
@@ -57,7 +57,7 @@ class AddressViewModel @Inject constructor(
     fun getIsAddressPosted(): LiveData<Boolean?> = isAddressPosted
     fun getAddressList(): LiveData<ArrayList<Address>> = addressList
     fun getRazorPayOrderId(): LiveData<String> = razorPayOrderId
-    fun getIsPaymentCaptured(): LiveData<Boolean> = isPaymentCaptured
+    fun getIsPaymentCaptured(): LiveData<Boolean?> = isPaymentCaptured
 
     fun genRazorPayOrderId(orderId: String, price: Int) {
         viewModelScope.launch {
@@ -74,11 +74,15 @@ class AddressViewModel @Inject constructor(
     }
 
     fun resetIsPaymentCaptured() {
-        isPaymentCaptured.value = false
+        isPaymentCaptured.value = null
     }
 
     fun resetRazorPayOrderId() {
         razorPayOrderId.value = ""
+    }
+
+    fun setIsPaymentCaptured(newValue: Boolean) {
+        isPaymentCaptured.value = newValue
     }
 
     fun verifyAndCapturePayment(
