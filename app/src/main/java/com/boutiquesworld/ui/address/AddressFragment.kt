@@ -1,26 +1,23 @@
 package com.boutiquesworld.ui.address
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentAddressBinding
-import com.boutiquesworld.ui.MainActivity
 import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.razorpay.Checkout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.address_item.view.*
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +34,7 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
     lateinit var cartViewModel: CartViewModel
 
     // Used to track the currently and previously selected address indices
+    // 0th index holds the currently selected item, 1st index holds previously selected item.
     private var addressSelectionIndices = mutableListOf(0, 0)
     private val addressAdapter by lazy {
         AddressAdapter(this, addressSelectionIndices)
@@ -48,12 +46,6 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
     }
     private val orderId by lazy {
         args.orderId
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Preload payment resources
-        Checkout.preload(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -154,37 +146,16 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
             }
 
             addressViewModel.getRazorPayOrderId().observe(viewLifecycleOwner) {
-                Log.d(this@AddressFragment.javaClass.simpleName, "Got new order_id - $it")
                 if (it.isNotEmpty()) {
-                    startPayment(it)
+                    addressViewModel.resetRazorPayOrderId()
+                    findNavController().navigate(
+                        AddressFragmentDirections.actionAddressFragmentToOrderSummaryFragment(
+                            razorPayOrderId = it,
+                            selectedAddressIndex = addressSelectionIndices[0]
+                        )
+                    )
                 }
             }
-        }
-    }
-
-    private fun startPayment(razorPayOrderId: String) {
-        val checkout = Checkout()
-        Log.d(this.javaClass.simpleName, "orderId - ${cartViewModel.orderId}")
-        Log.d(this.javaClass.simpleName, "cartTotal - ${cartViewModel.cartTotal}")
-        try {
-            val options = JSONObject()
-            options.put("name", "Boutiques world")
-            options.put("order_id", razorPayOrderId)
-            //You can omit the image option to fetch the image from dashboard
-            options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png")
-            options.put("currency", "INR")
-            options.put("amount", cartViewModel.cartTotal * 100)
-
-            options.put("prefill.email", "vinayagirichetty@gmail.com")
-            options.put("prefill.contact", "9876543210")
-
-            val notes = JSONObject()
-            notes.put("merchant_order_id", cartViewModel.orderId)
-            options.put("notes", notes)
-
-            checkout.open(requireActivity() as MainActivity, options)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

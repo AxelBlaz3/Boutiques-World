@@ -121,7 +121,6 @@
     <string name="email">Email</string>
     <string name="place">Place</string>
     <string name="name">Name</string>
-    <string name="order_summary">Order Summary</string>
     <string name="item_s_total">Item(s) total</string>
     <string name="checkout">Checkout</string>
     <string name="total">Total</string>
@@ -161,7 +160,7 @@
 
     <!-- Order -->
     <string name="order_id">Order Id - %1$s</string>
-    <string name="order_quantity"><b>Quantity</b> - %1$d</string>
+    <string name="order_quantity">Quantity - %1$d</string>
     <string name="received">Received</string>
     <string name="confirmed">Confirmed</string>
     <string name="dispatched">Dispatched</string>
@@ -173,4 +172,9 @@
     <string name="view_orders">View Orders</string>
     <string name="back_to_dashboard">Back to Dashboard</string>
     <string name="back_to_cart">Back to Cart</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="order_total">Order total</string>
+    <string name="delivery_charges">Delivery charge</string>
+    <string name="cart_items_count">%1$d item(s)</string>
+    <string name="place_order">Place order</string>
 </resources>

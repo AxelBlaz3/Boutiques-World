@@ -168,6 +168,9 @@
         <argument
             android:name="orderId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_addressFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
     </fragment>
     <fragment
         android:id="@+id/baseOrderFragment"
@@ -189,4 +192,16 @@
     <action
         android:id="@+id/action_global_orderSuccessFragment"
         app:destination="@id/orderSuccessFragment" />
+    <fragment
+        android:id="@+id/orderSummaryFragment"
+        android:name="com.boutiquesworld.ui.order.OrderSummaryFragment"
+        android:label="OrderSummaryFragment">
+        <argument
+            android:name="razorPayOrderId"
+            app:argType="string" />
+        <argument
+            android:name="selectedAddressIndex"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 </navigation>

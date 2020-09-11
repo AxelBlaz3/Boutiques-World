@@ -275,6 +275,18 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 updateToolbarTitle(R.string.orders)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
             }
+            R.id.orderSummaryFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_round_arrow_back
+                    )
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.order_summary)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
+            }
             R.id.orderSuccessFragment -> {
                 supportActionBar?.hide()
                 binding.toolbar.navigationIcon = null

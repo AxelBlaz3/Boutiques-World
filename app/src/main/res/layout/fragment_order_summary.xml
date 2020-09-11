@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="address"
+            type="com.boutiquesworld.model.Address" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?actionBarSize"
+                android:paddingBottom="80dp">
+
+                <TextView
+                    android:id="@+id/summary_cart_item_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:text="2 items" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/summary_product_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/grid_1"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@+id/summary_cart_item_count"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/summary_product_item" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:text="@string/order_summary"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintTop_toBottomOf="@+id/summary_product_recycler_view"
+                    tools:layout_editor_absoluteX="16dp" />
+
+                <TextView
+                    android:id="@+id/summary_order_total_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:text="@string/order_total"
+                    app:layout_constraintBottom_toBottomOf="@+id/summary_order_total"
+                    app:layout_constraintEnd_toStartOf="@+id/summary_order_total"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/summary_order_total" />
+
+                <TextView
+                    android:id="@+id/summary_order_total"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:gravity="end"
+                    android:textAppearance="?textAppearanceSubtitle2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/summary_order_total_text"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9"
+                    tools:text="₹1200" />
+
+                <TextView
+                    android:id="@+id/summary_delivery_charges_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:text="@string/delivery_charges"
+                    app:layout_constraintBottom_toBottomOf="@+id/summary_delivery_charges"
+                    app:layout_constraintEnd_toStartOf="@+id/summary_order_total"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/summary_delivery_charges" />
+
+                <TextView
+                    android:id="@+id/summary_delivery_charges"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:gravity="end"
+                    android:text="₹100"
+                    android:textAppearance="?textAppearanceSubtitle2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/summary_order_total_text"
+                    app:layout_constraintTop_toBottomOf="@+id/summary_order_total"
+                    tools:text="₹100" />
+
+                <TextView
+                    android:id="@+id/summary_address_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:text="@string/address"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintTop_toBottomOf="@+id/summary_delivery_charges_text" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginBottom="@dimen/grid_2"
+                    android:text="@{@string/address_description(address.flat, address.area, address.landmark, address.city, address.state, address.pincode)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/summary_address_title"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:text="61 /, Aram Ngr,  Bunglows, Andheri (w), Mumbai, Maharashtra, 400061." />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/place_order_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginBottom="@dimen/grid_2"
+            android:gravity="center"
+            android:text="@string/place_order" />
+    </FrameLayout>
+</layout>
