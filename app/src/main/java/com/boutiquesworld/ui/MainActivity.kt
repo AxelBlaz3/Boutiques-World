@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         bottomNavView.inflateMenu(R.menu.boutiques_nav_menu)
                         cartViewModel.updateCart(
                             it.shopId,
+                            it.businessCategory,
                             forceRefresh = false
                         )
                     }
@@ -90,6 +91,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             profileViewModel.getRetailer().value?.let {
                                 cartViewModel.updateCart(
                                     it.shopId,
+                                    it.businessCategory,
                                     forceRefresh = true
                                 )
                             }
@@ -117,7 +119,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             initCartBadge()
         }
 
-        // Set a click listener for basket
+        // Check if the logged in user is either F or Y (alias Store), if so, hide Cart and My Orders menu items.
+        profileViewModel.getRetailer().value?.let {
+            if (it.businessCategory == "F" || it.businessCategory == "Y")
+                binding.toolbar.menu.apply {
+                    findItem(R.id.cart).isVisible = false
+                    findItem(R.id.myOrdersFragment).isVisible = false
+                }
+        }
+
+        // Set a click listener for basket/cart
         menu?.findItem(R.id.cart)?.actionView?.setOnClickListener {
             findNavController(
                 R.id.nav_host_fragment
@@ -131,6 +142,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when (item.itemId) {
             R.id.cart -> findNavController(R.id.nav_host_fragment).navigate(
                 DashboardFragmentDirections.actionGlobalCartFragment()
+            )
+            R.id.myOrdersFragment -> findNavController(R.id.nav_host_fragment).navigate(
+                DashboardFragmentDirections.actionGlobalMyOrdersFragment()
             )
         }
         return true
@@ -274,6 +288,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 onCreateOptionsMenu(binding.toolbar.menu)
                 updateToolbarTitle(R.string.orders)
                 showHideFabAndBottomAppBar(hideFab = false, hideBottomAppBar = false)
+            }
+            R.id.myOrdersFragment -> {
+                supportActionBar?.show()
+                binding.toolbar.navigationIcon = ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_round_arrow_back
+                )
+                menuRes = -1
+                onCreateOptionsMenu(binding.toolbar.menu)
+                updateToolbarTitle(R.string.my_orders)
+                showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
             R.id.orderSummaryFragment -> {
                 supportActionBar?.show()

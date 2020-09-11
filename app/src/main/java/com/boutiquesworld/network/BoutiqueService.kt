@@ -18,7 +18,7 @@ interface BoutiqueService {
     fun getFabrics(): Call<ArrayList<BaseProduct.Store>>
 
     @GET("/new/API/orders.php")
-    fun getOrders(@Query("business_id") businessId: Int): Call<ArrayList<Order>>
+    fun getOrders(): Call<ArrayList<Order>>
 
     @GET("/new/API/sketches.php")
     fun getSketches(@Query("bid") businessId: Int): Call<ArrayList<BaseProduct.Sketch>>

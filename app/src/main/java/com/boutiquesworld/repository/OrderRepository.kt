@@ -18,7 +18,7 @@ class OrderRepository @Inject constructor(
 
     fun getOrdersMutableLiveData(): MutableLiveData<ArrayList<Order>> = orders
 
-    suspend fun updateOrders(businessId: Int, forceRefresh: Boolean): Boolean =
+    suspend fun updateOrders(forceRefresh: Boolean): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 if (!forceRefresh) {
@@ -30,7 +30,7 @@ class OrderRepository @Inject constructor(
                     }
                 }
 
-                val response = boutiqueService.getOrders(businessId).execute()
+                val response = boutiqueService.getOrders().execute()
                 if (response.isSuccessful) {
                     response.body()?.let {
                         boutiqueDatabase.orderDao().apply {

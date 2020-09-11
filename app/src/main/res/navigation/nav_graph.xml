@@ -204,4 +204,11 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/myOrdersFragment"
+        android:name="com.boutiquesworld.ui.order.MyOrdersFragment"
+        android:label="MyOrdersFragment" />
+    <action
+        android:id="@+id/action_global_myOrdersFragment"
+        app:destination="@id/myOrdersFragment" />
 </navigation>

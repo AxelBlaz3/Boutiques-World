@@ -32,7 +32,7 @@ class OrderAdapter(private val listener: OrderAdapterListener) :
                     oldItem.productDescription == newItem.productDescription &&
                     oldItem.productPrice == newItem.productPrice &&
                     oldItem.quantity == newItem.quantity &&
-                    oldItem.maxQuantity == newItem.maxQuantity &&
+                    oldItem.availableQuantity == newItem.availableQuantity &&
                     oldItem.userId == newItem.userId &&
                     oldItem.userCategory == newItem.userCategory &&
                     oldItem.productType == newItem.productType

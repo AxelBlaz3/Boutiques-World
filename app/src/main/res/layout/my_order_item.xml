@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="order"
+            type="com.boutiquesworld.model.Order" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.order.OrderAdapter.OrderAdapterListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="@dimen/grid_2"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/grid_2">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/order_product_image"
+            android:layout_width="72dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="@dimen/grid_2"
+            android:scaleType="centerCrop"
+            app:glideSrc="@{order.productImage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="?shapeAppearanceMediumComponent"
+            tools:src="@drawable/thumb" />
+
+        <TextView
+            android:id="@+id/order_product_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginEnd="@dimen/grid_2"
+            android:text="Dispatched"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textColor="?colorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            tools:text="Dispatched" />
+
+        <TextView
+            android:id="@+id/order_product_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{order.productName}"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@+id/order_product_status"
+            app:layout_constraintStart_toEndOf="@+id/order_product_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Pink Saree" />
+
+        <TextView
+            android:id="@+id/order_product_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{@string/order_id(order.orderId)}"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintEnd_toStartOf="@+id/order_product_status"
+            app:layout_constraintStart_toEndOf="@+id/order_product_image"
+            app:layout_constraintTop_toBottomOf="@+id/order_product_title"
+            tools:text="OrderID - 1234567890" />
+
+        <TextView
+            android:id="@+id/order_product_delivery_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Delivery expected by - 24 Dec"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintEnd_toStartOf="@+id/order_product_status"
+            app:layout_constraintStart_toEndOf="@+id/order_product_image"
+            app:layout_constraintTop_toBottomOf="@+id/order_product_desc"
+            tools:text="Delivery expected by - 24 Dec" />
+
+        <TextView
+            android:id="@+id/order_product_status"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:text="@{@string/product_price(order.productPrice)}"
+            android:textAppearance="?textAppearanceSubtitle1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="₹300" />
+
+        <TextView
+            android:id="@+id/order_product_quantity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:text="@{@string/order_quantity(order.quantity)}"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintBottom_toBottomOf="@+id/order_product_price"
+            app:layout_constraintEnd_toStartOf="@+id/order_product_price"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/order_product_image"
+            app:layout_constraintTop_toBottomOf="@+id/order_product_delivery_time"
+            tools:text="Qty - 5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

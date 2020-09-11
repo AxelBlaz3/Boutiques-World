@@ -20,5 +20,6 @@ data class Cart(
     @SerializedName("user_id") val userId: Int,
     @SerializedName("order_id") val orderId: String? = "-1",
     @SerializedName("business_category") val businessCategory: String,
-    @SerializedName("user_category") val userCategory: String? = "R"
+    @SerializedName("user_category") val userCategory: String? = "R",
+    @SerializedName("order_status") val orderStatus: Int = 0
 )

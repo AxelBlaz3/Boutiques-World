@@ -16,11 +16,15 @@ class OrderViewModel @Inject constructor(private val orderRepository: OrderRepos
     private val orders: MutableLiveData<ArrayList<Order>> =
         orderRepository.getOrdersMutableLiveData()
 
+    init {
+        updateOrders(forceRefresh = false)
+    }
+
     fun getOrders(): LiveData<ArrayList<Order>> = orders
 
-    fun updateOrders(businessId: Int, forceRefresh: Boolean) {
+    fun updateOrders(forceRefresh: Boolean) {
         viewModelScope.launch {
-            orderRepository.updateOrders(businessId, forceRefresh)
+            orderRepository.updateOrders(forceRefresh)
         }
     }
 }

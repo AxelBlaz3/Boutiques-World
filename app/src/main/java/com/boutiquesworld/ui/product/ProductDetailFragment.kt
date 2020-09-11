@@ -131,7 +131,7 @@ class ProductDetailFragment : Fragment() {
                             (it as ArrayList<BaseProduct.Store>).first { fabric -> fabric.productId == this@ProductDetailFragment.productId && fabric.businessCategory == this@ProductDetailFragment.businessCategory }
 
                         // Set a listener to hide or show sticky footer card
-                        descNestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+                        descNestedScrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
                             stickyFooterCard.visibility =
                                 if (oldScrollY < scrollY)
                                     View.GONE
@@ -403,6 +403,7 @@ class ProductDetailFragment : Fragment() {
             fabric?.let {
                 profileViewModel.getRetailer().value?.let { retailer ->
                     cartViewModel.postCartItem(retailer.shopId,
+                        retailer.businessCategory,
                         forceRefresh = true, cart = ArrayList<Cart>().apply {
                             getCartFromFabric(it)?.let { cart -> add(cart) }
                         })

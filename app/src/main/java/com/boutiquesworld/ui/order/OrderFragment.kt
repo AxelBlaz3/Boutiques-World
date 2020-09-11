@@ -51,13 +51,13 @@ class OrderFragment : Fragment(), OrderAdapter.OrderAdapterListener {
         binding.run {
             orderSwipeRefresh.setOnRefreshListener {
                 profileViewModel.getRetailer().value?.let {
-                    orderViewModel.updateOrders(it.shopId, forceRefresh = true)
+                    orderViewModel.updateOrders(forceRefresh = true)
                 }
                 orderSwipeRefresh.isRefreshing = false
             }
 
             profileViewModel.getRetailer().observe(viewLifecycleOwner) {
-                orderViewModel.updateOrders(it.shopId, forceRefresh = false)
+                orderViewModel.updateOrders(forceRefresh = false)
             }
 
             orderRecyclerView.apply {
@@ -72,12 +72,15 @@ class OrderFragment : Fragment(), OrderAdapter.OrderAdapterListener {
     }
 
     private fun getListForPosition(position: Int, orders: ArrayList<Order>): List<Order> {
-        return when (position) {
-            0 -> orders.filter { order -> order.orderStatus == 0 }
-            1 -> orders.filter { order -> order.orderStatus == 1 }
-            2 -> orders.filter { order -> order.orderStatus == 2 }
-            else -> orders.filter { order -> order.orderStatus == 3 }
+        profileViewModel.getRetailer().value?.let {
+            return when (position) {
+                0 -> orders.filter { order -> order.orderStatus == 0 && order.businessId == it.shopId }
+                1 -> orders.filter { order -> order.orderStatus == 1 && order.businessId == it.shopId }
+                2 -> orders.filter { order -> order.orderStatus == 2 && order.businessId == it.shopId }
+                else -> orders.filter { order -> order.orderStatus == 3 && order.businessId == it.shopId }
+            }
         }
+        return ArrayList()
     }
 
     override fun onOrderItemClicked(order: Order) {

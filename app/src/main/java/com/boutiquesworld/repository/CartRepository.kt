@@ -26,7 +26,7 @@ class CartRepository @Inject constructor(
      * @param userId: Update cart of User having id - userId.
      * @param forceRefresh: Whether to force refresh cart
      */
-    suspend fun updateCart(userId: Int, forceRefresh: Boolean): Boolean =
+    suspend fun updateCart(userId: Int, businessCategory: String, forceRefresh: Boolean): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 if (!forceRefresh) {
@@ -61,6 +61,7 @@ class CartRepository @Inject constructor(
 
     suspend fun postCartItem(
         userId: Int,
+        businessCategory: String,
         forceRefresh: Boolean,
         cart: List<Cart>
     ): Boolean = withContext(Dispatchers.IO) {
@@ -68,7 +69,7 @@ class CartRepository @Inject constructor(
             val response = boutiqueService.insertCartItem(cart).execute()
             if (response.isSuccessful) {
                 insertCartItem(cart)
-                updateCart(userId, forceRefresh)
+                updateCart(userId, businessCategory, forceRefresh)
                 return@withContext true
             }
         } catch (e: Exception) {
