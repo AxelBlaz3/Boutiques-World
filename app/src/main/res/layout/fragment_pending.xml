@@ -23,7 +23,7 @@
             app:tabIndicatorColor="?colorSecondary"
             app:tabIndicatorFullWidth="false"
             app:tabSelectedTextColor="?colorSecondary"
-            app:tabTextAppearance="?textAppearanceSubtitle2"
+            app:tabTextAppearance="?textAppearanceTab"
             app:tabTextColor="?colorControlNormal" />
 
         <androidx.viewpager2.widget.ViewPager2

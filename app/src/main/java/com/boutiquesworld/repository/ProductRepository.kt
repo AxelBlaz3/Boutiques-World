@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.boutiquesworld.data.BoutiqueDatabase
 import com.boutiquesworld.data.ProductDao
 import com.boutiquesworld.model.BaseProduct
+import com.boutiquesworld.model.StoreCategory
 import com.boutiquesworld.network.BoutiqueService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,10 +26,26 @@ class ProductRepository @Inject constructor(
     private val products: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData()
     private val fabrics: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData()
     private val sketches: MutableLiveData<ArrayList<BaseProduct>> = MutableLiveData(ArrayList())
+    private val storeFabrics: MutableLiveData<ArrayList<StoreCategory>> = MutableLiveData(
+        ArrayList()
+    )
+    private val storeDressMaterials: MutableLiveData<ArrayList<StoreCategory>> =
+        MutableLiveData(ArrayList())
+    private val storeClothes: MutableLiveData<ArrayList<StoreCategory>> =
+        MutableLiveData(ArrayList())
+    private val storeJewellery: MutableLiveData<ArrayList<StoreCategory>> =
+        MutableLiveData(ArrayList())
 
     fun getSketchesMutableLiveData(): MutableLiveData<ArrayList<BaseProduct>> = sketches
     fun getProductsLiveData(): MutableLiveData<ArrayList<BaseProduct>> = products
     fun getFabricsLiveData(): MutableLiveData<ArrayList<BaseProduct>> = fabrics
+    fun getClothesMutableLiveData(): MutableLiveData<ArrayList<StoreCategory>> = storeClothes
+    fun getFabricsMutableLiveData(): MutableLiveData<ArrayList<StoreCategory>> = storeFabrics
+    fun getDressMaterialsMutableLiveData(): MutableLiveData<ArrayList<StoreCategory>> =
+        storeDressMaterials
+
+    fun getJewelleryMutableLiveData(): MutableLiveData<ArrayList<StoreCategory>> =
+        storeJewellery
 
     /**
      * Helper method for getting the products.
@@ -60,7 +77,7 @@ class ProductRepository @Inject constructor(
             return@withContext false
         }
 
-    suspend fun getFabrics(forceRefresh: Boolean) = withContext(Dispatchers.IO) {
+    suspend fun getStore(forceRefresh: Boolean) = withContext(Dispatchers.IO) {
         try {
             val cachedFabrics = productDao.getAllFabrics()
             cachedFabrics?.apply {
@@ -116,12 +133,86 @@ class ProductRepository @Inject constructor(
             return@withContext false
         }
 
-    suspend fun updateFabric(productId: Int, quantity: Int) = withContext(Dispatchers.IO) {
-        try {
-            val response = boutiqueService.updateFabric(productId, quantity).execute()
-            if (response.isSuccessful) {
-                // TODO("Handle when the fabric is uploaded to server")
+    suspend fun getStoreProducts(productCategory: String, forceRefresh: Boolean): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                if (!forceRefresh) {
+                    when (productCategory) {
+                        "Clothing" -> boutiqueDatabase.storeCategoryDao().getClothes()?.let {
+                            if (it.isNotEmpty()) {
+                                storeClothes.postValue(it as ArrayList<StoreCategory>)
+                                return@withContext true
+                            }
+                        }
+                        "Dress Material" -> boutiqueDatabase.storeCategoryDao().getDressMaterials()
+                            ?.let {
+                                if (it.isNotEmpty()) {
+                                    storeDressMaterials.postValue(it as ArrayList<StoreCategory>)
+                                    return@withContext true
+                                }
+                            }
+                        "Fabric" -> boutiqueDatabase.storeCategoryDao().getFabrics()?.let {
+                            if (it.isNotEmpty()) {
+                                storeFabrics.postValue(it as ArrayList<StoreCategory>)
+                                return@withContext true
+                            }
+                        }
+                        else -> boutiqueDatabase.storeCategoryDao().getJewellery()?.let {
+                            if (it.isNotEmpty()) {
+                                storeJewellery.postValue(it as ArrayList<StoreCategory>)
+                                return@withContext true
+                            }
+                        }
+                    }
+                }
+
+                val response = when (productCategory) {
+                    "Clothing" -> boutiqueService.getStoreClothing().execute()
+                    "Dress Material" -> boutiqueService.getStoreDressMaterials().execute()
+                    "Fabric" -> boutiqueService.getStoreFabrics().execute()
+                    "Jewellery" -> boutiqueService.getStoreJewellery().execute()
+                    else -> throw IllegalArgumentException("Unknown category $productCategory")
+                }
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        boutiqueDatabase.storeCategoryDao().apply {
+                            when (productCategory) {
+                                "Clothing" -> {
+                                    truncateClothes()
+                                    insertClothes(it as ArrayList<StoreCategory.Cloth>)
+                                    storeClothes.postValue(it as ArrayList<StoreCategory>)
+                                }
+                                "Dress Material" -> {
+                                    truncateDressMaterials()
+                                    insertDressMaterials(it as ArrayList<StoreCategory.DressMaterial>)
+                                    storeDressMaterials.postValue(it as ArrayList<StoreCategory>)
+                                }
+                                "Fabric" -> {
+                                    truncateFabrics()
+                                    insertFabrics(it as ArrayList<StoreCategory.Fabric>)
+                                    storeFabrics.postValue(it as ArrayList<StoreCategory>)
+                                }
+                                else -> {
+                                    truncateJewellery()
+                                    insertJewellery(it as ArrayList<StoreCategory.Jewellery>)
+                                    storeJewellery.postValue(it as ArrayList<StoreCategory>)
+                                }
+                            }
+                        }
+                        return@withContext true
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+            return@withContext false
+        }
+
+    suspend fun updateQuantityOfStoreProduct(productId: Int, quantity: Int, productCategory: String) = withContext(Dispatchers.IO) {
+        try {
+            val response = boutiqueService.updateQuantityOfStoreProduct(productId, quantity, productCategory).execute()
+            if (response.isSuccessful)
+                getStore(forceRefresh = true)
         } catch (e: Exception) {
             e.printStackTrace()
         }

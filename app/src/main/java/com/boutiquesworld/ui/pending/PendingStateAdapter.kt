@@ -17,8 +17,7 @@ class PendingStateAdapter(
     override fun createFragment(position: Int): Fragment =
         ProductsFragment().apply {
             arguments = when (businessCategory) {
-                "F" -> bundleOf("position" to position)
-                "Y" -> bundleOf("position" to position + 7)
+                "F", "S", "Y" -> bundleOf("position" to position)
                 "B" -> bundleOf("position" to position + 4)
                 else -> bundleOf("position" to position + 10)
             }

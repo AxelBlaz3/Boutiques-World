@@ -11,7 +11,19 @@
 
         <variable
             name="fabric"
-            type="com.boutiquesworld.model.BaseProduct.Store" />
+            type="com.boutiquesworld.model.StoreCategory.Fabric" />
+
+        <variable
+            name="clothing"
+            type="com.boutiquesworld.model.StoreCategory.Cloth" />
+
+        <variable
+            name="dressMaterial"
+            type="com.boutiquesworld.model.StoreCategory.DressMaterial" />
+
+        <variable
+            name="jewellery"
+            type="com.boutiquesworld.model.StoreCategory.Jewellery" />
 
         <variable
             name="sketch"
@@ -22,6 +34,10 @@
             type="com.boutiquesworld.ui.product.ProductsAdapter.ProductsAdapterListener" />
 
         <variable
+            name="storeAdapterListener"
+            type="com.boutiquesworld.ui.product.StoreAdapter.StoreAdapterListener" />
+
+        <variable
             name="position"
             type="Integer" />
     </data>
@@ -30,8 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/grid_1"
-        android:onClick="@{(view) -> listener.onProductClick(product ?? (fabric ?? sketch), position)}"
-        android:transitionName="@{@string/transition_detail(position)}"
+        android:onClick="@{(view) -> product != null || sketch != null ? (listener.onProductClick(product ?? sketch, position)) : storeAdapterListener.onStoreItemClick((fabric ?? (clothing ?? (dressMaterial ?? jewellery))), position)}"
         app:cardElevation="@dimen/grid_1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,9 +56,9 @@
             <ImageView
                 android:id="@+id/product_logo"
                 android:layout_width="match_parent"
-                android:layout_height="192dp"
+                android:layout_height="176dp"
                 android:scaleType="centerCrop"
-                app:glideSrc="@{product != null ? product.productThumb : (fabric != null ? fabric.productThumb : sketch.productThumb)}"
+                app:glideSrc="@{(product != null ? product.productImage1 : (sketch != null ? sketch.productImage1 : (fabric != null ? fabric.productImage1 : (clothing != null ? clothing.productImage1 : (dressMaterial != null ? dressMaterial.productImage1 : (jewellery != null ? jewellery.productImage1 : ``))))))}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -56,8 +71,9 @@
                 android:layout_marginTop="@dimen/grid_1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{product != null ? product.productName : (fabric != null ? fabric.productName : sketch.productName)}"
+                android:text="@{(product != null ? product.productName : (sketch != null ? sketch.productName : (fabric != null ? fabric.productName : (clothing != null ? clothing.productName : (dressMaterial != null ? dressMaterial.productName : (jewellery != null ? jewellery.productName : `Test`))))))}"
                 android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_logo"
@@ -71,14 +87,15 @@
                 android:layout_marginBottom="@dimen/grid_1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="₹2000 - ₹5000"
+                android:text="@{(product != null ? @string/product_price(String.valueOf(product.startPrice)) + ` - ` + @string/product_price(String.valueOf(product.endPrice)) : sketch != null ? `` : (fabric != null ? @string/product_price(fabric.productPrice) : (clothing != null ? @string/product_price(clothing.productPrice) : (dressMaterial != null ? @string/product_price(dressMaterial.productPrice) : (jewellery != null ? @string/product_price(jewellery.productPrice) : ``)))))}"
                 android:textAppearance="?textAppearanceSubtitle2"
                 android:textColor="?colorSecondary"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_title"
-                tools:text="₹ 2000  -  ₹ 5000" />
+                tools:text="₹2000 - ₹5000" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

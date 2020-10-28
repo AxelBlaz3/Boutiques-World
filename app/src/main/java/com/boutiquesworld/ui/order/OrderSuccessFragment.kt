@@ -35,7 +35,7 @@ class OrderSuccessFragment : Fragment() {
             isOrderSuccess = this@OrderSuccessFragment.isOrderSuccess
             if (this@OrderSuccessFragment.isOrderSuccess) {
                 viewOrdersList.setOnClickListener {
-
+                    findNavController().navigate(DashboardFragmentDirections.actionGlobalMyOrdersFragment())
                 }
                 backToDashboard.setOnClickListener {
                     findNavController().navigate(DashboardFragmentDirections.actionGlobalDashboardFragment())

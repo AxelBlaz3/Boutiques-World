@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="size"
+            type="String" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.product.ProductSizeAdapter.ProductSizeAdapterListener" />
+    </data>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:onClick="@{() -> listener.onSizeClicked(size)}"
+        android:paddingHorizontal="@dimen/grid_2"
+        android:paddingVertical="@dimen/grid_1_5"
+        android:text="@{size}"
+        android:textAllCaps="false"
+        android:textAppearance="?textAppearanceButton"
+        android:textColor="?android:textColorPrimary"
+        app:rippleColor="?colorControlHighlight"
+        tools:text="Small (S)" />
+</layout>

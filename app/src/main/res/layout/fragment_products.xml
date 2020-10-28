@@ -5,25 +5,85 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="illustration"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="illustrationTitle"
+            type="String" />
+
+        <variable
+            name="illustrationSummary"
+            type="String" />
+
+        <variable
+            name="areProductsEmpty"
+            type="Boolean" />
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/products_swipe_refresh"
+    <FrameLayout
+        android:id="@+id/products_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/products_recycler_view"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/products_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
+            android:layout_height="match_parent"
+            tools:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/products_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/grid_1"
+                android:paddingTop="@dimen/grid_1"
+                android:paddingBottom="@dimen/recycler_view_bottom_padding"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:spanCount="2"
+                tools:listitem="@layout/product_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/empty_cart_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/grid_1"
-            android:paddingTop="@dimen/grid_1"
-            android:paddingBottom="@dimen/recycler_view_bottom_padding"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:spanCount="2"
-            tools:listitem="@layout/product_item" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:visibility="@{areProductsEmpty ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="144dp"
+                android:layout_height="144dp"
+                android:src="@{illustration}"
+                tools:src="@drawable/ic_no_cancelled_products" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:gravity="center"
+                android:text="@{illustrationTitle}"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold"
+                tools:text="Yay!" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_1"
+                android:gravity="center"
+                android:text="@{illustrationSummary}"
+                android:textAppearance="?textAppearanceCaption"
+                tools:text="No products are cancelled" />
+        </LinearLayout>
+    </FrameLayout>
 </layout>

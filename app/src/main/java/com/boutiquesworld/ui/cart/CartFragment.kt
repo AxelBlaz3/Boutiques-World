@@ -2,6 +2,7 @@ package com.boutiquesworld.ui.cart
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,12 +60,10 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
 
             cartRecyclerView.apply {
                 adapter = cartAdapter
-                addItemDecoration(CustomDividerItemDecoration())
+                // addItemDecoration(CustomDividerItemDecoration())
             }
 
             cartCheckout.apply {
-                if (cartAdapter.currentList.isEmpty())
-                    isEnabled = false
                 setOnClickListener {
                     isEnabled = false
                     cartViewModel.setIsCartCheckoutClicked(true)
@@ -81,9 +80,10 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
         }
 
         cartViewModel.getCart().observe(viewLifecycleOwner) {
+            binding.isCartEmpty = it.isEmpty()
             CartAdapter.CartDiffUtil.cartListCount = it.size
             cartViewModel.finalCartToCheckout = it
-            cartAdapter.submitList(it) {
+            cartAdapter.submitList(it.toMutableList()) {
                 binding.run {
                     cartViewModel.cartTotal = getCartTotal(it)
                     total = getString(
@@ -96,23 +96,52 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
         }
     }
 
-    override fun onDeleteButtonClick(cart: Cart) {
+    override fun onDeleteButtonClick(cart: Cart, position: Int) {
+        cartViewModel.finalCartToCheckout = cartAdapter.currentList.toMutableList() as ArrayList<Cart>
+        cartViewModel.finalCartToCheckout.run {
+                if (size == 1)
+                    binding.isCartEmpty = true
+                removeAt(position)
+                CartAdapter.CartDiffUtil.cartListCount -= 1
+                cartViewModel.cartTotal -= cart.quantity * cart.productPrice.toInt()
+                binding.total =
+                    getString(R.string.product_price, cartViewModel.cartTotal.toString())
+                cartAdapter.submitList(null)
+                cartAdapter.submitList(this)
+            }
+        cartViewModel.deleteCartItem(cart, position)
+    }
+
+    override fun onMinusClicked(cart: Cart) {
         cartViewModel.finalCartToCheckout =
             cartAdapter.currentList.toMutableList() as ArrayList<Cart>
         cartViewModel.finalCartToCheckout.apply {
-            val index = indexOfFirst { oldCart -> oldCart.productId == cart.productId }
-            if (index < 0)
+            val index =
+                indexOfFirst { cartItem -> cartItem.productId == cart.productId && cartItem.size == cart.size }
+            if (index < 0 || cart.quantity <= cart.minimumQuantity)
                 return@apply
-            if (size == 1)
-                binding.cartCheckout.isEnabled = false
-            removeAt(index)
-            CartAdapter.CartDiffUtil.cartListCount -= 1
+            set(index, cart.copy(quantity = cart.quantity - 1))
             cartViewModel.cartTotal -= cart.productPrice.toInt()
             binding.total =
                 getString(R.string.product_price, cartViewModel.cartTotal.toString())
         }
         cartAdapter.submitList(cartViewModel.finalCartToCheckout)
-        cartViewModel.deleteCartItem(cart)
+    }
+
+    override fun onPlusClicked(cart: Cart) {
+        cartViewModel.finalCartToCheckout =
+            cartAdapter.currentList.toMutableList() as ArrayList<Cart>
+        cartViewModel.finalCartToCheckout.apply {
+            val index =
+                indexOfFirst { cartItem -> cartItem.productId == cart.productId && cartItem.size == cart.size }
+            if (index < 0 || cart.quantity >= cart.availableQuantity)
+                return@apply
+            set(index, cart.copy(quantity = cart.quantity + 1))
+            cartViewModel.cartTotal += cart.productPrice.toInt()
+            binding.total =
+                getString(R.string.product_price, cartViewModel.cartTotal.toString())
+        }
+        cartAdapter.submitList(cartViewModel.finalCartToCheckout)
     }
 
     override fun onCartItemUpdated(newCartItem: Cart) {
@@ -141,7 +170,7 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
                     profileViewModel.getRetailer().value?.let { retailer ->
                         Handler(requireContext().mainLooper).post {
                             // Generate a random 10 digit OrderID
-                            cartViewModel.orderId = (1000000000..9999999999).random().toString()
+                            cartViewModel.orderId = "ORDER_${retailer.businessCategory}${retailer.shopId}${System.currentTimeMillis()}"
                             findNavController().navigate(
                                 CartFragmentDirections.actionCartFragmentToAddressFragment(
                                     retailer.shopId.toString(),

@@ -8,7 +8,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/address_form"
@@ -184,10 +186,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/submit_address"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/submit"
+                android:text="@string/add"
                 android:textColor="?colorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -200,9 +202,10 @@
             android:id="@+id/address_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="?actionBarSize"
+            android:layout_marginTop="@dimen/grid_1"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingTop="120dp"
             android:paddingBottom="88dp"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -210,51 +213,17 @@
             tools:listitem="@layout/address_item"
             tools:visibility="visible" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/checkout_footer_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="?colorPrimaryVariant"
-            app:cardElevation="@dimen/product_description_sticky_card_elevation"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Footer">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_new_address"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="?actionBarSize"
-                android:text="@string/add_a_new_address"
-                android:textColor="?colorSecondary"
-                android:visibility="visible"
-                app:backgroundTint="?colorPrimaryVariant"
-                app:cornerRadius="0dp"
-                app:icon="@drawable/ic_round_add"
-                app:iconGravity="textStart"
-                app:iconTint="?colorSecondary"
-                app:rippleColor="?colorSecondaryVariant" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/proceed_footer_card"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/address_proceed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:cardElevation="@dimen/product_description_sticky_card_elevation"
-            app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Footer">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/address_proceed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_2"
-                android:layout_marginVertical="@dimen/grid_1"
-                android:text="@string/proceed"
-                android:textAllCaps="false"
-                android:textAppearance="?textAppearanceBody2"
-                android:textColor="?colorOnSecondary"
-                app:backgroundTint="?colorSecondary" />
-        </com.google.android.material.card.MaterialCardView>
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginVertical="@dimen/grid_1"
+            android:gravity="center"
+            android:text="@string/proceed"
+            android:textAppearance="?textAppearanceButton"
+            android:textColor="?colorOnSecondary"
+            app:backgroundTint="?colorSecondary" />
     </FrameLayout>
 </layout>

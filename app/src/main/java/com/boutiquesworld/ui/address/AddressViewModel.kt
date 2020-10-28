@@ -1,13 +1,15 @@
 package com.boutiquesworld.ui.address
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.boutiquesworld.model.Address
+import com.boutiquesworld.model.OrderAddress
 import com.boutiquesworld.network.BoutiqueService
 import com.boutiquesworld.repository.AddressRepository
-import com.boutiquesworld.repository.RetailerRepository
+import com.boutiquesworld.repository.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
@@ -19,18 +21,27 @@ import javax.inject.Singleton
 class AddressViewModel @Inject constructor(
     private val boutiqueService: BoutiqueService,
     private val addressRepository: AddressRepository,
-    retailerRepository: RetailerRepository
+    profileRepository: ProfileRepository
 ) :
     ViewModel() {
     // Address list
     private val addressList: MutableLiveData<ArrayList<Address>> =
         addressRepository.getAddressMutableLiveData()
+    private val orderAddressList: MutableLiveData<ArrayList<OrderAddress>> =
+        addressRepository.getOrderAddressMutableLiveData()
 
     private var razorPayOrderId: MutableLiveData<String> =
         addressRepository.getRazorPayOrderIdMutableLiveData()
 
-    private val retailer = retailerRepository.getRetailerMutableLiveData()
+    private val retailer = profileRepository.getRetailerMutableLiveData()
     private val isPaymentCaptured: MutableLiveData<Boolean?> = MutableLiveData()
+
+    init {
+        retailer.value?.let {
+            if (it.businessCategory == "B" || it.businessCategory == "D")
+                updateOrderAddressList(it.shopId, forceRefresh = false)
+        }
+    }
 
     // Variables for verifying whether fields are empty
     private val addressNameEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -42,6 +53,7 @@ class AddressViewModel @Inject constructor(
     private val addressTownEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val addressStateEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isAddressPosted: MutableLiveData<Boolean?> = MutableLiveData(null)
+    private val isOrderAddressPosted: MutableLiveData<Boolean?> = MutableLiveData(null)
 
     // Map for posting address to server
     private val addressMap: HashMap<String, RequestBody> = HashMap()
@@ -55,12 +67,15 @@ class AddressViewModel @Inject constructor(
     fun getAddressTown(): LiveData<Boolean> = addressTownEmpty
     fun getAddressState(): LiveData<Boolean> = addressStateEmpty
     fun getIsAddressPosted(): LiveData<Boolean?> = isAddressPosted
+    fun getIsOrderAddressPosted(): LiveData<Boolean?> = isOrderAddressPosted
     fun getAddressList(): LiveData<ArrayList<Address>> = addressList
+    fun getOrderAddressList(): LiveData<ArrayList<OrderAddress>> = orderAddressList
     fun getRazorPayOrderId(): LiveData<String> = razorPayOrderId
     fun getIsPaymentCaptured(): LiveData<Boolean?> = isPaymentCaptured
 
-    fun genRazorPayOrderId(orderId: String, price: Int) {
-        viewModelScope.launch {
+    fun genRazorPayOrderId(orderId: String, price: Int, address: Address) {
+        viewModelScope.launch(Dispatchers.IO) {
+            postOrderAddress(address)
             addressRepository.genRazorPayOrderIdAndUpdateCartWithOrderId(
                 retailer.value!!.shopId.toString(),
                 orderId,
@@ -71,6 +86,10 @@ class AddressViewModel @Inject constructor(
 
     fun resetIsPosted() {
         isAddressPosted.value = null
+    }
+
+    fun resetIsOrderAddressPosted() {
+        isOrderAddressPosted.value = null
     }
 
     fun resetIsPaymentCaptured() {
@@ -112,6 +131,12 @@ class AddressViewModel @Inject constructor(
         }
     }
 
+    fun updateOrderAddressList(userId: Int, forceRefresh: Boolean) {
+        viewModelScope.launch {
+            addressRepository.updateOrderAddressList(userId, forceRefresh)
+        }
+    }
+
     fun postAddress(
         addressName: String,
         addressMobile: String,
@@ -137,6 +162,7 @@ class AddressViewModel @Inject constructor(
                 orderId
             )
         ) {
+            Log.d(this.javaClass.simpleName, orderId)
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val response = boutiqueService.postAddress(addressMap).execute()
@@ -149,6 +175,21 @@ class AddressViewModel @Inject constructor(
                 }
                 isAddressPosted.postValue(false)
             }
+        }
+    }
+
+    fun postOrderAddress(address: Address) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = boutiqueService.postOrderAddress(address).execute()
+                if (response.isSuccessful) {
+                    isOrderAddressPosted.postValue(true)
+                    return@launch
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            isOrderAddressPosted.postValue(false)
         }
     }
 

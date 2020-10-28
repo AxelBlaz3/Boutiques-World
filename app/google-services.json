@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "272275418379",
+    "firebase_url": "https://boutiquesworld-eaba1.firebaseio.com",
+    "project_id": "boutiquesworld-eaba1",
+    "storage_bucket": "boutiquesworld-eaba1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272275418379:android:d2a815ee02b5084f39460e",
+        "android_client_info": {
+          "package_name": "com.boutiquesworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272275418379-32fqg5pa9ns2kr78v00vt84ar6hm3k7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKt9HwUF1759JFmUNh2Hg0lIBWI5fJnqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272275418379-32fqg5pa9ns2kr78v00vt84ar6hm3k7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

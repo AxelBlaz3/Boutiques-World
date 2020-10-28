@@ -8,7 +8,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="fabric"
+            name="store"
             type="com.boutiquesworld.model.BaseProduct.Store" />
 
         <variable
@@ -17,111 +17,157 @@
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.fabrics.ProductStatusAdapter.ProductStatusAdapterListener" />
+            type="com.boutiquesworld.ui.store.ProductStatusAdapter.ProductStatusAdapterListener" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/grid_2">
+        android:layout_marginHorizontal="@dimen/grid_1"
+        android:layout_marginTop="@dimen/grid_1"
+        app:cardElevation="@dimen/card_elevation"
+        app:strokeColor="?colorControlHighlight"
+        app:strokeWidth="@dimen/card_stroke_width">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/shapeableImageView"
-            android:layout_width="80dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/grid_2"
-            android:scaleType="centerCrop"
-            app:glideSrc="@{fabric.productImage1}"
-            app:layout_constraintBottom_toBottomOf="@+id/product_status_quantity_text_input_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView6"
-            app:shapeAppearance="?shapeAppearanceMediumComponent"
-            tools:src="@drawable/thumb" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/grid_2"
-            android:layout_marginTop="@dimen/grid_2"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@{fabric.productName}"
-            android:textAppearance="?textAppearanceHeadline6"
-            app:layout_constraintBottom_toTopOf="@+id/textView7"
-            app:layout_constraintEnd_toStartOf="@+id/textView8"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pink Saree" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/product_status_image"
+                android:layout_width="72dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                android:scaleType="centerCrop"
+                app:glideSrc="@{store.productImage1}"
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                tools:src="@drawable/thumb" />
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/grid_2"
-            android:layout_marginTop="@dimen/grid_0_5"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@{fabric.productDescription}"
-            android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toTopOf="@+id/product_status_quantity_text_input_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
-            tools:text="Some weird description for a weird product." />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/product_status_quantity_text_input_layout"
-            style="@style/Widget.Boutiques.TextInputLayout"
-            android:layout_width="72dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/grid_2"
-            android:layout_marginTop="@dimen/grid_2"
-            app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView7">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/product_status"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:enabled="@{fabric.productStatus == 1 ? true : false}"
-                android:hint="@string/quantity"
-                android:inputType="number"
-                android:text="@{String.valueOf(fabric.availableQuantity)}"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{store.productName}"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/product_status_type"
+                app:layout_constraintEnd_toStartOf="@+id/textView8"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_status_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Pink Saree" />
+
+            <TextView
+                android:id="@+id/product_status_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_0_5"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{store.productType}"
+                android:textAppearance="?textAppearanceCaption"
+                app:layout_constraintEnd_toStartOf="@+id/save"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_status_image"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                tools:text="Fabric" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginVertical="@dimen/grid_2"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/product_status_image"
+                app:layout_constraintTop_toBottomOf="@+id/product_status_type"
+                app:strokeColor="?colorControlHighlight"
+                app:strokeWidth="1dp">
+
+                <ImageButton
+                    android:id="@+id/add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:onClick="@{() -> listener.onPlusClicked(productQuantity)}"
+                    android:padding="@dimen/grid_0_5"
+                    app:srcCompat="@drawable/ic_round_add" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/product_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_2"
+                android:text="@{String.valueOf(store.availableQuantity)}"
                 android:textAppearance="?textAppearanceBody2"
-                android:textCursorDrawable="@null"
-                tools:text="3" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
+                app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView"
+                tools:text="2" />
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/grid_2"
-            android:layout_marginEnd="@dimen/grid_2"
-            android:text="@{@string/product_price(fabric.productPrice)}"
-            android:textAppearance="?textAppearanceSubtitle1"
-            android:textColor="?colorSecondary"
-            app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView6"
-            tools:text="₹300" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/grid_2"
+                android:layout_marginStart="@dimen/grid_2"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toEndOf="@+id/product_quantity"
+                app:layout_constraintTop_toBottomOf="@+id/product_status_type"
+                app:strokeColor="?colorControlHighlight"
+                app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> listener.onSaveButtonClick(fabric.productId, productStatus)}"
-            android:paddingStart="@dimen/grid_2"
-            android:paddingEnd="0dp"
-            android:text="@string/save"
-            android:textColor="?colorSecondary"
-            android:visibility="@{fabric.productStatus == 1 ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/product_status_quantity_text_input_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/product_status_quantity_text_input_layout" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageButton
+                    android:id="@+id/remove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:onClick="@{() -> listener.onMinusClicked(productQuantity)}"
+                    android:padding="@dimen/grid_0_5"
+                    app:srcCompat="@drawable/ic_round_remove" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:text="@{@string/product_price(store.productPrice)}"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView6"
+                tools:text="₹300" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/grid_1"
+                android:onClick="@{() -> listener.onSaveButtonClick(store, productQuantity)}"
+                android:text="@string/save"
+                android:paddingStart="28dp"
+                android:textAllCaps="false"
+                android:textAppearance="?textAppearanceButton"
+                android:textColor="?colorSecondary"
+                android:visibility="@{store.productStatus == 1 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:rippleColor="?colorControlHighlight" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

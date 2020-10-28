@@ -36,10 +36,12 @@ class PendingFragment : Fragment() {
 
     private fun setupViewPagerWithTabs() {
         binding.run {
-            pendingViewPager.adapter = PendingStateAdapter(
-                this@PendingFragment,
-                profileViewModel.getRetailer().value?.businessCategory
-            )
+            profileViewModel.getRetailer().value?.let {
+                pendingViewPager.adapter = PendingStateAdapter(
+                    this@PendingFragment,
+                    it.businessCategory
+                )
+            }
             TabLayoutMediator(pendingTabLayout, pendingViewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> getString(R.string.live)

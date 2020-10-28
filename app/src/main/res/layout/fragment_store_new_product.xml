@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="hideBackButton"
+            type="Boolean" />
+
+        <variable
+            name="isDressMaterialsSelected"
+            type="Boolean" />
+
+        <variable
+            name="isFabricsSelected"
+            type="Boolean" />
+
+        <variable
+            name="isClothingSelected"
+            type="Boolean" />
+
+        <variable
+            name="isJewellerySelected"
+            type="Boolean" />
+
+        <variable
+            name="setPiecePosition"
+            type="Integer" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/new_product_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:paddingHorizontal="@dimen/grid_2"
+            android:paddingTop="?actionBarSize"
+            android:paddingBottom="@dimen/grid_2"
+            app:paddingBottomSystemWindowInsets="@{true}"
+            app:paddingTopSystemWindowInsets="@{true}">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:drawablePadding="@dimen/grid_2"
+                android:text="@string/new_product_image_desc"
+                android:textAppearance="?textAppearanceBody2"
+                app:drawableStartCompat="@drawable/ic_round_info"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/product_image_1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_0_5"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toStartOf="@+id/product_image_2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                app:srcCompat="@drawable/ic_add_new_image" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/product_image_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/grid_0_5"
+                android:layout_marginTop="@dimen/grid_2"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@+id/product_image_1"
+                app:layout_constraintEnd_toStartOf="@+id/product_image_3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_image_1"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                app:srcCompat="@drawable/ic_add_new_image" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/product_image_3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/grid_0_5"
+                android:layout_marginTop="@dimen/grid_2"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@+id/product_image_1"
+                app:layout_constraintEnd_toStartOf="@+id/product_image_4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_image_2"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                app:srcCompat="@drawable/ic_add_new_image" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/product_image_4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/grid_0_5"
+                android:layout_marginTop="@dimen/grid_2"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@+id/product_image_1"
+                app:layout_constraintEnd_toStartOf="@+id/product_image_5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_image_3"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                app:srcCompat="@drawable/ic_add_new_image" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/product_image_5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/grid_0_5"
+                android:layout_marginTop="@dimen/grid_2"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@+id/product_image_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_image_4"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                app:srcCompat="@drawable/ic_add_new_image" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_name_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_image_1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/product_name"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_category_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_name_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/product_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/category"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_price_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_2"
+                app:layout_constraintEnd_toStartOf="@+id/color_palette"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_category_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/price"
+                    android:inputType="number"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_s"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="S"
+                android:textAppearance="?textAppearanceBody2"
+                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/checkbox_m"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="M"
+                android:textAppearance="?textAppearanceBody2"
+                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/checkbox_l"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkbox_s"
+                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_l"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="L"
+                android:textAppearance="?textAppearanceBody2"
+                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/checkbox_xl"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkbox_m"
+                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_xl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="XL"
+                android:textAppearance="?textAppearanceBody2"
+                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/checkbox_xxl"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkbox_l"
+                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_xxl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:text="XXL"
+                android:textAppearance="?textAppearanceBody2"
+                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkbox_xl"
+                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_design_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:visibility="@{isClothingSelected || isFabricsSelected || isDressMaterialsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkbox_s"
+                app:layout_goneMarginTop="@dimen/grid_2">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/design"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Design"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_cloth_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:visibility="@{isClothingSelected || isFabricsSelected || isDressMaterialsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/product_design_text_input_layout"
+                app:layout_goneMarginTop="@dimen/grid_2">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/cloth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Cloth"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_pattern_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:visibility="@{(isDressMaterialsSelected || isFabricsSelected) ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_design_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/pattern"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Pattern"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_width_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isFabricsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/product_cloth_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/width"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Width"
+                    android:inputType="numberDecimal"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_set_piece_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isDressMaterialsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/product_cloth_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/set_piece"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Set piece"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_top_measurement_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:visibility="@{isDressMaterialsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_pattern_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/top_measurement"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Top measurement"
+                    android:inputType="numberDecimal"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_bottom_measurement_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isDressMaterialsSelected &amp;&amp; setPiecePosition == 2 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/product_pattern_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bottom_measurement"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Bottom measurement"
+                    android:inputType="numberDecimal"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_dupatta_measurement_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isDressMaterialsSelected &amp;&amp; (setPiecePosition == 1 || setPiecePosition == 2)? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_top_measurement_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dupatta_measurement"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Dupatta measurement"
+                    android:inputType="numberDecimal"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/gender_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:visibility="@{isJewellerySelected || isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_dupatta_measurement_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Gender"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_material_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:visibility="@{isJewellerySelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/gender_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/product_material"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Material"
+                    android:inputType="text"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_occasion_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/gender_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/product_occasion"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/occasion_type"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_type_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isClothingSelected || isJewellerySelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gender_text_input_layout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/product_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Type"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_available_quantity_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:hint="@{isFabricsSelected ? @string/hint_quantity_in_meters : @string/hint_quantity_in_units}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_type_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/available_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_minimum_quantity_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:visibility="@{isFabricsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/product_available_quantity_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minimum_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Min. Quantity"
+                    android:inputType="number"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_weight_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:visibility="@{isDressMaterialsSelected || isFabricsSelected ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_available_quantity_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Weight"
+                    android:inputType="numberDecimal"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_delivery_time_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_1"
+                android:layout_marginTop="@dimen/grid_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/product_minimum_quantity_text_input_layout"
+                app:layout_goneMarginTop="0dp">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/delivery_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Delivery time"
+                    android:inputType="none"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_description_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_weight_text_input_layout"
+                app:layout_goneMarginTop="@dimen/grid_2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Description"
+                    android:maxLines="5"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/color_palette"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/grid_2"
+                app:layout_constraintBottom_toBottomOf="@+id/product_price_text_input_layout"
+                app:layout_constraintEnd_toStartOf="@+id/color_name_text"
+                app:layout_constraintTop_toTopOf="@+id/product_price_text_input_layout"
+                app:srcCompat="@drawable/ic_round_palette" />
+
+            <TextView
+                android:id="@+id/color_name_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/grid_1"
+                android:textAppearance="?textAppearanceSubtitle2"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/color_palette"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/color_palette"
+                tools:text="Red"
+                tools:visibility="visible" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/submit_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_3"
+                android:gravity="center"
+                android:text="@string/submit"
+                android:textAppearance="?textAppearanceButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/product_description_text_input_layout" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

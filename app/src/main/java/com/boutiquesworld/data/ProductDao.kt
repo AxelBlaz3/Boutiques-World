@@ -44,4 +44,16 @@ interface ProductDao {
      */
     @Delete
     fun deleteProduct(product: BaseProduct.Product)
+
+    /**
+     * Truncate products.
+     */
+    @Query("DELETE FROM Product")
+    fun truncateProducts(): Int
+
+    /**
+     * Truncate store.
+     */
+    @Query("DELETE FROM Store")
+    fun truncateStore(): Int
 }

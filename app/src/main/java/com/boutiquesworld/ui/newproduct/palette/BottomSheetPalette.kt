@@ -5,42 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.boutiquesworld.databinding.FragmentBottomSheetPaletteDialogBinding
 import com.boutiquesworld.model.Palette
+import com.boutiquesworld.ui.newproduct.NewProductViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BottomSheetPalette : BottomSheetDialogFragment(), PaletteAdapter.PaletteAdapterListener {
     private lateinit var binding: FragmentBottomSheetPaletteDialogBinding
+    private val args: BottomSheetPaletteArgs by navArgs()
+    private val showColorsForJewellery by lazy {
+        args.showColorsForJewellery
+    }
     private val paletteAdapter by lazy {
         PaletteAdapter(this)
     }
 
-    private val paletteColors by lazy {
-        ArrayList<Palette>().apply {
-            add(Palette("#000000", "Black"))
-            add(Palette("#FFFFFF", "White"))
-            add(Palette("#FF0000", "Red"))
-            add(Palette("#FFFF00", "Yellow"))
-            add(Palette("#808000", "Olive"))
-            add(Palette("#000000", "Black"))
-            add(Palette("#FFFFFF", "White"))
-            add(Palette("#FF0000", "Red"))
-            add(Palette("#FFFF00", "Yellow"))
-            add(Palette("#808000", "Olive"))
-            add(Palette("#000000", "Black"))
-            add(Palette("#FFFFFF", "White"))
-            add(Palette("#FF0000", "Red"))
-            add(Palette("#FFFF00", "Yellow"))
-            add(Palette("#808000", "Olive"))
-            add(Palette("#000000", "Black"))
-            add(Palette("#FFFFFF", "White"))
-            add(Palette("#FF0000", "Red"))
-            add(Palette("#FFFF00", "Yellow"))
-            add(Palette("#808000", "Olive"))
-        }
-    }
+    @Inject
+    lateinit var newProductViewModel: NewProductViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,7 +40,10 @@ class BottomSheetPalette : BottomSheetDialogFragment(), PaletteAdapter.PaletteAd
         super.onViewCreated(view, savedInstanceState)
 
         binding.paletteRecyclerView.adapter = paletteAdapter
-        paletteAdapter.submitList(paletteColors)
+        if (showColorsForJewellery)
+            paletteAdapter.submitList(newProductViewModel.jewelleryPalette)
+        else
+            paletteAdapter.submitList(newProductViewModel.paletteColors)
     }
 
     override fun onColorClicked(palette: Palette) {

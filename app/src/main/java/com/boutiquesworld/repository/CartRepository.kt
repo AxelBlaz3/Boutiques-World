@@ -38,7 +38,7 @@ class CartRepository @Inject constructor(
                         }
                     }
                 }
-                val response = boutiqueService.getCart(userId, "R").execute()
+                val response = boutiqueService.getCart(userId, businessCategory).execute()
                 if (response.isSuccessful) {
                     response.body()?.let {
                         if (it.isNotEmpty()) {
@@ -89,20 +89,19 @@ class CartRepository @Inject constructor(
         cartDao.updateCartItems(newCartItem)
     }
 
-    suspend fun deleteCartItem(cart: Cart) =
+    suspend fun deleteCartItem(cart: Cart, position: Int) =
         withContext(Dispatchers.IO) {
             try {
                 val response =
-                    boutiqueService.deleteCartItem(cart.userId, cart.productId, cart.userCategory!!)
-                        .execute()
+                    boutiqueService.deleteCartItem(
+                        cart.userId,
+                        cart.productId,
+                        cart.userCategory!!,
+                        cart.size
+                    ).execute()
                 if (response.isSuccessful) {
-                    cartDao.removeItemFromCart(cart.productId)
-                    cartItems.value?.let {
-                        val index =
-                            cartItems.value!!.indexOfFirst { oldCartItem -> oldCartItem.productId == cart.productId }
-                        if (index > -1)
-                            it.removeAt(index)
-                    }
+                    cartDao.removeItemFromCart(cart.id)
+                    cartItems.value?.removeAt(position)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

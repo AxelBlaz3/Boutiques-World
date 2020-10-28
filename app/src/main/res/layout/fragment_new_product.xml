@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="isSketch"
+            type="Boolean" />
+
+        <variable
             name="hideBackButton"
             type="Boolean" />
     </data>
@@ -24,7 +28,6 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/grid_2"
             android:paddingTop="?actionBarSize"
-            android:paddingBottom="@dimen/grid_2"
             app:paddingBottomSystemWindowInsets="@{true}"
             app:paddingTopSystemWindowInsets="@{true}">
 
@@ -36,8 +39,8 @@
                 android:drawablePadding="@dimen/grid_2"
                 android:text="@string/new_product_image_desc"
                 android:textAppearance="?textAppearanceBody2"
-                app:layout_constraintTop_toTopOf="parent"
                 app:drawableStartCompat="@drawable/ic_round_info"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="16dp" />
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -142,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
                 android:layout_marginEnd="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toStartOf="@+id/product_cloth_text_input_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -163,6 +167,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/product_category_text_input_layout"
@@ -184,6 +189,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toStartOf="@+id/product_occasion_text_input_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -207,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/grid_2"
                 android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/product_fabric_text_input_layout"
@@ -228,6 +235,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_fabric_text_input_layout">
 
@@ -246,6 +254,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="@+id/product_quantity_text_input_layout"
                 app:layout_constraintStart_toEndOf="@+id/product_quantity_text_input_layout"
                 app:layout_constraintTop_toTopOf="@+id/product_quantity_text_input_layout"
@@ -271,10 +280,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/grid_2"
-                android:stepSize="100"
                 android:layout_marginTop="@dimen/grid_2"
+                android:stepSize="100"
                 android:valueFrom="0"
                 android:valueTo="18000"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/product_quantity_text_input_layout"
@@ -287,6 +297,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/price_range"
                 android:textAppearance="?textAppearanceSubtitle2"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="@+id/rangeSlider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/rangeSlider" />
@@ -309,19 +320,40 @@
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/submit_product"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_story_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_4"
+                android:layout_marginTop="@dimen/grid_2"
+                android:visibility="@{isSketch ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/product_description_text_input_layout"
+                tools:layout_editor_absoluteX="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/product_story"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/product_story_hint"
+                    android:maxLines="5"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/submit_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_3"
+                android:layout_marginBottom="@dimen/grid_2"
                 android:text="@string/submit"
-                android:textAllCaps="false"
-                android:textColor="?colorOnSecondary"
-                app:backgroundTint="?colorSecondary"
+                android:gravity="center"
+                android:textAppearance="?textAppearanceButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/product_description_text_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/product_story_text_input_layout"
+                app:layout_goneMarginTop="@dimen/grid_3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

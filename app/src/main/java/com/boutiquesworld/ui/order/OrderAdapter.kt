@@ -16,6 +16,7 @@ class OrderAdapter(private val listener: OrderAdapterListener) :
 
     interface OrderAdapterListener {
         fun onOrderItemClicked(order: Order)
+        fun onOrderActionClicked(order: Order)
     }
 
     object OrderDiffUtil : DiffUtil.ItemCallback<Order>() {

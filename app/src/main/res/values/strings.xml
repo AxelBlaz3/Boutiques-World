@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Boutiques World</string>
+    <string name="app_name">Trendition</string>
 
     <!-- Login -->
     <string name="mobile">Mobile</string>
@@ -55,6 +55,146 @@
     <string name="retry">Retry</string>
     <string name="select_image">Select Image</string>
 
+    <string-array name="store_categories">
+        <item>Fabric</item>
+        <item>Dress Material</item>
+        <item>Clothing</item>
+        <item>Jewellery</item>
+    </string-array>
+
+    <string-array name="store_dress_materials_set_piece">
+        <item>Top</item>
+        <item>Top &amp; Dupatta</item>
+        <item>Suit set</item>
+    </string-array>
+
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="store_fabrics_design_array">
+        <item>Kalam kari</item>
+        <item>Apatani</item>
+        <item>Muga</item>
+        <item>Bhagalpuri</item>
+        <item>Kosa</item>
+        <item>Kunbi</item>
+        <item>Bandhani</item>
+        <item>Kuchai</item>
+        <item>Chanderi</item>
+        <item>Paithani</item>
+        <item>Eri</item>
+        <item>Sambalpuri</item>
+        <item>Phulkari</item>
+        <item>Embroidery</item>
+        <item>Kanjeevaram</item>
+        <item>Ikat</item>
+        <item>Chikankari</item>
+        <item>Blockprint</item>
+        <item>Brocade</item>
+        <item>Mangalgiri</item>
+        <item>Bagh print</item>
+        <item>Banarasi</item>
+        <item>Dabu</item>
+        <item>Patola</item>
+    </string-array>
+
+    <string-array name="store_fabrics_cloth_array">
+        <item>Georgette</item>
+        <item>Velvet</item>
+        <item>Chiffon</item>
+        <item>Crepe</item>
+        <item>Organza</item>
+        <item>Taffeta</item>
+        <item>Silk</item>
+        <item>Wool</item>
+        <item>Cotton</item>
+        <item>Rayon</item>
+        <item>Linen</item>
+        <item>Net</item>
+        <item>Nylon</item>
+        <item>Satin</item>
+        <item>Polyester</item>
+    </string-array>
+
+    <string-array name="store_fabrics_pattern_array">
+        <item>Abstract</item>
+        <item>Checks</item>
+        <item>Floral</item>
+        <item>Geometric</item>
+        <item>Paisley</item>
+        <item>Objects</item>
+        <item>Plain</item>
+        <item>Stripes</item>
+        <item>Buttons</item>
+        <item>Motifs</item>
+        <item>Chevron</item>
+    </string-array>
+
+    <string-array name="store_jewellery_women_types_array">
+        <item>Earings</item>
+        <item>Jewellery set</item>
+        <item>Necklace &amp; Chains</item>
+        <item>Bracelet</item>
+        <item>Ring</item>
+        <item>Bangle</item>
+        <item>Pendant</item>
+        <item>Anklet</item>
+        <item>Brooch</item>
+    </string-array>
+
+    <string-array name="store_jewellery_men_types_array">
+        <item>Necklace &amp; Chains</item>
+        <item>Bracelet</item>
+        <item>Ring</item>
+        <item>Pendant</item>
+    </string-array>
+
+    <string-array name="store_jewellery_colors_array">
+        <item>Gold</item>
+        <item>Multicolor</item>
+        <item>Silver</item>
+        <item>Maroon</item>
+        <item>Green</item>
+    </string-array>
+
+    <string-array name="store_clothing_women_types_array">
+        <item>Churidar</item>
+        <item>Dresses</item>
+        <item>Dupatta</item>
+        <item>Kurtas</item>
+        <item>Kurta Sets</item>
+        <item>Kurtis</item>
+        <item>Lehenga Choli</item>
+        <item>Night Suits</item>
+        <item>Night Dress</item>
+        <item>Sarees</item>
+        <item>Shawl/Stoles</item>
+    </string-array>
+
+    <string-array name="store_clothing_men_types_array">
+        <item>Shirts</item>
+        <item>Kurta Sets</item>
+        <item>Kurtas</item>
+        <item>Jackets</item>
+        <item>Sherwani</item>
+    </string-array>
+
+    <string-array name="store_clothing_occasion_types_array">
+        <item>Casual Wear</item>
+        <item>Party Wear</item>
+        <item>Wedding/Festive</item>
+        <item>Home Wear</item>
+        <item>Office Wear</item>
+    </string-array>
+
+    <string-array name="login_type_array">
+        <item>Boutique</item>
+        <item>Store</item>
+        <item>Designer</item>
+    </string-array>
+
     <string-array name="product_categories">
         <item>Dress</item>
         <item>Lehenga</item>
@@ -91,9 +231,8 @@
     </string-array>
 
     <string-array name="preparation_time_array">
-        <item>1 – 2 days</item>
-        <item>2 – 5 days</item>
-        <item>5 – 10 days</item>
+        <item>5 – 7 days</item>
+        <item>7 – 10 days</item>
         <item>10 – 15 days</item>
     </string-array>
 
@@ -116,6 +255,7 @@
     <string name="quantity_in_units">%1$d units</string>
     <string name="unavailable">Unavailable</string>
     <string name="in_bag">Check your bag</string>
+    <string name="bag_at_price">Bag @₹%1$d</string>
 
     <!-- About -->
     <string name="email">Email</string>
@@ -124,19 +264,20 @@
     <string name="item_s_total">Item(s) total</string>
     <string name="checkout">Checkout</string>
     <string name="total">Total</string>
-    <string name="cancelled">Cancelled</string>
 
     <!-- Pending -->
-    <string name="in_progress">In Progress</string>
     <string name="progress">Progress</string>
     <string name="approved">Approved</string>
     <string name="seller_details">Seller Details</string>
     <string name="live">Live</string>
     <string name="remove">Remove</string>
+    <string name="confirm">Confirm</string>
+    <string name="dispatch">Dispatch</string>
     <string name="orders">Orders</string>
     <string name="save">Save</string>
     <string name="delivery_time">Delivery time</string>
     <string name="price">Price (₹)</string>
+    <string name="price_without_symbol">Price</string>
     <string name="price_cannot_be_zero">Price cannot be empty or zero</string>
     <string name="hint_quantity_in_meters">Quantity (meters)</string>
     <string name="hint_quantity_in_units">Quantity (units)</string>
@@ -153,8 +294,6 @@
     <string name="address">Address</string>
     <string name="cart_items_updated">Cart items have been updated based on the availability. Verify and checkout again.</string>
 
-    <style name="cancelled">Cancelled</style>
-
     <string name="address_description">%1$s, %2$s, %3$s, %4$s, %5$s\n%6$s</string>
     <string name="proceed">Proceed</string>
 
@@ -164,6 +303,11 @@
     <string name="received">Received</string>
     <string name="confirmed">Confirmed</string>
     <string name="dispatched">Dispatched</string>
+    <string name="in_progress">In progress</string>
+    <string name="in_transit">In transit</string>
+    <string name="out_for_delivery">Out for delivery</string>
+    <string name="delivered">Delivered</string>
+    <string name="cancelled">Cancelled</string>
     <string name="completed">Completed</string>
     <string name="thank_you">Thank you</string>
     <string name="order_success_desc">Your order has been placed successfully.</string>
@@ -178,4 +322,50 @@
     <string name="cart_items_count">%1$d item(s)</string>
     <string name="place_order">Place order</string>
     <string name="my_orders">My Orders</string>
+    <string name="order_title">Order #%1$s</string>
+    <string name="delivering_to">Delivering to</string>
+
+    <!-- Boutique request -->
+    <string name="preparation_time">Preparation time</string>
+    <string name="boutique_request_title">New %1$s request</string>
+    <string name="boutique_request_summary">Let the user know how long it takes to prepare the %1$s along with it\'s price.</string>
+    <string name="already_posted">Already submitted</string>
+    <string name="requests">Requests</string>
+    <string name="boutique_request_expected_date">Expecting in - %1$s</string>
+    <string name="boutique_request">Boutique request</string>
+    <string name="accepted">Accepted</string>
+
+    <!-- Confirm dialogs -->
+    <string name="confirm_order">Confirm Order?</string>
+    <string name="dispatch_order">Dispatch Order?</string>
+    <string name="tracking_id">Tracking ID</string>
+    <string name="courier_name">Courier name</string>
+    <string name="estimated_date">Estimated delivery</string>
+    <string name="product_story_hint">What inspired your design?</string>
+
+    <!-- Subscription -->
+    <string name="subscriptions">Subscriptions</string>
+    <string name="choose_a_plan">Subscription plan</string>
+    <string name="subscription_price_and_period">\@ ₹%1$s • %2$s months</string>
+    <string name="subscription_price_strike_and_period">\@ ₹<strike>%1$s</strike>%2$s • %3$s months</string>
+    <string name="payments">Payments</string>
+    <string name="choose_atleast_one_size">Choose at least one size</string>
+
+    <string name="dress_materials">Dress Materials</string>
+    <string name="clothes">Clothes</string>
+    <string name="jewellery">Jewellery</string>
+    <string name="size">Size</string>
+    <string name="cart_size">, Size - %1$s</string>
+    <string name="login_as">Login as</string>
+    <string name="product_details">Product Details</string>
+    <string name="size_name">Size - %1$s</string>
+    <string name="add">Add</string>
+    <string name="store">Store</string>
+    <string name="views">Views</string>
+    <string name="leads">Leads</string>
+    <string name="rating">Rating</string>
+    <string name="designs">Designs</string>
+    <string name="total_revenue">Total revenue</string>
+    <string name="order_tracking">Order Tracking</string>
+    <string name="estimated_delivery_by">Estimated delivery - %1$s</string>
 </resources>

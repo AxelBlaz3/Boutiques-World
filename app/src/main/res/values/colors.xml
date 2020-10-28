@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="white">#FFFFFF</color>
-    <color name="pink_600">#D4145A</color>
     <color name="pink_100">#E9BACB</color>
     <color name="black">#000000</color>
+    <color name="pink_800">#BB0A21</color>
+    <color name="yellow_700">#fabc3c</color>
     <color name="grey_900">#121212</color>
+    <color name="splash_text_color">#000000</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:ignore="PrivateResource">#E0E0E0
     </color>
 </resources>

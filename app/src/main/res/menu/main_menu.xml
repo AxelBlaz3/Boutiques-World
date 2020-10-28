@@ -6,11 +6,7 @@
         android:id="@+id/notifications"
         android:icon="@drawable/ic_round_notifications"
         android:title="@string/notification"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/myOrdersFragment"
-        android:icon="@drawable/ic_baseline_collections_bookmark"
-        android:title="@string/my_orders"
+        app:actionLayout="@layout/action_layout_basket_badge"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/cart"
@@ -18,4 +14,18 @@
         android:title="@string/cart"
         app:actionLayout="@layout/action_layout_basket_badge"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/myOrdersFragment"
+        android:icon="@drawable/ic_baseline_collections_bookmark"
+        android:title="@string/my_orders"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/subscriptionFragment"
+        android:icon="@drawable/ic_round_account_balance_wallet"
+        android:title="Subscription"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_round_power_settings_new"
+        android:title="Logout" />
 </menu>

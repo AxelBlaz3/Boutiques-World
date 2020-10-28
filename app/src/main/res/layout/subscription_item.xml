@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="subscription"
+            type="com.boutiquesworld.model.Subscription" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_1"
+        android:layout_marginTop="@dimen/grid_1"
+        app:cardElevation="@dimen/card_elevation"
+        app:strokeColor="?colorControlHighlight"
+        app:strokeWidth="@dimen/card_stroke_width">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/grid_2">
+
+            <TextView
+                android:id="@+id/subscription_item_plan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Starter plan"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Starter plan" />
+
+            <TextView
+                android:id="@+id/subscription_date_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:text="@{subscription.paidDate + ` - ` + subscription.endDate}"
+                android:textAppearance="?textAppearanceBody2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subscription_item_plan"
+                tools:text="30 Sep 2020 - 30 Mar 2021" />
+
+            <TextView
+                android:id="@+id/subscription_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:text="@{@string/product_price(subscription.amount)}"
+                android:textAppearance="?textAppearanceSubtitle2"
+                android:textColor="?colorSecondary"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subscription_item_plan"
+                tools:text="₹5000" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

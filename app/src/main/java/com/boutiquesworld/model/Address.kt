@@ -17,5 +17,6 @@ data class Address(
     @SerializedName("state") val state: String,
     @SerializedName("user_id") val userId: String,
     @SerializedName("order_id") val orderId: String,
-    @SerializedName("address") var isChecked: Boolean = false
+    @SerializedName("address") var isChecked: Boolean = false,
+    @SerializedName("user_category") val userCategory: String? = "R"
 )

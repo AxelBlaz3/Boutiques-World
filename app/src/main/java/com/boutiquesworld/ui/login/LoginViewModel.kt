@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.boutiquesworld.repository.RetailerRepository
+import com.boutiquesworld.repository.ProfileRepository
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @FragmentScoped
-class LoginViewModel @Inject constructor(private val retailerRepository: RetailerRepository) :
+class LoginViewModel @Inject constructor(private val profileRepository: ProfileRepository) :
     ViewModel() {
     private val isEmailEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isPasswordEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isLoginSuccessful: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun loginRetailer(mobile: String, password: String) {
+    fun loginRetailer(mobile: String, password: String, loginType: Char) {
         isEmailEmpty.value = mobile.isEmpty()
         isPasswordEmpty.value = password.isEmpty()
 
@@ -24,7 +24,7 @@ class LoginViewModel @Inject constructor(private val retailerRepository: Retaile
             return
 
         viewModelScope.launch {
-            isLoginSuccessful.value = retailerRepository.loginRetailer(mobile, password)
+            isLoginSuccessful.value = profileRepository.loginRetailer(mobile, password, loginType)
         }
     }
 

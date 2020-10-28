@@ -25,17 +25,30 @@
         android:orientation="vertical"
         android:padding="@dimen/grid_2">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:backgroundHexTint="@{palette.hexColorTint}"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
             app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Round"
-            tools:background="?colorSecondary" />
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="1dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/color_image_view"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/grid_0_25"
+                app:backgroundHexTint="@{palette.hexColorTint}"
+                app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Round"
+                tools:background="?colorSecondary" />
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/grid_1"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@{palette.colorName}"
             android:textAppearance="?textAppearanceBody2"
             tools:text="Pink" />

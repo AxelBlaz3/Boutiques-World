@@ -71,9 +71,9 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun deleteCartItem(cart: Cart) {
+    fun deleteCartItem(cart: Cart, position: Int) {
         viewModelScope.launch {
-            cartRepository.deleteCartItem(cart)
+            cartRepository.deleteCartItem(cart, position)
         }
     }
 }

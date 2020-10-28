@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="order"
+            type="com.boutiquesworld.model.Order" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/design_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:paddingBottomSystemWindowInsets="@{true}">
+
+        <TextView
+            android:id="@+id/order_heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:gravity="center"
+            android:text="@{order.orderStatus == 0 ? @string/confirm_order : @string/dispatch_order}"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintBottom_toBottomOf="@+id/order_sheet_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/confirm_order" />
+
+        <ImageView
+            android:id="@+id/order_sheet_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_round_close" />
+
+        <ImageView
+            android:id="@+id/order_detail_illustration"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="@dimen/grid_2"
+            app:glideSrc="@{order.productImage}"
+            app:layout_constraintTop_toBottomOf="@+id/order_sheet_close"
+            tools:srcCompat="@drawable/thumb" />
+
+        <TextView
+            android:id="@+id/order_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:gravity="center"
+            android:text="@{order.productName}"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/order_detail_illustration"
+            tools:text="Block Print Dupatta" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tracking_id_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:visibility="@{order.orderStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/order_quantity">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tracking_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/tracking_id"
+                android:textAppearance="?textAppearanceBody2"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/courier_name_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:visibility="@{order.orderStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toStartOf="@id/estimated_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tracking_id_text_input_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/courier_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/courier_name"
+                android:textAppearance="?textAppearanceBody2"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/estimated_date"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:textAllCaps="false"
+            android:textAppearance="?textAppearanceButton"
+            android:textColor="?colorControlNormal"
+            android:visibility="@{order.orderStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:icon="@drawable/ic_round_event"
+            app:iconTint="?colorControlNormal"
+            app:layout_constraintBottom_toBottomOf="@+id/courier_name_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/courier_name_text_input_layout"
+            app:layout_constraintTop_toTopOf="@+id/courier_name_text_input_layout"
+            app:rippleColor="?colorControlHighlight"
+            tools:text="25 Oct, 2020" />
+
+        <TextView
+            android:id="@+id/order_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_1"
+            android:gravity="center"
+            android:text="@{order.productDescription}"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintTop_toBottomOf="@+id/order_title"
+            tools:layout_editor_absoluteX="16dp"
+            tools:text="Some weird description for the weird product. This could be a 2 line description or maybe 3." />
+
+        <TextView
+            android:id="@+id/order_quantity_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_3"
+            android:gravity="center"
+            android:text="@{@string/quantity}"
+            android:textAppearance="?textAppearanceSubtitle2"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/order_price_text"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/order_desc"
+            tools:text="Quantity" />
+
+        <TextView
+            android:id="@+id/order_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_1"
+            android:gravity="center"
+            android:text="@{String.valueOf(order.quantity)}"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="@+id/order_quantity_text"
+            app:layout_constraintStart_toStartOf="@+id/order_quantity_text"
+            app:layout_constraintTop_toBottomOf="@+id/order_price_text"
+            tools:text="3" />
+
+        <TextView
+            android:id="@+id/order_price_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_3"
+            android:gravity="center"
+            android:text="@{@string/price_without_symbol}"
+            android:textAppearance="?textAppearanceSubtitle2"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/order_quantity_text"
+            app:layout_constraintTop_toBottomOf="@+id/order_desc"
+            tools:text="Price" />
+
+        <TextView
+            android:id="@+id/order_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_1"
+            android:gravity="center"
+            android:text="@{@string/product_price(order.productPrice)}"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="@+id/order_price_text"
+            app:layout_constraintStart_toStartOf="@+id/order_price_text"
+            app:layout_constraintTop_toBottomOf="@+id/order_price_text"
+            tools:text="₹3000" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/order_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_3"
+            android:layout_marginBottom="@dimen/grid_2"
+            android:enabled="@{order.orderStatus == 0 || order.orderStatus == 1}"
+            android:gravity="center"
+            android:text="@{order.orderStatus == 0 ? @string/confirm : (order.orderStatus == 1 ? @string/dispatch : ``)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/courier_name_text_input_layout"
+            app:layout_goneMarginTop="@dimen/grid_3"
+            tools:layout_editor_absoluteX="16dp"
+            tools:text="@string/confirm" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

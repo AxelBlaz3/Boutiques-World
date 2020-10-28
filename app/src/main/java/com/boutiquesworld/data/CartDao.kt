@@ -21,8 +21,8 @@ interface CartDao {
     /**
      * Delete item from the cart.
      */
-    @Query("DELETE FROM Cart WHERE productId=:productId")
-    fun removeItemFromCart(productId: Int): Int
+    @Query("DELETE FROM Cart WHERE id=:id")
+    fun removeItemFromCart(id: Int): Int
 
     /**
      * Truncate cart table.

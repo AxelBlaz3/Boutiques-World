@@ -10,27 +10,51 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/grid_3">
+        android:padding="@dimen/grid_3"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
+
+        <TextView
+            android:id="@+id/login_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome Back,"
+            android:textAppearance="?textAppearanceHeadline5"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_0_5"
+            android:text="Log in to continue"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintBottom_toTopOf="@id/login_logo"
+            app:layout_constraintStart_toStartOf="@+id/login_greeting"
+            app:layout_constraintTop_toBottomOf="@+id/login_greeting" />
 
         <ImageView
             android:id="@+id/login_logo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher_round"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="?actionBarSize"
+            android:src="@drawable/ic_login"
+            app:layout_constraintBottom_toTopOf="@+id/login_mobile_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:src="@mipmap/ic_launcher_round" />
+            tools:src="@drawable/ic_login" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_mobile_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top_mobile_edit_text"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
+            android:layout_marginTop="?actionBarSize"
+            app:layout_constraintBottom_toTopOf="@+id/login_password_text_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,25 +68,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_0_25"
-                android:background="@null"
-                android:drawableStart="@drawable/ic_round_smartphone"
-                android:drawablePadding="@dimen/grid_2"
                 android:hint="@string/mobile"
                 android:inputType="numberSigned"
-                android:padding="@dimen/grid_2"
                 android:textAppearance="?textAppearanceBody1" />
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView2"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_password_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/grid_3"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            android:layout_marginTop="@dimen/grid_1"
+            app:layout_constraintBottom_toTopOf="@+id/login_type_text_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+            app:layout_constraintTop_toBottomOf="@+id/login_mobile_text_input_layout"
             app:shapeAppearance="?shapeAppearanceMediumComponent"
             app:strokeColor="?colorControlHighlight"
             app:strokeWidth="@dimen/card_stroke_width">
@@ -71,44 +92,48 @@
                 android:id="@+id/login_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:drawableStart="@drawable/ic_round_vpn_key"
-                android:drawablePadding="@dimen/grid_2"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:padding="@dimen/grid_2"
                 android:textAppearance="?textAppearanceBody1" />
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView2"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_type_text_input_layout"
+            style="@style/Widget.Boutiques.TextInputLayout.DropDown"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/grid_1"
-            android:paddingVertical="@dimen/grid_2"
-            android:paddingStart="0dp"
-            android:paddingEnd="@dimen/grid_2"
-            android:text="@string/forgot_password"
-            android:textAppearance="?textAppearanceBody2"
-            android:textColor="?colorSecondary"
+            android:layout_marginTop="@dimen/grid_2"
             app:layout_constraintBottom_toTopOf="@+id/login_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
+            app:layout_constraintTop_toBottomOf="@+id/login_password_text_input_layout">
 
-        <com.google.android.material.button.MaterialButton
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/login_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/login_as"
+                android:inputType="none"
+                android:textAppearance="?textAppearanceBody2"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/login_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/grid_4"
+            android:layout_marginBottom="@dimen/grid_2"
+            android:gravity="center"
             android:text="@string/login"
+            android:textAppearance="?textAppearanceButton"
             android:textColor="?colorOnSecondary"
             app:backgroundTint="?colorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/login_type_text_input_layout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

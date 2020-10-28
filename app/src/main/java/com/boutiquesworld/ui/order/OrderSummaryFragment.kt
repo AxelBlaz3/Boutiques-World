@@ -1,6 +1,7 @@
 package com.boutiquesworld.ui.order
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,6 +58,10 @@ class OrderSummaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.run {
+            if (cartViewModel.cartTotal > 1499) {
+                summaryDeliveryCharges.visibility = View.GONE
+                summaryDeliveryChargesText.visibility = View.GONE
+            }
             summaryProductRecyclerView.adapter = summaryAdapter
             summaryOrderTotal.text =
                 getString(R.string.product_price, cartViewModel.cartTotal.toString())

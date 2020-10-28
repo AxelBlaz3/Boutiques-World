@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+    <!-- The white background color as one in Amazon, YouTube, or Drive app -->
+    <item android:drawable="@color/pink_800" />
+
+    <!-- App logo -->
+    <item
+        android:drawable="@drawable/ic_splash"
+        android:gravity="center_vertical"
+        android:left="?actionBarSize"
+        android:height="@dimen/splash_image_height"
+        android:right="?actionBarSize"/>
+
+</layer-list>

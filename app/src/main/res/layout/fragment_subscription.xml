@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="subscription"
+            type="com.boutiquesworld.model.Subscription" />
+
+        <variable
+            name="subscriptionPlan"
+            type="com.boutiquesworld.model.SubscriptionPlan" />
+
+        <variable
+            name="isActive"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/grid_2"
+        app:paddingTopSystemWindowInsets="@{true}">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_1"
+            android:layout_marginTop="?actionBarSize"
+            app:cardElevation="@dimen/card_elevation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?colorControlHighlight"
+            app:strokeWidth="@dimen/card_stroke_width">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/grid_3">
+
+                <ImageButton
+                    android:id="@+id/refresh_subscription_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:padding="@dimen/grid_2"
+                    android:src="@drawable/ic_round_sync"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_marginTop="@dimen/grid_3"
+                    android:src="@{isActive ? @drawable/ic_round_check_circle_outline : @drawable/ic_round_error_outline_24}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/subscription_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{isActive ? `Active` : `Inactive`}"
+                    android:textAppearance="?textAppearanceHeadline5"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                    app:layout_constraintStart_toStartOf="@+id/imageView2"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                    tools:text="Active" />
+
+                <TextView
+                    android:id="@+id/subscription_plan_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:text="@{subscriptionPlan.planName}"
+                    android:textAppearance="?textAppearanceSubtitle1"
+                    android:textStyle="bold"
+                    android:visibility="@{isActive ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subscription_status"
+                    tools:text="Starter Plan" />
+
+                <TextView
+                    android:id="@+id/subscription_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_0_5"
+                    android:text="@{isActive ? `Ends on - ` + subscription.endDate : `Renew your subscription`}"
+                    android:textAppearance="?textAppearanceSubtitle2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subscription_plan_name"
+                    tools:text="Ends on - Oct 2, 2020" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/renewButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:gravity="center"
+                    android:text="Renew"
+                    android:visibility="@{isActive ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subscription_end_date"
+                    tools:visibility="gone" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/history_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:text="History"
+            android:textAppearance="?textAppearanceHeadline6"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView6" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subscription_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_1"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/history_text"
+            app:paddingBottomSystemWindowInsets="@{true}"
+            tools:listitem="@layout/subscription_item" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

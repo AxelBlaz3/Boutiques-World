@@ -1,50 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/dashboard_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/grid_2"
-        android:paddingBottom="96dp"
-        app:paddingBottomSystemWindowInsets="@{true}"
-        app:paddingTopSystemWindowInsets="@{true}">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView3"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginHorizontal="@dimen/grid_2"
-            android:layout_marginTop="?actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="?colorControlHighlight"
-            app:strokeWidth="@dimen/card_stroke_width" />
+            android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView4"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_margin="@dimen/grid_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView3"
-            app:strokeColor="?colorControlHighlight"
-            app:strokeWidth="@dimen/card_stroke_width" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/grid_2"
+                android:paddingBottom="96dp"
+                app:paddingBottomSystemWindowInsets="@{true}"
+                app:paddingTopSystemWindowInsets="@{true}">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_margin="@dimen/grid_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView4"
-            app:strokeColor="?colorControlHighlight"
-            app:strokeWidth="@dimen/card_stroke_width" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/dashboard_greeting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="?actionBarSize"
+                    android:text="Hello,"
+                    android:textAppearance="?textAppearanceHeadline5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:text="Hello," />
+
+                <TextView
+                    android:id="@+id/dashboard_greeting_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_0_25"
+                    android:textAppearance="?textAppearanceHeadline5"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/dashboard_greeting"
+                    tools:text="Ali Conners!" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_3"
+                    app:cardElevation="@dimen/card_elevation"
+                    app:layout_constraintEnd_toStartOf="@+id/materialCardView4"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dashboard_greeting_name"
+                    app:strokeColor="?colorControlHighlight"
+                    app:strokeWidth="@dimen/card_stroke_width">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/grid_2">
+
+                        <ImageView
+                            android:id="@+id/dashboard_image_1"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            tools:src="@drawable/ic_round_thumb_up" />
+
+                        <TextView
+                            android:id="@+id/dashboard_count_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_1_5"
+                            android:textAppearance="?textAppearanceHeadline4"
+                            android:textColor="?android:textColorPrimary"
+                            android:textStyle="bold"
+                            tools:text="800" />
+
+                        <TextView
+                            android:id="@+id/dashboard_caption_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_0_5"
+                            android:textAppearance="?textAppearanceCaption"
+                            android:textStyle="bold"
+                            tools:text="Likes" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_3"
+                    app:cardElevation="@dimen/card_elevation"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView3"
+                    app:layout_constraintTop_toBottomOf="@+id/dashboard_greeting_name"
+                    app:strokeColor="?colorControlHighlight"
+                    app:strokeWidth="@dimen/card_stroke_width">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/grid_2">
+
+                        <ImageView
+                            android:id="@+id/dashboard_image_2"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            tools:src="@drawable/ic_round_remove_red_eye" />
+
+                        <TextView
+                            android:id="@+id/dashboard_count_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_1_5"
+                            android:textAppearance="?textAppearanceHeadline4"
+                            android:textColor="?android:textColorPrimary"
+                            android:textStyle="bold"
+                            tools:text="800" />
+
+                        <TextView
+                            android:id="@+id/dashboard_caption_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_0_5"
+                            android:textAppearance="?textAppearanceCaption"
+                            android:textStyle="bold"
+                            tools:text="Views" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    app:cardElevation="@dimen/card_elevation"
+                    app:layout_constraintEnd_toStartOf="@+id/materialCardView6"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView3"
+                    app:strokeColor="?colorControlHighlight"
+                    app:strokeWidth="@dimen/card_stroke_width">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/grid_2">
+
+                        <ImageView
+                            android:id="@+id/dashboard_image_3"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            tools:src="@drawable/ic_round_signal_cellular" />
+
+                        <TextView
+                            android:id="@+id/dashboard_count_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_1_5"
+                            android:textAppearance="?textAppearanceHeadline4"
+                            android:textColor="?android:textColorPrimary"
+                            android:textStyle="bold"
+                            tools:text="800" />
+
+                        <TextView
+                            android:id="@+id/dashboard_caption_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_0_5"
+                            android:textAppearance="?textAppearanceCaption"
+                            android:textStyle="bold"
+                            tools:text="Ratings" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    app:cardElevation="@dimen/card_elevation"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView3"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView3"
+                    app:strokeColor="?colorControlHighlight"
+                    app:strokeWidth="@dimen/card_stroke_width">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/grid_2">
+
+                        <ImageView
+                            android:id="@+id/dashboard_image_4"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            tools:src="@drawable/ic_round_how_to_reg" />
+
+                        <TextView
+                            android:id="@+id/dashboard_count_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_1_5"
+                            android:textAppearance="?textAppearanceHeadline4"
+                            android:textColor="?android:textColorPrimary"
+                            android:textStyle="bold"
+                            tools:text="800" />
+
+                        <TextView
+                            android:id="@+id/dashboard_caption_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_0_5"
+                            android:textAppearance="?textAppearanceCaption"
+                            android:textStyle="bold"
+                            tools:text="Leads" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

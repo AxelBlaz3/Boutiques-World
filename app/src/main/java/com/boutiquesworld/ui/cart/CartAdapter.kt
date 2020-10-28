@@ -17,9 +17,11 @@ class CartAdapter(private val listener: CartAdapterListener) :
     ListAdapter<Cart, CartAdapter.CartViewHolder>(CartDiffUtil) {
 
     interface CartAdapterListener {
-        fun onDeleteButtonClick(cart: Cart)
+        fun onDeleteButtonClick(cart: Cart, position: Int)
         fun onCartItemUpdated(newCartItem: Cart)
         fun onCartListsDiffer(areDifferent: Boolean)
+        fun onMinusClicked(cart: Cart)
+        fun onPlusClicked(cart: Cart)
     }
 
     object CartDiffUtil : DiffUtil.ItemCallback<Cart>() {
@@ -61,44 +63,12 @@ class CartAdapter(private val listener: CartAdapterListener) :
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(cart: Cart) {
+        fun bind(cart: Cart, position: Int) {
             binding.run {
                 this.cart = cart
                 this.listener = this@CartViewHolder.listener
-                cartProductQuantity.run {
-                    if (cart.availableQuantity < cart.quantity)
-                        cart.quantity = cart.availableQuantity
-                    setText(cart.quantity.toString(), false)
-                    onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            updateQuantityAndPrice(binding, cart, adapter.getItem(position) as Int)
-                        }
-                    setAdapter(
-                        ArrayAdapter(
-                            binding.root.context,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            (1..cart.availableQuantity).toList()
-                        )
-                    )
-                }
+                this.position = position
                 executePendingBindings()
-            }
-        }
-
-        private fun getPrice(quantity: Int, productPrice: String, newQuantity: Int): String =
-            (newQuantity * productPrice.toInt() / quantity).toString()
-
-        private fun updateQuantityAndPrice(binding: CartItemBinding, cart: Cart, newQuantity: Int) {
-            binding.run {
-                val newCart = cart.copy(
-                    productPrice = getPrice(
-                        this.cart!!.quantity,
-                        this.cart!!.productPrice,
-                        newQuantity
-                    ), quantity = newQuantity
-                )
-                this.cart = newCart
-                this@CartViewHolder.listener.onCartItemUpdated(newCart)
             }
         }
     }
@@ -110,5 +80,5 @@ class CartAdapter(private val listener: CartAdapterListener) :
         )
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) =
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
 }

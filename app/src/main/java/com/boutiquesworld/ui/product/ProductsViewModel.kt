@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.boutiquesworld.model.BaseProduct
 import com.boutiquesworld.model.Retailer
+import com.boutiquesworld.model.StoreCategory
 import com.boutiquesworld.repository.ProductRepository
-import com.boutiquesworld.repository.RetailerRepository
+import com.boutiquesworld.repository.ProfileRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,21 +19,29 @@ import javax.inject.Singleton
 @Singleton
 class ProductsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val retailerRepository: RetailerRepository
+    private val profileRepository: ProfileRepository
 ) :
     ViewModel() {
     private val retailer: MutableLiveData<Retailer> =
-        retailerRepository.getRetailerMutableLiveData()
+        profileRepository.getRetailerMutableLiveData()
+    private val storeFabrics: MutableLiveData<ArrayList<StoreCategory>> = productRepository.getFabricsMutableLiveData()
+    private val storeDressMaterials: MutableLiveData<ArrayList<StoreCategory>> = productRepository.getDressMaterialsMutableLiveData()
+    private val storeClothes: MutableLiveData<ArrayList<StoreCategory>> = productRepository.getClothesMutableLiveData()
+    private val storeJewellery: MutableLiveData<ArrayList<StoreCategory>> = productRepository.getJewelleryMutableLiveData()
 
     init {
         viewModelScope.launch {
-            retailerRepository.updateRetailer()
+            getStoreProduct("Fabric", forceRefresh = false)
+            getStoreProduct("Dress Material", forceRefresh = false)
+            getStoreProduct("Clothing", forceRefresh = false)
+            getStoreProduct("Jewellery", forceRefresh = false)
+            profileRepository.updateRetailer()
             retailer.value?.let {
                 if (it.businessCategory == "B")
                     getProducts(forceRefresh = false)
                 else if (it.businessCategory == "D")
                     getSketches(forceRefresh = false)
-                getFabrics(forceRefresh = false)
+                getStore(forceRefresh = false)
             }
         }
     }
@@ -47,6 +56,10 @@ class ProductsViewModel @Inject constructor(
     fun getProductsLiveData(): LiveData<ArrayList<BaseProduct>> = products
     fun getFabricsLiveData(): LiveData<ArrayList<BaseProduct>> = fabrics
     fun getSketchesLiveData(): LiveData<ArrayList<BaseProduct>> = sketches
+    fun getStoreFabricsLiveData(): LiveData<ArrayList<StoreCategory>> = storeFabrics
+    fun getStoreClothesLiveData(): LiveData<ArrayList<StoreCategory>> = storeClothes
+    fun getStoreDressMaterialsLiveData(): LiveData<ArrayList<StoreCategory>> = storeDressMaterials
+    fun getStoreJewelleryLiveData(): LiveData<ArrayList<StoreCategory>> = storeJewellery
 
     fun getProducts(forceRefresh: Boolean) {
         viewModelScope.launch {
@@ -56,10 +69,10 @@ class ProductsViewModel @Inject constructor(
         }
     }
 
-    fun getFabrics(forceRefresh: Boolean) {
+    fun getStore(forceRefresh: Boolean) {
         viewModelScope.launch {
             retailer.value?.let {
-                productRepository.getFabrics(forceRefresh)
+                productRepository.getStore(forceRefresh)
             }
         }
     }
@@ -72,9 +85,15 @@ class ProductsViewModel @Inject constructor(
         }
     }
 
-    fun updateFabric(productId: Int, quantity: Int) {
+    fun getStoreProduct(productCategory: String, forceRefresh: Boolean) {
         viewModelScope.launch {
-            productRepository.updateFabric(productId, quantity)
+            productRepository.getStoreProducts(productCategory, forceRefresh)
+        }
+    }
+
+    fun updateQuantityOfStoreProduct(productId: Int, quantity: Int, productCategory: String) {
+        viewModelScope.launch {
+            productRepository.updateQuantityOfStoreProduct(productId, quantity, productCategory)
         }
     }
 }

@@ -6,8 +6,9 @@
     <style name="Theme.BoutiquesWorld" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorSecondary">@color/pink_600</item>
+        <item name="colorSecondary">@color/pink_800</item>
         <item name="colorSecondaryVariant">@color/pink_100</item>
+        <item name="colorTertiary">@color/yellow_700</item>
         <item name="colorSurface">@color/white</item>
 
         <item name="colorOnSecondary">@color/white</item>
@@ -29,8 +30,7 @@
         <item name="textAppearanceHeadline5">@style/TextAppearance.BoutiquesWorld.HeadLine5</item>
         <item name="textAppearanceHeadline4">@style/TextAppearance.BoutiquesWorld.HeadLine4</item>
         <item name="textAppearanceHeadline3">@style/TextAppearance.BoutiquesWorld.HeadLine3</item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.BoutiquesWorld.HeadLine2</item>
-        <item name="textAppearanceHeadline1">@style/TextAppearance.BoutiquesWorld.HeadLine1</item>
+        <item name="textAppearanceTab">@style/TextAppearance.Trendition.Tab</item>
 
         <!-- Shape -->
         <item name="shapeAppearanceSmallComponent">
@@ -43,9 +43,25 @@
             @style/ShapeAppearance.BoutiquesWorld.LargeComponent
         </item>
 
+        <item name="badgeStyle">@style/BoutiqueBadge</item>
+
         <!-- Platform attributes -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
     </style>
 
+    <style name="Theme.Trendition.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- Platform attributes -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
+
+    <style name="Theme.Trendition.Calendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/pink_800</item>
+        <item name="colorOnPrimary">?colorOnSecondary</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.BoutiquesWorld.SmallComponent</item>
+    </style>
 </resources>

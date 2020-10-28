@@ -28,7 +28,9 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -48,103 +50,23 @@
                 tools:src="@mipmap/ic_launcher_round" />
 
             <TextView
-                android:id="@+id/likes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_3"
-                android:gravity="center"
-                android:text="2k"
-                android:textAppearance="?textAppearanceHeadline6"
-                android:visibility="@{isBoutique ? View.VISIBLE : View.GONE}"
-                app:layout_constraintEnd_toEndOf="@+id/likes_text"
-                app:layout_constraintStart_toStartOf="@+id/likes_text"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
-                tools:text="2k" />
-
-            <TextView
-                android:id="@+id/visits"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_3"
-                android:gravity="center"
-                android:text="5k"
-                android:textAppearance="?textAppearanceHeadline6"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
-                app:layout_constraintEnd_toEndOf="@+id/visits_text"
-                app:layout_constraintStart_toStartOf="@+id/visits_text"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
-                tools:text="5k" />
-
-            <TextView
-                android:id="@+id/uploads"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_3"
-                android:gravity="center"
-                android:text="2k"
-                android:textAppearance="?textAppearanceHeadline6"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
-                app:layout_constraintEnd_toEndOf="@+id/uploads_text"
-                app:layout_constraintStart_toStartOf="@+id/uploads_text"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
-                tools:text="2k" />
-
-            <TextView
-                android:id="@+id/likes_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/likes"
-                android:textAppearance="?textAppearanceSubtitle1"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
-                app:layout_constraintEnd_toStartOf="@+id/visits_text"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/likes" />
-
-            <TextView
-                android:id="@+id/visits_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/visits"
-                android:textAppearance="?textAppearanceSubtitle1"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
-                app:layout_constraintEnd_toStartOf="@+id/uploads_text"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/likes_text"
-                app:layout_constraintTop_toBottomOf="@+id/visits" />
-
-            <TextView
-                android:id="@+id/uploads_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/uploads"
-                android:textAppearance="?textAppearanceSubtitle1"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/visits_text"
-                app:layout_constraintTop_toBottomOf="@+id/uploads" />
-
-            <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_3"
+                android:layout_marginTop="@dimen/grid_4"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="@{retailer.businessName}"
                 android:textAppearance="?textAppearanceHeadline4"
-                app:layout_constraintTop_toBottomOf="@+id/likes_text"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
                 tools:text="Ali Connors" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
                 android:gravity="center"
                 android:text="@{retailer.zone}"
                 android:textAppearance="?textAppearanceSubtitle1"
@@ -202,7 +124,8 @@
                 android:background="?colorControlHighlight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/show_more_less_button" />
+                app:layout_constraintTop_toBottomOf="@+id/show_more_less_button"
+                app:layout_goneMarginTop="@dimen/grid_2" />
 
             <TextView
                 android:id="@+id/textView10"

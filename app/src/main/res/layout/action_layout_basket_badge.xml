@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/action_layout_root"
+    android:paddingBottom="@dimen/grid_1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -10,24 +11,35 @@
         android:id="@+id/action_item_basket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="start"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_round_shopping_cart" />
+        tools:src="@drawable/ic_round_notifications" />
 
     <TextView
         android:id="@+id/action_item_basket_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
         android:background="@drawable/bag_badge_drawable"
         android:gravity="center"
+        android:textAppearance="?textAppearanceCaption"
         android:textColor="?colorOnSecondary"
+        android:textSize="10sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/action_item_basket"
-        app:layout_constraintEnd_toEndOf="@+id/action_item_basket"
-        app:layout_constraintStart_toEndOf="@+id/action_item_basket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/action_item_basket"
-        tools:text="4"
+        tools:text="12"
         tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="25dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

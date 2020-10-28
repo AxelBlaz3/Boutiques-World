@@ -1,5 +1,6 @@
 package com.boutiquesworld.ui.product
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -24,11 +25,10 @@ class ProductsAdapter(
 
         fun bind(product: BaseProduct, position: Int) {
             binding.run {
-                when (product) {
-                    is BaseProduct.Product -> this.product = product
-                    is BaseProduct.Store -> this.fabric = product
-                    else -> this.sketch = product as BaseProduct.Sketch
-                }
+                if (product is BaseProduct.Product)
+                    this.product = product
+                else
+                    this.sketch = product as BaseProduct.Sketch
                 this.position = position
                 listener = this@ProductViewHolder.listener
                 executePendingBindings()
@@ -81,12 +81,8 @@ class ProductsAdapter(
                         oldItem.date == newItem.date &&
                         oldItem.productPrice == newItem.productPrice &&
                         oldItem.likes == newItem.likes &&
-                        oldItem.productCloth == newItem.productCloth &&
-                        oldItem.deliveryTime == newItem.deliveryTime &&
-                        oldItem.productColor == newItem.productColor &&
                         oldItem.productDescription == newItem.productDescription &&
                         oldItem.productName == newItem.productName &&
-                        oldItem.productFabric == newItem.productFabric &&
                         oldItem.availableQuantity == newItem.availableQuantity &&
                         oldItem.upid == newItem.upid &&
                         oldItem.uuid == newItem.uuid &&
@@ -100,17 +96,9 @@ class ProductsAdapter(
                 return (oldItem as BaseProduct.Sketch).businessId == (newItem as BaseProduct.Sketch).businessId &&
                         oldItem.businessName == newItem.businessName &&
                         oldItem.date == newItem.date &&
-                        oldItem.endPrice == newItem.endPrice &&
-                        oldItem.startPrice == newItem.startPrice &&
-                        oldItem.likes == newItem.likes &&
-                        oldItem.productCloth == newItem.productCloth &&
-                        oldItem.preparationTime == newItem.preparationTime &&
-                        oldItem.productColor == newItem.productColor &&
                         oldItem.productDescription == newItem.productDescription &&
+                        oldItem.productStory == newItem.productStory &&
                         oldItem.productName == newItem.productName &&
-                        oldItem.productFabric == newItem.productFabric &&
-                        oldItem.productOccasion == newItem.productOccasion &&
-                        oldItem.zone == newItem.zone &&
                         oldItem.upid == newItem.upid &&
                         oldItem.uuid == newItem.uuid &&
                         oldItem.productImage1 == newItem.productImage1 &&

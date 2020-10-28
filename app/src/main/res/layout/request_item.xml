@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="request"
+            type="com.boutiquesworld.model.BoutiqueRequest" />
+
+        <variable
+            name="listener"
+            type="com.boutiquesworld.ui.requests.BoutiqueRequestAdapter.BoutiqueRequestAdapterListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_1"
+        android:layout_marginTop="@dimen/grid_1"
+        android:onClick="@{() -> request.requestStatus == 0 ? listener.onBoutiqueRequestClick(request) : null}"
+        app:cardElevation="@dimen/card_elevation"
+        app:strokeColor="?colorControlHighlight"
+        app:strokeWidth="@dimen/card_stroke_width">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/grid_2">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/requestPhoto"
+                android:layout_width="64dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:glideSrc="@{request.upload}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="?shapeAppearanceMediumComponent"
+                tools:srcCompat="@drawable/thumb" />
+
+            <TextView
+                android:id="@+id/requestTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_2"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{request.typeOfDress}"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/requestPhoto"
+                app:layout_constraintTop_toTopOf="@+id/requestPhoto"
+                tools:text="New Lehenga request" />
+
+            <TextView
+                android:id="@+id/requestDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{@string/boutique_request_title(request.message)}"
+                android:textAppearance="?textAppearanceBody2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/requestPhoto"
+                app:layout_constraintTop_toBottomOf="@+id/requestDescSummary"
+                tools:text="Some weird description for previewing layout." />
+
+            <TextView
+                android:id="@+id/requestDescSummary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_0_5"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{@string/boutique_request_expected_date(request.timePeriod)}"
+                android:textAppearance="?textAppearanceCaption"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/requestPhoto"
+                app:layout_constraintTop_toBottomOf="@+id/requestTitle"
+                tools:text="@string/boutique_request_expected_date" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

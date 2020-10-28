@@ -69,7 +69,7 @@ fun setBackgroundHexTint(
     oldHexColorCode: String?,
     newHexColorCode: String?
 ) {
-    if (oldHexColorCode == newHexColorCode || newHexColorCode == null)
+    if ((oldHexColorCode == newHexColorCode) || newHexColorCode == null)
         return
     imageView.setBackgroundColor(Color.parseColor(newHexColorCode))
 }

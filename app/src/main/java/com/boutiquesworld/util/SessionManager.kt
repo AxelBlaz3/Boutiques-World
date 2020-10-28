@@ -31,4 +31,9 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
      * @return: true if previously logged in, false otherwise.
      */
     fun getSession(): Boolean = boutiquesPreferences.getBoolean(KEY_SESSION, false)
+
+    /**
+     * Delete the current session (logout the retailer).
+     */
+    fun deleteSession() = boutiquesPreferences.edit().putBoolean(KEY_SESSION, false).apply()
 }

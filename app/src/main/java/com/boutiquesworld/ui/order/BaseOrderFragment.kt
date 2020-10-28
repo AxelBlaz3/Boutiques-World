@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentBaseOrderBinding
-import com.boutiquesworld.ui.fabrics.FabricProductsStateAdapter
+import com.boutiquesworld.ui.store.FabricProductsStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 

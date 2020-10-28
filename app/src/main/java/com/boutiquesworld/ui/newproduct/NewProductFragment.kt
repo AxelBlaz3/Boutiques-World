@@ -1,5 +1,6 @@
 package com.boutiquesworld.ui.newproduct
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.LayerDrawable
@@ -17,6 +18,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentNewProductBinding
+import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.boutiquesworld.util.FileUtils.copyInputStreamToFile
 import com.boutiquesworld.util.FileUtils.getExtension
 import com.google.android.material.snackbar.Snackbar
@@ -42,6 +44,9 @@ class NewProductFragment : Fragment() {
 
     @Inject
     lateinit var newProductViewModel: NewProductViewModel
+
+    @Inject
+    lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,9 +80,15 @@ class NewProductFragment : Fragment() {
             }
         }
 
-        binding.apply {
+        binding.run {
             // Setup same height and width of ImageView
-            productImage1.post { productImage1.layoutParams.height = productImage1.width }
+            productImage1.post {
+                productImage1.layoutParams.height = productImage1.width
+
+                profileViewModel.getRetailer().value?.let {
+                    isSketch = it.businessCategory == "D"
+                }
+            }
 
             // Setup adapters for category, cloth, fabric, occasion, preparation time
             productCategory.setAdapter(
@@ -119,7 +130,7 @@ class NewProductFragment : Fragment() {
             // Launch PaletteBottomSheet for picking a color.
             colorPalette.setOnClickListener {
                 findNavController().navigate(
-                    NewProductFragmentDirections.actionNewProductFragmentToBottomSheetPalette()
+                    NewProductFragmentDirections.actionNewProductFragmentToBottomSheetPalette(showColorsForJewellery = false)
                 )
             }
 
@@ -147,6 +158,11 @@ class NewProductFragment : Fragment() {
             newProductViewModel.getIsPreparationTimeEmpty().observe(viewLifecycleOwner) {
                 if (it)
                     setEmptyDropDownError(preparationTime)
+            }
+
+            newProductViewModel.getIsProductStoryEmpty().observe(viewLifecycleOwner) {
+                if (it)
+                    requestFocusForEditText(productStory)
             }
 
             newProductViewModel.getIsProductClothEmpty().observe(viewLifecycleOwner) {
@@ -222,6 +238,33 @@ class NewProductFragment : Fragment() {
                 }
             }
 
+            newProductViewModel.getIsSketchSubmissionSuccessful().observe(viewLifecycleOwner) {
+                // Enable the submit product button
+                binding.submitProduct.isEnabled = true
+                if (it) {
+                    findNavController().navigateUp()
+                    Snackbar.make(
+                        view,
+                        getString(R.string.product_submitted_successfully),
+                        Snackbar.LENGTH_LONG
+                    ).apply {
+                        Handler().postDelayed({
+                            setAnchorView(R.id.fab)
+                            show()
+                        }, 300)
+                    }
+                } else {
+                    Snackbar.make(
+                        view,
+                        getString(R.string.some_error_occured),
+                        Snackbar.LENGTH_SHORT
+                    ).apply {
+                        setAction(getString(R.string.retry)) { onSubmitButtonClick(colorName) }
+                        show()
+                    }
+                }
+            }
+
             // Image click listeners.
             productImage1.setOnClickListener { choosePhoto(requestCode = 1) }
             productImage2.setOnClickListener { choosePhoto(requestCode = 2) }
@@ -237,7 +280,7 @@ class NewProductFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == 0)
+        if (resultCode == Activity.RESULT_CANCELED)
             return
         val imageUri = data?.data
         imageUri?.let {
@@ -320,23 +363,37 @@ class NewProductFragment : Fragment() {
         binding.submitProduct.isEnabled = false
         lifecycleScope.launch {
             binding.apply {
-                newProductViewModel.submitProduct(
-                    productName = productName.text.toString(),
-                    productType = productCategory.text.toString(),
-                    productCloth = productCloth.text.toString(),
-                    productFabric = productFabric.text.toString(),
-                    productOccasion = productOccasion.text.toString(),
-                    preparationTime = preparationTime.text.toString(),
-                    productColor = colorName,
-                    productDescription = productDescription.text.toString(),
-                    startPrice = rangeSlider.values[0].toInt(),
-                    endPrice = rangeSlider.values[1].toInt(),
-                    productImage1 = imageFiles[0],
-                    productImage2 = imageFiles[1],
-                    productImage3 = imageFiles[2],
-                    productImage4 = imageFiles[3],
-                    productImage5 = imageFiles[4]
-                )
+                profileViewModel.getRetailer().value?.let {
+                    if (it.businessCategory == "B")
+                        newProductViewModel.submitProduct(
+                            productName = productName.text.toString(),
+                            productType = productCategory.text.toString(),
+                            productCloth = productCloth.text.toString(),
+                            productFabric = productFabric.text.toString(),
+                            productOccasion = productOccasion.text.toString(),
+                            preparationTime = preparationTime.text.toString(),
+                            productColor = colorName,
+                            productDescription = productDescription.text.toString(),
+                            startPrice = rangeSlider.values[0].toInt(),
+                            endPrice = rangeSlider.values[1].toInt(),
+                            productImage1 = imageFiles[0],
+                            productImage2 = imageFiles[1],
+                            productImage3 = imageFiles[2],
+                            productImage4 = imageFiles[3],
+                            productImage5 = imageFiles[4]
+                        )
+                    else // Sketch
+                        newProductViewModel.submitSketch(
+                            productName = productName.text.toString(),
+                            productDescription = productDescription.text.toString(),
+                            productStory = productStory.text.toString(),
+                            productImage1 = imageFiles[0],
+                            productImage2 = imageFiles[1],
+                            productImage3 = imageFiles[2],
+                            productImage4 = imageFiles[3],
+                            productImage5 = imageFiles[4]
+                        )
+                }
             }
         }
     }

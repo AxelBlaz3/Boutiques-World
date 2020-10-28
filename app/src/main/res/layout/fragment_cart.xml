@@ -5,19 +5,30 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="total"
             type="String" />
+
+        <variable
+            name="isCartEmpty"
+            type="Boolean" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/cart_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="@{isCartEmpty ? View.GONE : View.VISIBLE}"
+            app:paddingBottomSystemWindowInsets="@{true}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cart_recycler_view"
@@ -34,18 +45,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:visibility="@{isCartEmpty ? View.GONE : View.VISIBLE}"
             app:cardElevation="@dimen/product_description_sticky_card_elevation"
             app:shapeAppearance="@style/ShapeAppearance.BoutiquesWorld.Footer">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/grid_2">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/order_total_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
                     android:layout_marginEnd="@dimen/grid_2"
                     android:text="@string/total"
                     android:textAppearance="?textAppearanceCaption"
@@ -57,7 +69,7 @@
                     android:id="@+id/order_total"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_1"
+                    android:layout_marginStart="@dimen/grid_2"
                     android:layout_marginEnd="@dimen/grid_2"
                     android:text="@{total}"
                     android:textAppearance="?textAppearanceHeadline6"
@@ -69,21 +81,53 @@
                     app:layout_constraintTop_toBottomOf="@+id/order_total_text"
                     tools:text="₹900.00" />
 
-                <com.google.android.material.button.MaterialButton
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/cart_checkout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/grid_2"
                     android:layout_marginStart="@dimen/grid_2"
+                    android:gravity="center"
                     android:text="@string/checkout"
-                    android:textAllCaps="false"
-                    android:textAppearance="?textAppearanceBody2"
-                    android:textColor="?colorOnSecondary"
-                    app:backgroundTint="?colorSecondary"
+                    android:textAppearance="?textAppearanceButton"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/order_total"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/empty_cart_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{isCartEmpty ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="144dp"
+                android:layout_height="144dp"
+                android:src="@drawable/ic_empty_cart" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_2"
+                android:gravity="center"
+                android:text="Start adding"
+                android:textAppearance="?textAppearanceSubtitle1"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_1"
+                android:gravity="center"
+                android:text="Products added from store are visible here"
+                android:textAppearance="?textAppearanceCaption" />
+        </LinearLayout>
     </FrameLayout>
 </layout>

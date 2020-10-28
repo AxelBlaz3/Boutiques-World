@@ -26,4 +26,10 @@ interface OrderDao {
      */
     @Query("DELETE FROM `Order`")
     fun truncateOrders(): Int
+
+    /**
+     * Truncate OrderAddress table.
+     */
+    @Query("DELETE FROM OrderAddress")
+    fun truncateOrderAddress(): Int
 }

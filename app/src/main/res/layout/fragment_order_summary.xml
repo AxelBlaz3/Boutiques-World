@@ -12,7 +12,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -54,7 +56,7 @@
                     android:layout_marginTop="@dimen/grid_2"
                     android:text="@string/order_summary"
                     android:textAppearance="?textAppearanceHeadline6"
-                    app:layout_constraintTop_toBottomOf="@+id/summary_product_recycler_view"
+                    app:layout_constraintTop_toBottomOf="@+id/view4"
                     tools:layout_editor_absoluteX="16dp" />
 
                 <TextView
@@ -63,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/grid_2"
                     android:text="@string/order_total"
+                    android:textAppearance="?textAppearanceSubtitle2"
                     app:layout_constraintBottom_toBottomOf="@+id/summary_order_total"
                     app:layout_constraintEnd_toStartOf="@+id/summary_order_total"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -77,6 +80,7 @@
                     android:layout_marginEnd="@dimen/grid_2"
                     android:gravity="end"
                     android:textAppearance="?textAppearanceSubtitle2"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/summary_order_total_text"
@@ -89,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/grid_2"
                     android:text="@string/delivery_charges"
+                    android:textAppearance="?textAppearanceSubtitle2"
                     app:layout_constraintBottom_toBottomOf="@+id/summary_delivery_charges"
                     app:layout_constraintEnd_toStartOf="@+id/summary_order_total"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -99,11 +104,12 @@
                     android:id="@+id/summary_delivery_charges"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginEnd="@dimen/grid_2"
                     android:gravity="end"
                     android:text="₹100"
                     android:textAppearance="?textAppearanceSubtitle2"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/summary_order_total_text"
@@ -118,18 +124,37 @@
                     android:layout_marginTop="@dimen/grid_2"
                     android:text="@string/address"
                     android:textAppearance="?textAppearanceHeadline6"
-                    app:layout_constraintTop_toBottomOf="@+id/summary_delivery_charges_text" />
+                    app:layout_constraintTop_toBottomOf="@+id/view5" />
 
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_height="1dp"
+                    app:layout_goneMarginTop="@dimen/grid_2"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:background="?colorControlHighlight"
+                    app:layout_constraintTop_toBottomOf="@id/summary_delivery_charges"
+                    tools:layout_editor_absoluteX="16dp" />
+
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:background="?colorControlHighlight"
+                    app:layout_constraintTop_toBottomOf="@id/summary_product_recycler_view"
+                    tools:layout_editor_absoluteX="16dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/grid_2"
-                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginBottom="@dimen/grid_2"
                     android:text="@{@string/address_description(address.flat, address.area, address.landmark, address.city, address.state, address.pincode)}"
+                    android:textAppearance="?textAppearanceBody2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/summary_address_title"
-                    tools:layout_editor_absoluteX="16dp"
                     tools:text="61 /, Aram Ngr,  Bunglows, Andheri (w), Mumbai, Maharashtra, 400061." />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

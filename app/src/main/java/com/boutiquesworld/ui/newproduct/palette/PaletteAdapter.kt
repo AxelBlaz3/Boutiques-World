@@ -1,5 +1,7 @@
 package com.boutiquesworld.ui.newproduct.palette
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

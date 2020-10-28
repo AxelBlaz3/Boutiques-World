@@ -11,11 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.boutiquesworld.R
 import com.boutiquesworld.databinding.FragmentAddressBinding
+import com.boutiquesworld.ui.MainActivity
 import com.boutiquesworld.ui.cart.CartViewModel
 import com.boutiquesworld.ui.profile.ProfileViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.address_item.view.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -71,11 +73,13 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
                 addressAdapter.submitList(it)
                 if (it.isEmpty()) {
                     addressRecyclerView.visibility = View.GONE
-                    addNewAddress.visibility = View.GONE
+                    (requireActivity() as MainActivity).toolbar?.menu?.findItem(R.id.add_address)?.isVisible = false
                     addressForm.visibility = View.VISIBLE
+                    addressProceed.visibility = View.GONE
                 } else {
                     addressForm.visibility = View.GONE
-                    addNewAddress.visibility = View.VISIBLE
+                    addressProceed.visibility = View.VISIBLE
+                    (requireActivity() as MainActivity).toolbar?.menu?.findItem(R.id.add_address)?.isVisible = true
                     addressRecyclerView.visibility = View.VISIBLE
                 }
             }
@@ -116,7 +120,8 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
                 isPosted?.let {
                     if (it) {
                         addressForm.visibility = View.GONE
-                        addNewAddress.visibility = View.VISIBLE
+                        addressProceed.visibility = View.VISIBLE
+                        (requireActivity() as MainActivity).toolbar?.menu?.findItem(R.id.add_address)?.isVisible = true
                         addressRecyclerView.visibility = View.VISIBLE
                         resetAddressFields()
                         addressViewModel.updateAddressList(
@@ -136,24 +141,45 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
                 }
             }
             submitAddress.setOnClickListener { onSubmitButtonClick() }
-            addNewAddress.setOnClickListener {
+
+            (requireActivity() as MainActivity).toolbar?.menu?.findItem(R.id.add_address)?.setOnMenuItemClickListener {
+                it.isVisible = false
+                addressRecyclerView.visibility = View.GONE
+                addressForm.visibility = View.VISIBLE
+                addressProceed.visibility = View.GONE
+                return@setOnMenuItemClickListener true
+            }
+
+            /*addNewAddress.setOnClickListener {
+                (requireActivity() as MainActivity).toolbar?.menu?.findItem(R.id.add_address)?.isVisible = false
                 it.visibility = View.GONE
                 addressRecyclerView.visibility = View.GONE
                 addressForm.visibility = View.VISIBLE
-            }
+                addressProceed.visibility = View.GONE
+            }*/
             addressProceed.setOnClickListener {
-                addressViewModel.genRazorPayOrderId(orderId, cartViewModel.cartTotal)
+                addressViewModel.getAddressList().value?.let {
+                    if (it.isNotEmpty())
+                        addressViewModel.genRazorPayOrderId(
+                            cartViewModel.orderId,
+                            cartViewModel.cartTotal,
+                            it[addressSelectionIndices[0]].copy(orderId = cartViewModel.orderId)
+                        )
+                }
             }
 
             addressViewModel.getRazorPayOrderId().observe(viewLifecycleOwner) {
-                if (it.isNotEmpty()) {
-                    addressViewModel.resetRazorPayOrderId()
-                    findNavController().navigate(
-                        AddressFragmentDirections.actionAddressFragmentToOrderSummaryFragment(
-                            razorPayOrderId = it,
-                            selectedAddressIndex = addressSelectionIndices[0]
+                addressViewModel.getIsOrderAddressPosted().value?.let { isOrderAddressPosted ->
+                    if (it.isNotEmpty() && isOrderAddressPosted) {
+                        addressViewModel.resetRazorPayOrderId()
+                        findNavController().navigate(
+                            AddressFragmentDirections.actionAddressFragmentToOrderSummaryFragment(
+                                razorPayOrderId = it,
+                                selectedAddressIndex = addressSelectionIndices[0]
+                            )
                         )
-                    )
+                        addressViewModel.resetIsOrderAddressPosted()
+                    }
                 }
             }
         }
@@ -173,7 +199,7 @@ class AddressFragment : Fragment(), AddressAdapter.AddressAdapterListener {
                     addressTown.text.toString(),
                     addressState.text.toString(),
                     userId,
-                    orderId
+                    cartViewModel.orderId
                 )
             }
         }
