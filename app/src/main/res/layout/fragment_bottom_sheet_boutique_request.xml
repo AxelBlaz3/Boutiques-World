@@ -5,14 +5,25 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="request"
-            type="com.boutiquesworld.model.BoutiqueRequest" />
+            type="in.trendition.model.BoutiqueRequest" />
+
+        <variable
+            name="preparationTimeResponse"
+            type="kotlin.Pair&lt;String, String>" />
+
+        <variable
+            name="priceResponse"
+            type="kotlin.Pair&lt;String, String>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/design_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:paddingBottomSystemWindowInsets="@{true}">
 
         <TextView
@@ -33,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/request_detail_illustration"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_round_close" />
@@ -43,6 +55,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="@dimen/grid_2"
             app:glideSrc="@{request.upload}"
+            app:layout_constraintBottom_toTopOf="@+id/request_title"
             app:layout_constraintTop_toBottomOf="@+id/request_sheet_close" />
 
         <TextView
@@ -55,7 +68,9 @@
             android:text="@{request.typeOfDress}"
             android:textAppearance="?textAppearanceSubtitle1"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/request_desc"
             app:layout_constraintTop_toBottomOf="@+id/request_detail_illustration"
+            tools:layout_editor_absoluteX="16dp"
             tools:text="Lehenga" />
 
         <TextView
@@ -67,25 +82,78 @@
             android:gravity="center"
             android:text="@{request.message}"
             android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintBottom_toTopOf="@+id/view_line"
             app:layout_constraintTop_toBottomOf="@+id/request_title"
             tools:layout_editor_absoluteX="16dp"
             tools:text="Let the user know how long it takes to prepare the lehenga along with it\'s price." />
 
+        <View
+            android:id="@+id/view_line"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/grid_2"
+            android:visibility="@{request.requestStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@id/request_desc"
+            app:layout_constraintBottom_toTopOf="@id/your_response_text"
+            android:background="?colorControlHighlight" />
+
+        <TextView
+            android:id="@+id/your_response_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:text="Your response"
+            android:gravity="center"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textStyle="bold"
+            android:visibility="@{request.requestStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/response_preparation_time"
+            app:layout_constraintTop_toBottomOf="@+id/view_line"
+            tools:layout_editor_absoluteX="16dp"
+            tools:text="Your response" />
+
+        <include
+            android:id="@+id/response_preparation_time"
+            layout="@layout/specification_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:visibility="@{request.requestStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/response_price"
+            app:layout_constraintTop_toBottomOf="@id/your_response_text"
+            app:specification="@{preparationTimeResponse}" />
+
+        <include
+            android:id="@+id/response_price"
+            layout="@layout/specification_item"
+            android:layout_width="match_parent"
+            app:layout_goneMarginBottom="@dimen/grid_2"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:visibility="@{request.requestStatus == 1 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/preparation_time_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@id/response_preparation_time"
+            app:specification="@{priceResponse}" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/preparation_time_text_input_layout"
-            style="@style/Widget.Boutiques.TextInputLayout.DropDown"
+            style="@style/Widget.Boutiques.TextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/grid_2"
             android:layout_marginTop="@dimen/grid_2"
-            android:enabled="@{request.requestStatus == 0}"
-            app:layout_constraintBottom_toBottomOf="@+id/price_text_input_layout"
+            android:visibility="@{request.requestStatus == 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/cancel_response"
             app:layout_constraintEnd_toStartOf="@+id/price_text_input_layout"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/request_desc">
+            app:layout_constraintTop_toBottomOf="@+id/response_price"
+            app:layout_goneMarginBottom="@dimen/grid_2">
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/preparation_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -102,12 +170,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/grid_2"
-            android:layout_marginTop="@dimen/grid_2"
-            android:enabled="@{request.requestStatus == 0}"
+            android:visibility="@{request.requestStatus == 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/preparation_time_text_input_layout"
-            app:layout_constraintTop_toBottomOf="@+id/request_desc">
+            app:layout_constraintTop_toTopOf="@+id/preparation_time_text_input_layout"
+            app:layout_goneMarginBottom="@dimen/grid_2">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/price"
@@ -122,16 +190,38 @@
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/submit_response"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/grid_2"
-            android:layout_marginTop="@dimen/grid_3"
-            android:layout_marginBottom="@dimen/grid_2"
             android:enabled="@{request.requestStatus == 0}"
             android:gravity="center"
             android:text="@{request.requestStatus == 0 ? @string/submit : @string/already_posted}"
+            android:visibility="@{request.requestStatus == 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/cancel_response"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cancel_response"
+            app:layout_constraintTop_toTopOf="@+id/cancel_response"
+            tools:text="Submit"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_response"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:layout_marginBottom="@dimen/grid_2"
+            android:text="@string/ignore"
+            android:textColor="?colorSecondary"
+            android:visibility="@{request.requestStatus == 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price_text_input_layout"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintEnd_toStartOf="@+id/submit_response"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/preparation_time_text_input_layout"
+            app:rippleColor="?colorControlHighlight"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,7 +7,7 @@
 
         <variable
             name="address"
-            type="com.boutiquesworld.model.Address" />
+            type="in.trendition.model.Address" />
 
         <variable
             name="position"
@@ -15,7 +15,7 @@
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.address.AddressAdapter.AddressAdapterListener" />
+            type="in.trendition.ui.address.AddressAdapter.AddressAdapterListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

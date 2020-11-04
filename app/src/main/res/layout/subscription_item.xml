@@ -7,7 +7,7 @@
 
         <variable
             name="subscription"
-            type="com.boutiquesworld.model.Subscription" />
+            type="in.trendition.model.Subscription" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -28,7 +28,7 @@
                 android:id="@+id/subscription_item_plan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Starter plan"
+                android:text="Beginner Plan"
                 android:textAppearance="?textAppearanceSubtitle1"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"

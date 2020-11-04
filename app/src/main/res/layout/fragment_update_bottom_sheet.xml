@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isDownloading"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/update_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:gravity="center"
+            android:text="@{isDownloading ? @string/update_title_download_in_progress : @string/update_title}"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/update_summary"
+            app:layout_constraintTop_toBottomOf="@+id/update_progress"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_goneMarginTop="@dimen/grid_2"
+            tools:layout_editor_absoluteX="16dp"
+            tools:text="New update available" />
+
+        <ImageView
+            android:id="@+id/update_illustration"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_3"
+            android:src="@drawable/ic_notify_update"
+            app:layout_constraintBottom_toTopOf="@+id/update_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.progressindicator.ProgressIndicator
+            android:id="@+id/update_progress"
+            style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:visibility="@{isDownloading ? View.VISIBLE : View.GONE}"
+            app:indicatorColor="?colorSecondary"
+            app:indicatorCornerRadius="@dimen/grid_2"
+            app:layout_constraintBottom_toTopOf="@+id/update_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_illustration"
+            tools:progress="75"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/update_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_1"
+            android:gravity="center"
+            android:text="@{isDownloading ? @string/update_summary_downloading : @string/update_summary}"
+            android:textAppearance="?textAppearanceCaption"
+            app:layout_constraintBottom_toTopOf="@+id/update_action"
+            app:layout_constraintTop_toBottomOf="@+id/update_title"
+            tools:layout_editor_absoluteX="16dp"
+            tools:text="@string/update_summary" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/update_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:layout_marginBottom="@dimen/grid_3"
+            android:gravity="center"
+            android:text="Install"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_summary"
+            tools:layout_editor_absoluteX="16dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

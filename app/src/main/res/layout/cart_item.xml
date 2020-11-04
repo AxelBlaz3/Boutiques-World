@@ -13,11 +13,11 @@
 
         <variable
             name="cart"
-            type="com.boutiquesworld.model.Cart" />
+            type="in.trendition.model.Cart" />
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.cart.CartAdapter.CartAdapterListener" />
+            type="in.trendition.ui.cart.CartAdapter.CartAdapterListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -61,7 +61,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="?shapeAppearanceMediumComponent"
-                tools:src="@drawable/thumb" />
+                tools:src="@mipmap/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/cart_product_price"
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/grid_2"
                 android:layout_marginEnd="@dimen/grid_2"
-                android:text="@{@string/product_price(cart.productPrice)}"
+                android:text="@{@string/product_price(String.valueOf(Integer.valueOf(cart.productPrice) * cart.quantity))}"
                 android:textAppearance="?textAppearanceSubtitle1"
                 android:textColor="?colorSecondary"
                 android:textStyle="bold"
@@ -104,15 +104,15 @@
                 app:strokeWidth="1dp">
 
                 <ImageButton
-                    android:id="@+id/add"
+                    android:id="@+id/remove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{() -> listener.onPlusClicked(cart)}"
+                    android:onClick="@{() -> listener.onMinusClicked(cart, cartQuantity, cartProductPrice)}"
                     android:padding="@dimen/grid_0_5"
-                    app:srcCompat="@drawable/ic_round_add" />
+                    app:srcCompat="@drawable/ic_round_remove" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -140,15 +140,15 @@
                 app:strokeWidth="1dp">
 
                 <ImageButton
-                    android:id="@+id/remove"
+                    android:id="@+id/add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackground"
+                    android:onClick="@{() -> listener.onPlusClicked(cart, cartQuantity, cartProductPrice)}"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{() -> listener.onMinusClicked(cart)}"
                     android:padding="@dimen/grid_0_5"
-                    app:srcCompat="@drawable/ic_round_remove" />
+                    app:srcCompat="@drawable/ic_round_add" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

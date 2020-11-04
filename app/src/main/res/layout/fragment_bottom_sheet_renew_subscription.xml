@@ -9,7 +9,7 @@
 
         <variable
             name="subscriptionPlan"
-            type="com.boutiquesworld.model.SubscriptionPlan" />
+            type="in.trendition.model.SubscriptionPlan" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

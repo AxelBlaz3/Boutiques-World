@@ -17,7 +17,7 @@
 
         <variable
             name="retailer"
-            type="com.boutiquesworld.model.Retailer" />
+            type="in.trendition.model.Retailer" />
 
         <variable
             name="showMoreVisibility"
@@ -80,7 +80,6 @@
                 android:layout_marginHorizontal="@dimen/grid_3"
                 android:layout_marginTop="@dimen/grid_3"
                 android:background="?colorControlHighlight"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView4" />
@@ -92,9 +91,8 @@
                 android:layout_marginTop="@dimen/grid_2"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="An artist of considerable range, Connors name taken as a placeholder for retailer name. An artist of considerable range, Connors name taken as a placeholder for retailer name."
+                android:text="@{retailer.designerInfo}"
                 android:textAppearance="?textAppearanceBody2"
-                android:visibility='@{isBoutique ? View.VISIBLE : View.GONE}'
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/view"
@@ -108,7 +106,7 @@
                 android:text="@string/show_more"
                 android:textAllCaps="false"
                 android:textColor="?colorSecondary"
-                android:visibility='@{isBoutique ? (showMoreVisibility ? View.VISIBLE : View.GONE) : View.GONE}'
+                android:visibility='@{showMoreVisibility ? View.VISIBLE : View.GONE}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description"

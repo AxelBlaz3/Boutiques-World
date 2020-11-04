@@ -9,15 +9,15 @@
 
         <variable
             name="payment"
-            type="com.boutiquesworld.model.Payment" />
+            type="in.trendition.model.Payment" />
 
         <variable
             name="order"
-            type="com.boutiquesworld.model.Order" />
+            type="in.trendition.model.Order" />
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.order.OrderAdapter.OrderAdapterListener" />
+            type="in.trendition.ui.order.OrderAdapter.OrderAdapterListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -39,11 +39,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> listener.onOrderActionClicked(order)}"
-                android:text="@{order.orderStatus == 0 ? @string/confirm : (order.orderStatus == 1 ? @string/dispatch : ``)}"
+                android:text="@{order.orderStatus == 0 ? @string/confirm : (order.orderStatus == 1 ? @string/dispatch : (order.orderStatus == 2 ? @string/dispatched : (order.orderStatus == 3 ? @string/in_transit : (order.orderStatus == 4 ? @string/out_for_delivery : (order.orderStatus == 5 ? @string/delivered : @string/cancelled)))))}"
                 android:textAllCaps="false"
                 android:textAppearance="?textAppearanceButton"
+                android:enabled="@{order.orderStatus == 0 || order.orderStatus == 1}"
                 android:textColor="?colorSecondary"
-                android:visibility="@{order != null ? (order.orderStatus > 1 ? View.GONE : View.VISIBLE) : View.GONE}"
+                android:visibility="@{order != null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/order_product_desc"
@@ -62,7 +63,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="?shapeAppearanceMediumComponent"
-                tools:src="@drawable/thumb" />
+                tools:src="@mipmap/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/order_product_price"

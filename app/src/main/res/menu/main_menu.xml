@@ -18,7 +18,7 @@
         android:id="@+id/myOrdersFragment"
         android:icon="@drawable/ic_baseline_collections_bookmark"
         android:title="@string/my_orders"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/subscriptionFragment"
         android:icon="@drawable/ic_round_account_balance_wallet"

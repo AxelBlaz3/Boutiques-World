@@ -11,7 +11,7 @@
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.product.ProductSizeAdapter.ProductSizeAdapterListener" />
+            type="in.trendition.ui.product.ProductSizeAdapter.ProductSizeAdapterListener" />
     </data>
 
     <com.google.android.material.button.MaterialButton

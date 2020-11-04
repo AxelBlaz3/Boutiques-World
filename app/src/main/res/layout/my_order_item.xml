@@ -9,11 +9,11 @@
 
         <variable
             name="order"
-            type="com.boutiquesworld.model.Order" />
+            type="in.trendition.model.Order" />
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.order.OrderAdapter.OrderAdapterListener" />
+            type="in.trendition.ui.order.OrderAdapter.OrderAdapterListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -42,7 +42,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="?shapeAppearanceMediumComponent"
-                tools:src="@drawable/thumb" />
+                tools:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/order_product_price"

@@ -7,11 +7,11 @@
 
         <variable
             name="cart"
-            type="com.boutiquesworld.model.Cart" />
+            type="in.trendition.model.Cart" />
 
         <variable
             name="orderItem"
-            type="com.boutiquesworld.model.Order" />
+            type="in.trendition.model.Order" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cart_product_title"
             app:shapeAppearance="?shapeAppearanceMediumComponent"
-            tools:src="@drawable/thumb" />
+            tools:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/cart_product_price"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/grid_1"
             android:layout_marginHorizontal="@dimen/grid_2"
-            android:text="@{cart != null ? @string/product_price(cart.productPrice) : @string/product_price(orderItem.productPrice)}"
+            android:text="@{cart != null ? @string/product_price(String.valueOf(Integer.valueOf(cart.productPrice) * cart.quantity)) : @string/product_price(String.valueOf(Integer.valueOf(orderItem.productPrice) * orderItem.quantity))}"
             android:textAppearance="?textAppearanceSubtitle2"
             android:textStyle="bold"
             android:textColor="?colorSecondary"

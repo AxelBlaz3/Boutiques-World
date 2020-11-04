@@ -9,7 +9,7 @@
 
         <variable
             name="order"
-            type="com.boutiquesworld.model.Order" />
+            type="in.trendition.model.Order" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,7 +47,7 @@
             android:layout_marginTop="@dimen/grid_2"
             app:glideSrc="@{order.productImage}"
             app:layout_constraintTop_toBottomOf="@+id/order_sheet_close"
-            tools:srcCompat="@drawable/thumb" />
+            tools:srcCompat="@mipmap/ic_launcher_round" />
 
         <TextView
             android:id="@+id/order_title"
@@ -107,21 +107,23 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/estimated_date"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/grid_2"
             android:textAllCaps="false"
             android:textAppearance="?textAppearanceButton"
+            android:hint="@string/estimated_date"
             android:textColor="?colorControlNormal"
             android:visibility="@{order.orderStatus == 1 ? View.VISIBLE : View.GONE}"
             app:icon="@drawable/ic_round_event"
+            app:iconGravity="start"
             app:iconTint="?colorControlNormal"
             app:layout_constraintBottom_toBottomOf="@+id/courier_name_text_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/courier_name_text_input_layout"
             app:layout_constraintTop_toTopOf="@+id/courier_name_text_input_layout"
             app:rippleColor="?colorControlHighlight"
-            tools:text="25 Oct, 2020" />
+            tools:hint="@string/estimated_date" />
 
         <TextView
             android:id="@+id/order_desc"

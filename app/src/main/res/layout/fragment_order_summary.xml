@@ -7,7 +7,7 @@
 
         <variable
             name="address"
-            type="com.boutiquesworld.model.Address" />
+            type="in.trendition.model.Address" />
     </data>
 
     <FrameLayout
@@ -107,7 +107,7 @@
                     android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginEnd="@dimen/grid_2"
                     android:gravity="end"
-                    android:text="₹100"
+                    android:text="₹99"
                     android:textAppearance="?textAppearanceSubtitle2"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"

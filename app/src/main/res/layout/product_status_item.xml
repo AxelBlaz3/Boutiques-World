@@ -9,7 +9,7 @@
 
         <variable
             name="store"
-            type="com.boutiquesworld.model.BaseProduct.Store" />
+            type="in.trendition.model.BaseProduct.Store" />
 
         <variable
             name="position"
@@ -17,7 +17,7 @@
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.store.ProductStatusAdapter.ProductStatusAdapterListener" />
+            type="in.trendition.ui.store.ProductStatusAdapter.ProductStatusAdapterListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -45,7 +45,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="?shapeAppearanceMediumComponent"
-                tools:src="@drawable/thumb" />
+                tools:src="@mipmap/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -95,13 +95,13 @@
                 app:strokeWidth="1dp">
 
                 <ImageButton
-                    android:id="@+id/add"
+                    android:id="@+id/remove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?actionBarItemBackground"
-                    android:onClick="@{() -> listener.onPlusClicked(productQuantity)}"
+                    android:onClick="@{() -> listener.onMinusClicked(productQuantity)}"
                     android:padding="@dimen/grid_0_5"
-                    app:srcCompat="@drawable/ic_round_add" />
+                    app:srcCompat="@drawable/ic_round_remove" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -129,13 +129,13 @@
                 app:strokeWidth="1dp">
 
                 <ImageButton
-                    android:id="@+id/remove"
+                    android:id="@+id/add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?actionBarItemBackground"
-                    android:onClick="@{() -> listener.onMinusClicked(productQuantity)}"
+                    android:onClick="@{() -> listener.onPlusClicked(productQuantity)}"
                     android:padding="@dimen/grid_0_5"
-                    app:srcCompat="@drawable/ic_round_remove" />
+                    app:srcCompat="@drawable/ic_round_add" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

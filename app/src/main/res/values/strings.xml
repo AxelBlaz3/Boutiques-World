@@ -47,7 +47,8 @@
     <string name="price_range">Price range</string>
     <string name="submit">Submit</string>
     <string name="new_product_image_desc">You can upload at most 5 images. Make sure to capture all the sides for best experience.</string>
-    <string name="empty_start_price">Start price cannot be ₹0</string>
+    <string name="empty_start_price">Start price cannot be empty</string>
+    <string name="empty_end_price">End price cannot be empty</string>
     <string name="choose_a_color">Pick a color for your product</string>
     <string name="min_image_upload_error">Upload at least 2 images</string>
     <string name="product_submitted_successfully">Success! You can now check pending status.</string>
@@ -74,7 +75,9 @@
     </string-array>
 
     <string-array name="store_fabrics_design_array">
-        <item>Kalam kari</item>
+        <item>Raw Silk</item>
+        <item>Cotton</item>
+        <item>Kalamkari</item>
         <item>Apatani</item>
         <item>Muga</item>
         <item>Bhagalpuri</item>
@@ -98,6 +101,13 @@
         <item>Banarasi</item>
         <item>Dabu</item>
         <item>Patola</item>
+    </string-array>
+
+    <string-array name="boutique_category_type_array">
+        <item>Churidar</item>
+        <item>Dresses</item>
+        <item>Kurtas</item>
+        <item>Lehenga Choli</item>
     </string-array>
 
     <string-array name="store_fabrics_cloth_array">
@@ -303,7 +313,7 @@
     <string name="received">Received</string>
     <string name="confirmed">Confirmed</string>
     <string name="dispatched">Dispatched</string>
-    <string name="in_progress">In progress</string>
+    <string name="in_progress">In Progress</string>
     <string name="in_transit">In transit</string>
     <string name="out_for_delivery">Out for delivery</string>
     <string name="delivered">Delivered</string>
@@ -327,7 +337,7 @@
 
     <!-- Boutique request -->
     <string name="preparation_time">Preparation time</string>
-    <string name="boutique_request_title">New %1$s request</string>
+    <string name="boutique_request_title">%1$s</string>
     <string name="boutique_request_summary">Let the user know how long it takes to prepare the %1$s along with it\'s price.</string>
     <string name="already_posted">Already submitted</string>
     <string name="requests">Requests</string>
@@ -368,4 +378,23 @@
     <string name="total_revenue">Total revenue</string>
     <string name="order_tracking">Order Tracking</string>
     <string name="estimated_delivery_by">Estimated delivery - %1$s</string>
+    <string name="payment_waiting_summary">Waiting for payment confirmation</string>
+    <string name="payment_waiting_title">Payment processing</string>
+    <string name="notif_new_request_message">You\'ve received a new request</string>
+    <string name="notif_new_order_message">You\'ve received a new order</string>
+    <string name="ignore">Ignore</string>
+    <string name="delivery_details">Delivery Details</string>
+    <string name="specialization">Specialization</string>
+    <string name="zone">Zone</string>
+    <string name="timings">Timings</string>
+    <string name="end_price">End price</string>
+    <string name="start_price">Start price</string>
+    <string name="max_quantity_snackbar">Max quantity available is %1$d</string>
+    <string name="min_quantity_snackbar">Min quantity available is %1$d</string>
+
+    <!-- Update -->
+    <string name="update_title">New update available</string>
+    <string name="update_title_download_in_progress">Download in progress</string>
+    <string name="update_summary_downloading">Your update is being downloaded. Meanwhile, have a cup of coffee.</string>
+    <string name="update_summary">Update your app to get the latest features and stable experience with Trendition.</string>
 </resources>

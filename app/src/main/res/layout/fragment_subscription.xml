@@ -9,11 +9,11 @@
 
         <variable
             name="subscription"
-            type="com.boutiquesworld.model.Subscription" />
+            type="in.trendition.model.Subscription" />
 
         <variable
             name="subscriptionPlan"
-            type="com.boutiquesworld.model.SubscriptionPlan" />
+            type="in.trendition.model.SubscriptionPlan" />
 
         <variable
             name="isActive"

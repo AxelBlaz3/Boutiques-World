@@ -9,31 +9,35 @@
 
         <variable
             name="fabric"
-            type="com.boutiquesworld.model.StoreCategory.Fabric" />
+            type="in.trendition.model.StoreCategory.Fabric" />
 
         <variable
             name="cloth"
-            type="com.boutiquesworld.model.StoreCategory.Cloth" />
+            type="in.trendition.model.StoreCategory.Cloth" />
 
         <variable
             name="dressMaterial"
-            type="com.boutiquesworld.model.StoreCategory.DressMaterial" />
+            type="in.trendition.model.StoreCategory.DressMaterial" />
 
         <variable
             name="jewellery"
-            type="com.boutiquesworld.model.StoreCategory.Jewellery" />
+            type="in.trendition.model.StoreCategory.Jewellery" />
 
         <variable
             name="product"
-            type="com.boutiquesworld.model.BaseProduct.Product" />
+            type="in.trendition.model.BaseProduct.Product" />
 
         <variable
             name="sketch"
-            type="com.boutiquesworld.model.BaseProduct.Sketch" />
+            type="in.trendition.model.BaseProduct.Sketch" />
 
         <variable
             name="hexColor"
             type="String" />
+
+        <variable
+            name="shouldHide"
+            type="Boolean" />
     </data>
 
     <FrameLayout
@@ -52,7 +56,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true">
+                android:animateLayoutChanges="true"
+                android:paddingBottom="96dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/detail_image_recycler_view"
@@ -96,9 +101,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/grid_2"
-                    android:fontFamily="@font/lato_bold"
                     android:text="@{product != null ? @string/product_price(product.startPrice) + ` - ` + @string/product_price(product.endPrice) : (fabric != null ? @string/product_price(fabric.productPrice) : (cloth != null ? @string/product_price(cloth.productPrice) : (dressMaterial != null ? @string/product_price(dressMaterial.productPrice) : (jewellery != null ? @string/product_price(jewellery.productPrice) : ``))))}"
                     android:textAppearance="?textAppearanceSubtitle1"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/product_title"
                     tools:text="₹500" />
@@ -115,6 +120,29 @@
                     android:textAppearance="?textAppearanceBody2"
                     app:layout_constraintTop_toBottomOf="@+id/product_title"
                     tools:layout_editor_absoluteX="16dp" />
+
+                <TextView
+                    android:id="@+id/design_inspiration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:text="Design Inspiration"
+                    android:textAppearance="?textAppearanceSubtitle1"
+                    android:textStyle="bold"
+                    android:visibility="@{sketch != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintTop_toBottomOf="@id/product_description" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:text="@{sketch != null ? sketch.productStory : ``}"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:visibility="@{sketch != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintTop_toBottomOf="@id/design_inspiration"
+                    tools:text="Some inspiration story that led forth this design." />
 
                 <View
                     android:layout_width="match_parent"
@@ -165,22 +193,20 @@
                     app:layout_constraintTop_toTopOf="@+id/product_color"
                     tools:text="Purple" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/size"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="@dimen/grid_2"
-                    android:background="?selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_round_keyboard_arrow_down"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="@dimen/grid_1_5"
-                    android:paddingStart="@dimen/grid_2"
-                    android:textAppearance="?textAppearanceSubtitle1"
-                    android:textStyle="bold"
-                    android:visibility="@{cloth == null ? View.GONE : View.VISIBLE}"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginEnd="@dimen/grid_1"
+                    android:textAppearance="?textAppearanceButton"
+                    android:textColor="?colorOnPrimary"
+                    android:visibility="@{cloth == null ? View.GONE : (cloth.productType == `Dupatta` || cloth.productType == `Sarees` || cloth.productType == `Shawl/Stoles` ? View.GONE : View.VISIBLE)}"
+                    app:icon="@drawable/ic_round_keyboard_arrow_down"
+                    app:iconGravity="end"
+                    app:iconTint="?colorOnPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/product_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/product_color_text"
@@ -215,6 +241,7 @@
                     app:iconGravity="end"
                     app:iconTint="?android:textColorPrimary"
                     app:layout_constraintTop_toBottomOf="@+id/product_color"
+                    app:rippleColor="?colorControlHighlight"
                     tools:layout_editor_absoluteX="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -223,19 +250,96 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/grid_2"
                     android:orientation="vertical"
-                    android:paddingBottom="96dp"
-                    android:visibility="gone"
+                    android:visibility="@{product != null ? View.VISIBLE : View.GONE}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/product_details_title"
                     tools:listitem="@layout/specification_item" />
 
                 <View
+                    android:id="@+id/view8"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="@dimen/grid_2"
                     android:background="?colorControlHighlight"
                     android:visibility="@{sketch != null ? View.GONE : View.VISIBLE}"
-                    app:layout_constraintTop_toBottomOf="@id/specifications_recycler_view" />
+                    app:layout_constraintTop_toBottomOf="@id/specifications_recycler_view"
+                    tools:layout_editor_absoluteX="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/delivery_details_title"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/grid_2"
+                    android:paddingVertical="@dimen/grid_1"
+                    android:text="@string/delivery_details"
+                    android:textAppearance="?textAppearanceButton"
+                    android:textColor="?android:textColorPrimary"
+                    android:visibility="@{sketch != null || product != null ? View.GONE : View.VISIBLE}"
+                    app:icon="@drawable/ic_round_keyboard_arrow_down"
+                    app:iconGravity="end"
+                    app:iconTint="?android:textColorPrimary"
+                    app:layout_constraintTop_toBottomOf="@+id/view8"
+                    app:rippleColor="?colorControlHighlight"
+                    tools:layout_editor_absoluteX="16dp" />
+
+                <View
+                    android:id="@+id/view9"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:background="?colorControlHighlight"
+                    android:visibility="@{sketch != null || product != null ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintTop_toBottomOf="@+id/delivery_details_4"
+                    app:layout_goneMarginTop="0dp"
+                    tools:layout_editor_absoluteX="16dp" />
+
+                <TextView
+                    android:id="@+id/delivery_details_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:text="• Free delivery on orders above Rs. 1499 /-"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:visibility="@{product != null || sketch != null ? View.GONE : (shouldHide ? View.GONE : View.VISIBLE)}"
+                    app:layout_constraintTop_toBottomOf="@id/delivery_details_title" />
+
+                <TextView
+                    android:id="@+id/delivery_details_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:text="@{`• ` + (fabric != null ? @string/estimated_delivery_by(fabric.deliveryTime) : (cloth != null ? @string/estimated_delivery_by(cloth.deliveryTime) : (dressMaterial != null ? @string/estimated_delivery_by(dressMaterial.deliveryTime) : (jewellery != null ? @string/estimated_delivery_by(jewellery.deliveryTime) : ``))))}"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:visibility="@{product != null || sketch != null ? View.GONE : (shouldHide ? View.GONE : View.VISIBLE)}"
+                    app:layout_constraintTop_toBottomOf="@id/delivery_details_1"
+                    tools:text="• Estimated delivery - 24 Dec, 2020" />
+
+                <TextView
+                    android:id="@+id/delivery_details_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:text="• This product is not eligible for COD."
+                    android:textAppearance="?textAppearanceBody2"
+                    android:visibility="@{product != null || sketch != null ? View.GONE : (shouldHide ? View.GONE : View.VISIBLE)}"
+                    app:layout_constraintTop_toBottomOf="@id/delivery_details_2" />
+
+                <TextView
+                    android:id="@+id/delivery_details_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:text="• Due to current situation, we're not accepting returns/refunds unless it's damaged or wrong product is delivered."
+                    android:textAppearance="?textAppearanceBody2"
+                    android:visibility="@{product != null || sketch != null ? View.GONE : (shouldHide ? View.GONE : View.VISIBLE)}"
+                    app:layout_constraintTop_toBottomOf="@id/delivery_details_3" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

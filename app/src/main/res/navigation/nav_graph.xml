@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/dashboardFragment">
 
     <fragment
         android:id="@+id/productsFragment"
-        android:name="com.boutiquesworld.ui.product.ProductsFragment"
+        android:name="in.trendition.ui.product.ProductsFragment"
         android:label="Products"
         tools:layout="@layout/fragment_products" />
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.boutiquesworld.ui.login.LoginFragment"
+        android:name="in.trendition.ui.login.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
@@ -23,7 +23,7 @@
             app:exitAnim="@anim/fragment_close_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/fragment_close_exit"
-            app:popUpTo="@id/dashboardFragment"
+            app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_profileFragment"
@@ -37,17 +37,17 @@
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.boutiquesworld.ui.dashboard.DashboardFragment"
+        android:name="in.trendition.ui.dashboard.DashboardFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.boutiquesworld.ui.profile.ProfileFragment"
+        android:name="in.trendition.ui.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/newProductFragment"
-        android:name="com.boutiquesworld.ui.newproduct.NewProductFragment"
+        android:name="in.trendition.ui.newproduct.NewProductFragment"
         android:label="New Product"
         tools:layout="@layout/fragment_new_product">
         <action
@@ -63,7 +63,7 @@
         app:popExitAnim="@anim/fragment_close_exit" />
     <dialog
         android:id="@+id/bottomSheetPalette"
-        android:name="com.boutiquesworld.ui.newproduct.palette.BottomSheetPalette"
+        android:name="in.trendition.ui.newproduct.palette.BottomSheetPalette"
         android:label="BottomSheetPalette"
         tools:layout="@layout/fragment_bottom_sheet_palette_dialog">
         <argument
@@ -72,7 +72,7 @@
     </dialog>
     <fragment
         android:id="@+id/storeFragment"
-        android:name="com.boutiquesworld.ui.store.StoreFragment"
+        android:name="in.trendition.ui.store.StoreFragment"
         android:label="Store"
         tools:layout="@layout/fragment_store" />
     <action
@@ -104,38 +104,38 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.boutiquesworld.ui.product.ProductDetailFragment"
+        android:name="in.trendition.ui.product.ProductDetailFragment"
         android:label="ProductDetailFragment"
         tools:layout="@layout/fragment_product_detail">
         <argument
             android:name="cloth"
             android:defaultValue="@null"
-            app:argType="com.boutiquesworld.model.StoreCategory$Cloth"
+            app:argType="in.trendition.model.StoreCategory$Cloth"
             app:nullable="true" />
         <argument
             android:name="jewellery"
             android:defaultValue="@null"
-            app:argType="com.boutiquesworld.model.StoreCategory$Jewellery"
+            app:argType="in.trendition.model.StoreCategory$Jewellery"
             app:nullable="true" />
         <argument
             android:name="fabric"
             android:defaultValue="@null"
-            app:argType="com.boutiquesworld.model.StoreCategory$Fabric"
+            app:argType="in.trendition.model.StoreCategory$Fabric"
             app:nullable="true" />
         <argument
             android:name="dressMaterial"
             android:defaultValue="@null"
-            app:argType="com.boutiquesworld.model.StoreCategory$DressMaterial"
+            app:argType="in.trendition.model.StoreCategory$DressMaterial"
             app:nullable="true" />
         <argument
             android:name="sketch"
             android:defaultValue="@null"
-            app:argType="com.boutiquesworld.model.BaseProduct$Sketch"
+            app:argType="in.trendition.model.BaseProduct$Sketch"
             app:nullable="true" />
         <argument
             android:name="product"
             android:defaultValue="@null"
-            app:argType="com.boutiquesworld.model.BaseProduct$Product"
+            app:argType="in.trendition.model.BaseProduct$Product"
             app:nullable="true" />
         <action
             android:id="@+id/action_productDetailFragment_to_productSizesBottomSheet"
@@ -150,7 +150,7 @@
         app:popExitAnim="@anim/fragment_close_exit" />
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.boutiquesworld.ui.cart.CartFragment"
+        android:name="in.trendition.ui.cart.CartFragment"
         android:label="CartFragment"
         tools:layout="@layout/fragment_cart">
         <action
@@ -159,7 +159,7 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_close_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_close_exit"/>
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <action
         android:id="@+id/action_global_cartFragment"
@@ -172,7 +172,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/pendingFragment"
-        android:name="com.boutiquesworld.ui.pending.PendingFragment"
+        android:name="in.trendition.ui.pending.PendingFragment"
         android:label="PendingFragment"
         tools:layout="@layout/fragment_pending" />
     <action
@@ -186,7 +186,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/storeProductsFragment"
-        android:name="com.boutiquesworld.ui.store.StoreProductsFragment"
+        android:name="in.trendition.ui.store.StoreProductsFragment"
         android:label="Store Products"
         tools:layout="@layout/fragment_store_products" />
     <action
@@ -195,10 +195,10 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <fragment
         android:id="@+id/storeNewProductFragment"
-        android:name="com.boutiquesworld.ui.store.newproduct.StoreNewProductFragment"
+        android:name="in.trendition.ui.store.newproduct.StoreNewProductFragment"
         android:label="FabricNewProductFragment">
         <action
             android:id="@+id/action_fabricNewProductFragment_to_bottomSheetPalette"
@@ -210,10 +210,10 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <fragment
         android:id="@+id/addressFragment"
-        android:name="com.boutiquesworld.ui.address.AddressFragment"
+        android:name="in.trendition.ui.address.AddressFragment"
         android:label="AddressFragment">
         <argument
             android:name="userId"
@@ -227,11 +227,11 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_close_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_close_exit"/>
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <fragment
         android:id="@+id/baseOrderFragment"
-        android:name="com.boutiquesworld.ui.order.BaseOrderFragment"
+        android:name="in.trendition.ui.order.BaseOrderFragment"
         android:label="Orders">
         <action
             android:id="@+id/action_baseOrderFragment_to_orderConfirmBottomSheetDialog"
@@ -243,10 +243,10 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <fragment
         android:id="@+id/orderSuccessFragment"
-        android:name="com.boutiquesworld.ui.order.OrderSuccessFragment"
+        android:name="in.trendition.ui.order.OrderSuccessFragment"
         android:label="OrderSuccessFragment"
         tools:layout="@layout/fragment_order_success">
         <argument
@@ -260,10 +260,12 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit"
+        app:popUpTo="@id/orderSuccessFragment"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/orderSummaryFragment"
-        android:name="com.boutiquesworld.ui.order.OrderSummaryFragment"
+        android:name="in.trendition.ui.order.OrderSummaryFragment"
         android:label="OrderSummaryFragment">
         <argument
             android:name="razorPayOrderId"
@@ -272,10 +274,13 @@
             android:name="selectedAddressIndex"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_paymentWaitingBottomSheetDialog"
+            app:destination="@id/paymentWaitingBottomSheetDialog" />
     </fragment>
     <fragment
         android:id="@+id/myOrdersFragment"
-        android:name="com.boutiquesworld.ui.order.MyOrdersFragment"
+        android:name="in.trendition.ui.order.MyOrdersFragment"
         android:label="MyOrdersFragment">
         <action
             android:id="@+id/action_myOrdersFragment_to_orderTrackingFragment"
@@ -283,7 +288,7 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_close_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_close_exit"/>
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <action
         android:id="@+id/action_global_myOrdersFragment"
@@ -292,22 +297,19 @@
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
         app:popExitAnim="@anim/fragment_close_exit"
-        app:popUpTo="@id/myOrdersFragment"
-        app:popUpToInclusive="true"/>
+        app:popUpTo="@id/dashboardFragment"
+        app:popUpToInclusive="false" />
     <fragment
         android:id="@+id/orderTrackingFragment"
-        android:name="com.boutiquesworld.ui.order.OrderTrackingFragment"
+        android:name="in.trendition.ui.order.OrderTrackingFragment"
         android:label="OrderTrackingFragment">
         <argument
-            android:name="orderId"
-            app:argType="string" />
-        <argument
-            android:name="productId"
-            app:argType="string" />
+            android:name="orderItem"
+            app:argType="in.trendition.model.Order" />
     </fragment>
     <fragment
         android:id="@+id/boutiqueRequestFragment"
-        android:name="com.boutiquesworld.ui.requests.BoutiqueRequestFragment"
+        android:name="in.trendition.ui.requests.BoutiqueRequestFragment"
         android:label="BoutiqueRequestFragment">
         <action
             android:id="@+id/action_boutiqueRequestFragment_to_boutiqueRequestBottomSheetDialog"
@@ -319,18 +321,23 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <dialog
         android:id="@+id/boutiqueRequestBottomSheetDialog"
-        android:name="com.boutiquesworld.ui.requests.BoutiqueRequestBottomSheetDialog"
+        android:name="in.trendition.ui.requests.BoutiqueRequestBottomSheetDialog"
         android:label="BoutiqueRequestBottomSheetDialog">
         <argument
             android:name="boutiqueRequest"
-            app:argType="com.boutiquesworld.model.BoutiqueRequest" />
+            app:argType="in.trendition.model.BoutiqueRequest" />
+        <argument
+            android:name="boutiqueResponse"
+            android:defaultValue="@null"
+            app:argType="in.trendition.model.BoutiqueResponse"
+            app:nullable="true" />
     </dialog>
     <fragment
         android:id="@+id/baseRequestFragment"
-        android:name="com.boutiquesworld.ui.requests.BaseRequestFragment"
+        android:name="in.trendition.ui.requests.BaseRequestFragment"
         android:label="BaseRequestFragment">
         <action
             android:id="@+id/action_baseRequestFragment_to_boutiqueRequestBottomSheetDialog"
@@ -342,18 +349,18 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <dialog
         android:id="@+id/orderConfirmBottomSheetDialog"
-        android:name="com.boutiquesworld.ui.order.OrderConfirmBottomSheetDialog"
+        android:name="in.trendition.ui.order.OrderConfirmBottomSheetDialog"
         android:label="OrderConfirmBottomSheetDialog">
         <argument
             android:name="order"
-            app:argType="com.boutiquesworld.model.Order" />
+            app:argType="in.trendition.model.Order" />
     </dialog>
     <fragment
         android:id="@+id/subscriptionFragment"
-        android:name="com.boutiquesworld.ui.profile.SubscriptionFragment"
+        android:name="in.trendition.ui.profile.SubscriptionFragment"
         android:label="SubscriptionFragment">
         <action
             android:id="@+id/action_subscriptionFragment_to_bottomSheetRenewSubscriptionFragment"
@@ -365,14 +372,14 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <dialog
         android:id="@+id/bottomSheetRenewSubscriptionFragment"
-        android:name="com.boutiquesworld.ui.profile.BottomSheetRenewSubscriptionFragment"
+        android:name="in.trendition.ui.profile.BottomSheetRenewSubscriptionFragment"
         android:label="BottomSheetRenewSubscriptionFragment" />
     <fragment
         android:id="@+id/paymentsFragment"
-        android:name="com.boutiquesworld.ui.profile.PaymentsFragment"
+        android:name="in.trendition.ui.profile.PaymentsFragment"
         android:label="PaymentsFragment" />
     <action
         android:id="@+id/action_global_paymentsFragment"
@@ -380,10 +387,10 @@
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_close_exit"
         app:popEnterAnim="@anim/fragment_open_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
+        app:popExitAnim="@anim/fragment_close_exit" />
     <dialog
         android:id="@+id/productSizesBottomSheet"
-        android:name="com.boutiquesworld.ui.product.ProductSizesBottomSheet"
+        android:name="in.trendition.ui.product.ProductSizesBottomSheet"
         android:label="ProductSizesBottomSheet">
         <argument
             android:name="sizesAvailable"
@@ -398,4 +405,15 @@
         app:popExitAnim="@anim/fragment_close_exit"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
+    <dialog
+        android:id="@+id/paymentWaitingBottomSheetDialog"
+        android:name="in.trendition.ui.order.PaymentWaitingBottomSheetDialog"
+        android:label="PaymentWaitingBottomSheetDialog" />
+    <dialog
+        android:id="@+id/updateBottomSheetDialog"
+        android:name="in.trendition.ui.update.UpdateBottomSheetDialog"
+        android:label="UpdateBottomSheetDialog" />
+    <action
+        android:id="@+id/action_global_updateBottomSheetDialog"
+        app:destination="@id/updateBottomSheetDialog" />
 </navigation>

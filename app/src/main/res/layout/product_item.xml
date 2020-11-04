@@ -4,38 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
         <variable
             name="product"
-            type="com.boutiquesworld.model.BaseProduct.Product" />
+            type="in.trendition.model.BaseProduct.Product" />
 
         <variable
             name="fabric"
-            type="com.boutiquesworld.model.StoreCategory.Fabric" />
+            type="in.trendition.model.StoreCategory.Fabric" />
 
         <variable
             name="clothing"
-            type="com.boutiquesworld.model.StoreCategory.Cloth" />
+            type="in.trendition.model.StoreCategory.Cloth" />
 
         <variable
             name="dressMaterial"
-            type="com.boutiquesworld.model.StoreCategory.DressMaterial" />
+            type="in.trendition.model.StoreCategory.DressMaterial" />
 
         <variable
             name="jewellery"
-            type="com.boutiquesworld.model.StoreCategory.Jewellery" />
+            type="in.trendition.model.StoreCategory.Jewellery" />
 
         <variable
             name="sketch"
-            type="com.boutiquesworld.model.BaseProduct.Sketch" />
+            type="in.trendition.model.BaseProduct.Sketch" />
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.product.ProductsAdapter.ProductsAdapterListener" />
+            type="in.trendition.ui.product.ProductsAdapter.ProductsAdapterListener" />
 
         <variable
             name="storeAdapterListener"
-            type="com.boutiquesworld.ui.product.StoreAdapter.StoreAdapterListener" />
+            type="in.trendition.ui.product.StoreAdapter.StoreAdapterListener" />
 
         <variable
             name="position"
@@ -59,7 +60,9 @@
                 android:layout_height="176dp"
                 android:scaleType="centerCrop"
                 app:glideSrc="@{(product != null ? product.productImage1 : (sketch != null ? sketch.productImage1 : (fabric != null ? fabric.productImage1 : (clothing != null ? clothing.productImage1 : (dressMaterial != null ? dressMaterial.productImage1 : (jewellery != null ? jewellery.productImage1 : ``))))))}"
+                app:layout_constraintBottom_toTopOf="@+id/product_title"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,15 +74,19 @@
                 android:layout_marginTop="@dimen/grid_1"
                 android:ellipsize="end"
                 android:maxLines="1"
+                app:layout_goneMarginBottom="@dimen/grid_1"
                 android:text="@{(product != null ? product.productName : (sketch != null ? sketch.productName : (fabric != null ? fabric.productName : (clothing != null ? clothing.productName : (dressMaterial != null ? dressMaterial.productName : (jewellery != null ? jewellery.productName : `Test`))))))}"
                 android:textAppearance="?textAppearanceSubtitle1"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_logo"
                 tools:text="Blue Floral Organza" />
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/grid_2"
@@ -87,12 +94,15 @@
                 android:layout_marginBottom="@dimen/grid_1"
                 android:ellipsize="end"
                 android:maxLines="1"
+                tools:visibility="gone"
                 android:text="@{(product != null ? @string/product_price(String.valueOf(product.startPrice)) + ` - ` + @string/product_price(String.valueOf(product.endPrice)) : sketch != null ? `` : (fabric != null ? @string/product_price(fabric.productPrice) : (clothing != null ? @string/product_price(clothing.productPrice) : (dressMaterial != null ? @string/product_price(dressMaterial.productPrice) : (jewellery != null ? @string/product_price(jewellery.productPrice) : ``)))))}"
                 android:textAppearance="?textAppearanceSubtitle2"
                 android:textColor="?colorSecondary"
                 android:textStyle="bold"
+                android:visibility="@{sketch != null ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_title"
                 tools:text="₹2000 - ₹5000" />

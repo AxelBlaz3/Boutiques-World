@@ -7,13 +7,13 @@
         android:title="@string/dashboard" />
     <item
         android:id="@+id/storeFragment"
-        android:icon="@drawable/ic_cloth"
+        android:icon="@drawable/ic_round_store_24"
         android:title="@string/store" />
     <item android:title="" />
     <item
         android:id="@+id/pendingFragment"
-        android:icon="@drawable/ic_round_access_time"
-        android:title="@string/pending" />
+        android:icon="@drawable/ic_cloth"
+        android:title="@string/products" />
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_round_person"

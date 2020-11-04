@@ -24,6 +24,10 @@
             type="Boolean" />
 
         <variable
+            name="areSizesAvailable"
+            type="Boolean" />
+
+        <variable
             name="isJewellerySelected"
             type="Boolean" />
 
@@ -206,64 +210,60 @@
                 android:layout_marginTop="@dimen/grid_2"
                 android:text="S"
                 android:textAppearance="?textAppearanceBody2"
-                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                android:visibility="@{isClothingSelected &amp;&amp; areSizesAvailable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toStartOf="@+id/checkbox_m"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/product_type_text_input_layout" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkbox_m"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_2"
                 android:text="M"
                 android:textAppearance="?textAppearanceBody2"
-                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                android:visibility="@{isClothingSelected &amp;&amp; areSizesAvailable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toStartOf="@+id/checkbox_l"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/checkbox_s"
-                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+                app:layout_constraintTop_toTopOf="@+id/checkbox_s" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkbox_l"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_2"
                 android:text="L"
                 android:textAppearance="?textAppearanceBody2"
-                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                android:visibility="@{isClothingSelected &amp;&amp; areSizesAvailable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toStartOf="@+id/checkbox_xl"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/checkbox_m"
-                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+                app:layout_constraintTop_toTopOf="@+id/checkbox_s" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkbox_xl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_2"
                 android:text="XL"
                 android:textAppearance="?textAppearanceBody2"
-                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                android:visibility="@{isClothingSelected &amp;&amp; areSizesAvailable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toStartOf="@+id/checkbox_xxl"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/checkbox_l"
-                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+                app:layout_constraintTop_toTopOf="@+id/checkbox_s" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkbox_xxl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_2"
                 android:text="XXL"
                 android:textAppearance="?textAppearanceBody2"
-                android:visibility="@{isClothingSelected ? View.VISIBLE : View.GONE}"
+                android:visibility="@{isClothingSelected &amp;&amp; areSizesAvailable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/checkbox_xl"
-                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout" />
+                app:layout_constraintTop_toTopOf="@+id/checkbox_s" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/product_design_text_input_layout"
@@ -276,7 +276,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/checkbox_s"
+                app:layout_constraintTop_toBottomOf="@+id/product_price_text_input_layout"
                 app:layout_goneMarginTop="@dimen/grid_2">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -352,7 +352,7 @@
                     android:id="@+id/width"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Width"
+                    android:hint="Width (inches)"
                     android:inputType="numberDecimal"
                     android:textAppearance="?textAppearanceBody2"
                     android:textCursorDrawable="@null" />
@@ -549,7 +549,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/product_type_text_input_layout">
+                app:layout_constraintTop_toBottomOf="@+id/checkbox_s">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/available_quantity"
@@ -599,7 +599,7 @@
                     android:id="@+id/weight"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Weight"
+                    android:hint="Weight (gms.)"
                     android:inputType="numberDecimal"
                     android:textAppearance="?textAppearanceBody2"
                     android:textCursorDrawable="@null" />

@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "272275418379",
-    "firebase_url": "https://boutiquesworld-eaba1.firebaseio.com",
-    "project_id": "boutiquesworld-eaba1",
-    "storage_bucket": "boutiquesworld-eaba1.appspot.com"
+    "project_number": "604976949005",
+    "firebase_url": "https://trendition-7c880.firebaseio.com",
+    "project_id": "trendition-7c880",
+    "storage_bucket": "trendition-7c880.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:272275418379:android:d2a815ee02b5084f39460e",
+        "mobilesdk_app_id": "1:604976949005:android:2096f20c954b9a0e0f7244",
         "android_client_info": {
-          "package_name": "com.boutiquesworld"
+          "package_name": "in.trendition"
         }
       },
       "oauth_client": [
         {
-          "client_id": "272275418379-32fqg5pa9ns2kr78v00vt84ar6hm3k7f.apps.googleusercontent.com",
+          "client_id": "604976949005-ibpg2v5jbml0ek4gf0g0o7n2hsdi050l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.trendition",
+            "certificate_hash": "e9565dcacf3d6f7a5bcfdcc9b5c52e474173b67c"
+          }
+        },
+        {
+          "client_id": "604976949005-hlug4e6eoecgjvqfn17jnq4sj8jp3sci.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDKt9HwUF1759JFmUNh2Hg0lIBWI5fJnqE"
+          "current_key": "AIzaSyDVGyVGQ9Zx0PRYL9fOgBCuYGhpgCCxF7E"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "272275418379-32fqg5pa9ns2kr78v00vt84ar6hm3k7f.apps.googleusercontent.com",
+              "client_id": "604976949005-hlug4e6eoecgjvqfn17jnq4sj8jp3sci.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

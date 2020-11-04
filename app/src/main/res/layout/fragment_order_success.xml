@@ -14,23 +14,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/grid_2">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/order_success_illustration"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_marginHorizontal="@dimen/grid_2"
             android:src="@{ isOrderSuccess ? @drawable/ic_order_success : @drawable/ic_order_fail}"
             app:layout_constraintBottom_toTopOf="@+id/order_success_title"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:srcCompat="@drawable/illustration_order_failed" />
+            tools:srcCompat="@drawable/ic_order_fail" />
 
         <TextView
             android:id="@+id/order_success_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
             android:layout_marginTop="@dimen/grid_2"
             android:gravity="center"
             android:text="@{isOrderSuccess ? @string/thank_you : @string/payment_failed}"
@@ -44,10 +45,11 @@
             android:id="@+id/order_success_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
             android:layout_marginTop="@dimen/grid_2"
             android:gravity="center"
-            android:textAppearance="?textAppearanceBody2"
             android:text="@{isOrderSuccess ? @string/order_success_desc : @string/order_failed_desc}"
+            android:textAppearance="?textAppearanceBody2"
             app:layout_constraintBottom_toTopOf="@+id/view_orders_list"
             app:layout_constraintTop_toBottomOf="@+id/order_success_title"
             tools:layout_editor_absoluteX="16dp"
@@ -55,12 +57,15 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/view_orders_list"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
             android:layout_marginTop="@dimen/grid_3"
-            android:padding="@dimen/grid_2"
             android:text="@string/view_orders"
+            android:textColor="?colorOnSecondary"
             android:visibility="@{isOrderSuccess ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="?colorSecondary"
             app:layout_constraintBottom_toTopOf="@+id/back_to_dashboard"
             app:layout_constraintTop_toBottomOf="@+id/order_success_desc"
             tools:layout_editor_absoluteX="16dp"
@@ -68,11 +73,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_to_dashboard"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_2"
             android:layout_marginTop="@dimen/grid_1"
-            android:padding="@dimen/grid_2"
             android:text="@{isOrderSuccess ? @string/back_to_dashboard : @string/back_to_cart}"
+            android:textColor="?colorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_orders_list"
             app:layout_goneMarginTop="@dimen/grid_3"

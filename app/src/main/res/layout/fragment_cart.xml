@@ -27,7 +27,6 @@
             android:id="@+id/cart_swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{isCartEmpty ? View.GONE : View.VISIBLE}"
             app:paddingBottomSystemWindowInsets="@{true}">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -103,6 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            tools:visibility="gone"
             android:orientation="vertical"
             android:visibility="@{isCartEmpty ? View.VISIBLE : View.GONE}">
 

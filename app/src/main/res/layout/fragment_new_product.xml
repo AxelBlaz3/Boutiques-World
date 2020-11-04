@@ -274,33 +274,49 @@
                 tools:text="Red"
                 tools:visibility="visible" />
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/rangeSlider"
-                style="@style/Widget.Boutiques.Slider"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_start_price_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/grid_2"
                 android:layout_marginTop="@dimen/grid_2"
-                android:stepSize="100"
-                android:valueFrom="0"
-                android:valueTo="18000"
+                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
+                app:layout_constraintEnd_toStartOf="@+id/product_end_price_text_input_layout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_quantity_text_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/start_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/start_price"
+                    android:inputType="number"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/product_end_price_text_input_layout"
+                style="@style/Widget.Boutiques.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toBottomOf="@+id/product_quantity_text_input_layout"
-                app:minSeparation="100dp"
-                app:values="@array/price_ranges" />
+                android:layout_marginStart="@dimen/grid_2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/product_start_price_text_input_layout"
+                app:layout_constraintTop_toTopOf="@+id/product_start_price_text_input_layout">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/price_range"
-                android:textAppearance="?textAppearanceSubtitle2"
-                android:visibility="@{isSketch ? View.GONE : View.VISIBLE}"
-                app:layout_constraintBottom_toBottomOf="@+id/rangeSlider"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rangeSlider" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/end_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/end_price"
+                    android:inputType="number"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textCursorDrawable="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/product_description_text_input_layout"
@@ -308,7 +324,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_2"
-                app:layout_constraintTop_toBottomOf="@+id/rangeSlider">
+                app:layout_constraintTop_toBottomOf="@+id/product_start_price_text_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/product_description"
@@ -346,8 +362,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_3"
                 android:layout_marginBottom="@dimen/grid_2"
-                android:text="@string/submit"
                 android:gravity="center"
+                android:text="@string/submit"
                 android:textAppearance="?textAppearanceButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

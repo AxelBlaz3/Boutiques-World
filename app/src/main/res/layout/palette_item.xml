@@ -7,11 +7,11 @@
 
         <variable
             name="palette"
-            type="com.boutiquesworld.model.Palette" />
+            type="in.trendition.model.Palette" />
 
         <variable
             name="listener"
-            type="com.boutiquesworld.ui.newproduct.palette.PaletteAdapter.PaletteAdapterListener" />
+            type="in.trendition.ui.newproduct.palette.PaletteAdapter.PaletteAdapterListener" />
     </data>
 
     <LinearLayout
