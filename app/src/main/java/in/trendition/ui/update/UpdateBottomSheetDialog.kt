@@ -14,6 +14,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.FileProvider
 import androidx.lifecycle.observe
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.progressindicator.ProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
@@ -80,15 +81,7 @@ class UpdateBottomSheetDialog : BottomSheetDialogFragment() {
                     isIndeterminate = false
                     show()
                 }
-                ObjectAnimator.ofInt(
-                    updateProgress,
-                    "progress",
-                    updateProgress.progress,
-                    it
-                ).apply {
-                    interpolator = AccelerateDecelerateInterpolator()
-                    start()
-                }
+                animateProgressIndicator(progressIndicator = updateProgress, toProgress = it)
             }
         }
     }
@@ -103,5 +96,19 @@ class UpdateBottomSheetDialog : BottomSheetDialogFragment() {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         startActivity(installIntent)
+    }
+
+    private fun animateProgressIndicator(progressIndicator: ProgressIndicator, toProgress: Int) {
+        binding.run {
+            ObjectAnimator.ofInt(
+                progressIndicator,
+                "progress",
+                progressIndicator.progress,
+                toProgress
+            ).apply {
+                interpolator = AccelerateDecelerateInterpolator()
+                start()
+            }
+        }
     }
 }

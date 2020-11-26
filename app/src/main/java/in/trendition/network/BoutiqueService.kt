@@ -126,7 +126,7 @@ interface BoutiqueService {
     fun postProduct(
         @PartMap formDataMap: Map<String, @JvmSuppressWildcards RequestBody>,
         @Part imageFiles: List<MultipartBody.Part>
-    ): Call<ProductResponse>
+    ): Call<Void>
 
     @Multipart
     @POST("post_sketch.php")

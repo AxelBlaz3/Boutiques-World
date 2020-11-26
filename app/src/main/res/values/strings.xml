@@ -397,4 +397,7 @@
     <string name="update_title_download_in_progress">Download in progress</string>
     <string name="update_summary_downloading">Your update is being downloaded. Meanwhile, have a cup of coffee.</string>
     <string name="update_summary">Update your app to get the latest features and stable experience with Trendition.</string>
+    <string name="product_uploading_summary">Please wait while your product is being uploaded. Do not close the app. Meanwhile, have a cup of coffee.</string>
+    <string name="upload_in_progress">Upload in progress</string>
+    <string name="finishing_up">Finishing up</string>
 </resources>

@@ -400,7 +400,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 updateToolbarTitle(R.string.subscriptions)
                 showHideFabAndBottomAppBar(hideFab = true, hideBottomAppBar = true)
             }
-            R.id.boutiqueRequestBottomSheetDialog, R.id.bottomSheetPalette, R.id.orderConfirmBottomSheetDialog, R.id.bottomSheetRenewSubscriptionFragment, R.id.productSizesBottomSheet, R.id.paymentWaitingBottomSheetDialog, R.id.updateBottomSheetDialog -> {
+            R.id.productPostingBottomSheetDialog, R.id.boutiqueRequestBottomSheetDialog, R.id.bottomSheetPalette, R.id.orderConfirmBottomSheetDialog, R.id.bottomSheetRenewSubscriptionFragment, R.id.productSizesBottomSheet, R.id.paymentWaitingBottomSheetDialog, R.id.updateBottomSheetDialog -> {
             }
             else -> throw RuntimeException("Unknown destination - ${destination.id}")
         }
@@ -701,9 +701,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             retailer.businessName,
                             retailer.uuid,
                             subscriptionPlan.planAmount.toString(),
-                            getFormattedDate(needToday = true),
+                            getFormattedDate(),
                             getFormattedDate(
-                                needToday = false,
                                 period = subscriptionPlan.planPeriod.toInt()
                             ),
                             it.orderId,
@@ -737,7 +736,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
-    fun getFormattedDate(needToday: Boolean, period: Int = 0): String {
+    fun getFormattedDate(period: Int = 0): String {
         try {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.MONTH, period)

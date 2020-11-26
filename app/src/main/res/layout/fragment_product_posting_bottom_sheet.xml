@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="uploadPercentage"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/grid_2"
+        android:paddingBottom="@dimen/grid_3">
+
+        <ImageView
+            android:id="@+id/uploading_illustration"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:src="@drawable/ic_uploading" />
+
+        <com.google.android.material.progressindicator.ProgressIndicator
+            android:id="@+id/progressBar"
+            style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:indicatorColor="?colorSecondary"
+            app:indicatorCornerRadius="@dimen/grid_2"
+            tools:progress="70" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_2"
+            android:gravity="center"
+            android:text="@{uploadPercentage >= 99 ? @string/finishing_up : @string/upload_in_progress}"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textStyle="bold"
+            tools:text="@string/upload_in_progress" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_1"
+            android:gravity="center"
+            android:text="@string/product_uploading_summary"
+            android:textAppearance="?textAppearanceCaption" />
+    </LinearLayout>
+</layout>

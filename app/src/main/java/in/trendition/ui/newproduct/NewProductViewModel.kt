@@ -4,6 +4,11 @@ import `in`.trendition.model.Palette
 import `in`.trendition.model.Retailer
 import `in`.trendition.network.BoutiqueService
 import `in`.trendition.repository.ProfileRepository
+import `in`.trendition.util.Constants
+import `in`.trendition.util.ProgressUpload
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,9 +18,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
+
 
 /**
  * ViewModel for managing the NewProduct submission.
@@ -65,11 +70,12 @@ class NewProductViewModel @Inject constructor(
     private val isStoreSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
     private val isSketchSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
 
-    // RequestBody PartMap for BoutiqueService
-    private val formDataMap = HashMap<String, RequestBody>()
+    private val contentMap = HashMap<String, ProgressUpload.ProgressRequestBody>()
 
     // List of MultipartBody.Part for image files
     private val imageFiles = ArrayList<MultipartBody.Part>()
+
+    private val progressUpload = ProgressUpload()
 
     fun getIsProductNameEmpty(): LiveData<Boolean> = isProductNameEmpty
     fun getIsProductTypeEmpty(): LiveData<Boolean> = isProductTypeEmpty
@@ -193,7 +199,8 @@ class NewProductViewModel @Inject constructor(
         productImage4: File?,
         productImage5: File?,
         startPrice: String,
-        endPrice: String
+        endPrice: String,
+        listener: ProgressUpload.UploadListener
     ) {
         try {
             retailer.value?.let {
@@ -221,9 +228,13 @@ class NewProductViewModel @Inject constructor(
                 if (isDataValid) {
                     viewModelScope.launch(Dispatchers.IO) {
                         try {
+                            progressUpload.apply {
+                                prepareToUpload(contentMap = contentMap, files = imageFiles)
+                                setUploadListener(listener = listener)
+                            }
                             val response =
-                                boutiqueService.postProduct(formDataMap, imageFiles).execute()
-                            if (response.isSuccessful) {
+                                boutiqueService.postProduct(contentMap, imageFiles).execute()
+                            if (response.isSuccessful && response.code() == 201) {
                                 isProductSubmissionSuccessful.postValue(true)
                                 productImage1?.delete()
                                 productImage2?.delete()
@@ -253,7 +264,8 @@ class NewProductViewModel @Inject constructor(
         productImage2: File?,
         productImage3: File?,
         productImage4: File?,
-        productImage5: File?
+        productImage5: File?,
+        listener: ProgressUpload.UploadListener
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             isProductNameEmpty.postValue(productName.isEmpty())
@@ -265,37 +277,47 @@ class NewProductViewModel @Inject constructor(
             if (productName.isEmpty() || productStory.isEmpty() || productDescription.isEmpty() || productImage1 == null || productImage2 == null)
                 return@launch
 
-            formDataMap.apply {
-                put("product_name", getFormRequestBody(productName))
-                put("product_description", getFormRequestBody(productDescription))
-                put("product_story", getFormRequestBody(productStory))
+            contentMap.apply {
+                put("product_name", getFormProgressRequestBody(progressUpload, productName))
+                put(
+                    "product_description",
+                    getFormProgressRequestBody(progressUpload, productDescription)
+                )
+                put("product_story", getFormProgressRequestBody(progressUpload, productStory))
                 retailer.value?.let {
-                    put("business_id", getFormRequestBody(it.shopId.toString()))
-                    put("uuid", getFormRequestBody(it.uuid))
-                    put("business_name", getFormRequestBody(it.businessName))
+                    put(
+                        "business_id",
+                        getFormProgressRequestBody(progressUpload, it.shopId.toString())
+                    )
+                    put("uuid", getFormProgressRequestBody(progressUpload, it.uuid))
+                    put(
+                        "business_name",
+                        getFormProgressRequestBody(progressUpload, it.businessName)
+                    )
                 }
-                put("product_status", getFormRequestBody("0"))
+                put("product_status", getFormProgressRequestBody(progressUpload, "0"))
             }
 
-            addFileMultiPartBody("product_image1", productImage1)
-            addFileMultiPartBody("product_image2", productImage2)
-            addFileMultiPartBody("product_image3", productImage3)
-            addFileMultiPartBody("product_image4", productImage4)
-            addFileMultiPartBody("product_image5", productImage5)
+            addMultiPartProgressRequestBody(progressUpload, "product_image1", productImage1)
+            addMultiPartProgressRequestBody(progressUpload, "product_image2", productImage2)
+            addMultiPartProgressRequestBody(progressUpload, "product_image3", productImage3)
+            addMultiPartProgressRequestBody(progressUpload, "product_image4", productImage4)
+            addMultiPartProgressRequestBody(progressUpload, "product_image5", productImage5)
 
             try {
-                val response = boutiqueService.postSketch(formDataMap, imageFiles).execute()
-                if (response.code() == 201) {
-                    isSketchSubmissionSuccessful.postValue(true)
-                    return@launch
-                } else {
-                    isSketchSubmissionSuccessful.postValue(false)
-                    return@launch
+                progressUpload.apply {
+                    prepareToUpload(contentMap = contentMap, files = imageFiles)
+                    setUploadListener(listener = listener)
                 }
+                val response = boutiqueService.postSketch(contentMap, imageFiles).execute()
+                if (response.code() == 201)
+                    isSketchSubmissionSuccessful.postValue(true)
+                else
+                    isSketchSubmissionSuccessful.postValue(false)
             } catch (e: Exception) {
                 e.printStackTrace()
+                isSketchSubmissionSuccessful.postValue(false)
             }
-            isSketchSubmissionSuccessful.postValue(false)
         }
     }
 
@@ -318,7 +340,8 @@ class NewProductViewModel @Inject constructor(
         productImage3: File?,
         productImage4: File?,
         productImage5: File?,
-        productPrice: String
+        productPrice: String,
+        listener: ProgressUpload.UploadListener
     ) {
         try {
             retailer.value?.let {
@@ -357,46 +380,137 @@ class NewProductViewModel @Inject constructor(
                     )
                         return@launch
 
-                    formDataMap.apply {
+                    contentMap.apply {
                         retailer.value?.let {
-                            put("product_name", getFormRequestBody(productName))
-                            put("product_category", getFormRequestBody(productCategory))
-                            put("product_type", getFormRequestBody(productType))
-                            put("product_description", getFormRequestBody(productDescription))
-                            put("product_price", getFormRequestBody(productPrice))
-                            put("product_colour", getFormRequestBody(productColor))
-                            put("product_cloth", getFormRequestBody(productCloth))
-                            put("product_fabric", getFormRequestBody(productFabric))
-                            put("product_pattern", getFormRequestBody(productPattern))
-                            put("width", getFormRequestBody(productWidth))
-                            put("weight", getFormRequestBody(productWeight))
-                            put("available_quantity", getFormRequestBody(productQuantity))
-                            put("minimum_quantity", getFormRequestBody(minimumQuantity))
-                            put("delivery_time", getFormRequestBody(deliveryTime))
-                            put("business_category", getFormRequestBody(it.businessCategory))
+                            put(
+                                "product_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productName
+                                )
+                            )
+                            put(
+                                "product_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCategory
+                                )
+                            )
+                            put(
+                                "product_type", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productType
+                                )
+                            )
+                            put(
+                                "product_description", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productDescription
+                                )
+                            )
+                            put(
+                                "product_price", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productPrice
+                                )
+                            )
+                            put(
+                                "product_colour", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productColor
+                                )
+                            )
+                            put(
+                                "product_cloth", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCloth
+                                )
+                            )
+                            put(
+                                "product_fabric", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productFabric
+                                )
+                            )
+                            put(
+                                "product_pattern", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productPattern
+                                )
+                            )
+                            put("width", getFormProgressRequestBody(progressUpload, productWidth))
+                            put("weight", getFormProgressRequestBody(progressUpload, productWeight))
+                            put(
+                                "available_quantity", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productQuantity
+                                )
+                            )
+                            put(
+                                "minimum_quantity", getFormProgressRequestBody(
+                                    progressUpload,
+                                    minimumQuantity
+                                )
+                            )
+                            put(
+                                "delivery_time", getFormProgressRequestBody(
+                                    progressUpload,
+                                    deliveryTime
+                                )
+                            )
+                            put(
+                                "business_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessCategory
+                                )
+                            )
                             put(
                                 "business_category_type",
-                                getFormRequestBody(it.specialization)
+                                getFormProgressRequestBody(progressUpload, it.specialization)
                             )
-                            put("business_id", getFormRequestBody(it.shopId.toString()))
-                            put("uuid", getFormRequestBody(it.uuid))
-                            put("business_name", getFormRequestBody(it.businessName))
-                            put("likes", getFormRequestBody("0"))
-                            put("product_status", getFormRequestBody("0"))
+                            put(
+                                "business_id", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.shopId.toString()
+                                )
+                            )
+                            put("uuid", getFormProgressRequestBody(progressUpload, it.uuid))
+                            put(
+                                "business_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessName
+                                )
+                            )
+                            put("likes", getFormProgressRequestBody(progressUpload, "0"))
+                            put("product_status", getFormProgressRequestBody(progressUpload, "0"))
                         }
                     }
 
-                    addFileMultiPartBody("product_image1", productImage1)
-                    addFileMultiPartBody("product_image2", productImage2)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image1", productImage1)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image2", productImage2)
                     if (productImage3 != null)
-                        addFileMultiPartBody("product_image3", productImage3)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image3",
+                            productImage3
+                        )
                     if (productImage4 != null)
-                        addFileMultiPartBody("product_image4", productImage4)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image4",
+                            productImage4
+                        )
                     if (productImage5 != null)
-                        addFileMultiPartBody("product_image5", productImage5)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image5",
+                            productImage5
+                        )
                     try {
+                        progressUpload.apply {
+                            prepareToUpload(contentMap = contentMap, files = imageFiles)
+                            setUploadListener(listener = listener)
+                        }
                         val response =
-                            boutiqueService.postStoreProduct(formDataMap, imageFiles).execute()
+                            boutiqueService.postStoreProduct(contentMap, imageFiles).execute()
                         if (response.code() == 201) {
                             isStoreSubmissionSuccessful.postValue(true)
                             productImage1.delete()
@@ -404,8 +518,15 @@ class NewProductViewModel @Inject constructor(
                             productImage3?.delete()
                             productImage4?.delete()
                             productImage5?.delete()
-                        } else
+                        } else {
+                            response.errorBody()?.let {
+                                Log.d(
+                                    this@NewProductViewModel.javaClass.simpleName,
+                                    it.string()
+                                )
+                            }
                             isStoreSubmissionSuccessful.postValue(false)
+                        }
                     } catch (e: Exception) {
                         isStoreSubmissionSuccessful.postValue(false)
                         e.printStackTrace()
@@ -439,7 +560,8 @@ class NewProductViewModel @Inject constructor(
         productImage3: File?,
         productImage4: File?,
         productImage5: File?,
-        setPiecePosition: Int
+        setPiecePosition: Int,
+        listener: ProgressUpload.UploadListener
     ) {
         try {
             retailer.value?.let {
@@ -482,48 +604,151 @@ class NewProductViewModel @Inject constructor(
                     )
                         return@launch
 
-                    formDataMap.apply {
+                    contentMap.apply {
                         retailer.value?.let {
-                            put("product_name", getFormRequestBody(productName))
-                            put("product_category", getFormRequestBody(productCategory))
-                            put("product_type", getFormRequestBody(productType))
-                            put("product_description", getFormRequestBody(productDescription))
-                            put("set_piece", getFormRequestBody(setPiece))
-                            put("product_price", getFormRequestBody(productPrice))
-                            put("product_colour", getFormRequestBody(productColor))
-                            put("product_cloth", getFormRequestBody(productCloth))
-                            put("product_fabric", getFormRequestBody(productFabric))
-                            put("product_pattern", getFormRequestBody(productPattern))
-                            put("weight", getFormRequestBody(productWeight))
-                            put("top_measurement", getFormRequestBody(topMeasurement))
-                            put("bottom_measurement", getFormRequestBody(if (setPiecePosition == 2) bottomMeasurement else ""))
-                            put("dupatta_measurement", getFormRequestBody(if (setPiecePosition != 0) dupattaMeasurement else ""))
-                            put("available_quantity", getFormRequestBody(productQuantity))
-                            put("delivery_time", getFormRequestBody(deliveryTime))
-                            put("business_category", getFormRequestBody(it.businessCategory))
+                            put(
+                                "product_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productName
+                                )
+                            )
+                            put(
+                                "product_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCategory
+                                )
+                            )
+                            put(
+                                "product_type", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productType
+                                )
+                            )
+                            put(
+                                "product_description", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productDescription
+                                )
+                            )
+                            put("set_piece", getFormProgressRequestBody(progressUpload, setPiece))
+                            put(
+                                "product_price", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productPrice
+                                )
+                            )
+                            put(
+                                "product_colour", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productColor
+                                )
+                            )
+                            put(
+                                "product_cloth", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCloth
+                                )
+                            )
+                            put(
+                                "product_fabric", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productFabric
+                                )
+                            )
+                            put(
+                                "product_pattern", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productPattern
+                                )
+                            )
+                            put("weight", getFormProgressRequestBody(progressUpload, productWeight))
+                            put(
+                                "top_measurement", getFormProgressRequestBody(
+                                    progressUpload,
+                                    topMeasurement
+                                )
+                            )
+                            put(
+                                "bottom_measurement",
+                                getFormProgressRequestBody(
+                                    progressUpload,
+                                    if (setPiecePosition == 2) bottomMeasurement else ""
+                                )
+                            )
+                            put(
+                                "dupatta_measurement",
+                                getFormProgressRequestBody(
+                                    progressUpload,
+                                    if (setPiecePosition != 0) dupattaMeasurement else ""
+                                )
+                            )
+                            put(
+                                "available_quantity", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productQuantity
+                                )
+                            )
+                            put(
+                                "delivery_time", getFormProgressRequestBody(
+                                    progressUpload,
+                                    deliveryTime
+                                )
+                            )
+                            put(
+                                "business_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessCategory
+                                )
+                            )
                             put(
                                 "business_category_type",
-                                getFormRequestBody(it.specialization)
+                                getFormProgressRequestBody(progressUpload, it.specialization)
                             )
-                            put("business_id", getFormRequestBody(it.shopId.toString()))
-                            put("uuid", getFormRequestBody(it.uuid))
-                            put("business_name", getFormRequestBody(it.businessName))
-                            put("likes", getFormRequestBody("0"))
-                            put("product_status", getFormRequestBody("0"))
+                            put(
+                                "business_id", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.shopId.toString()
+                                )
+                            )
+                            put("uuid", getFormProgressRequestBody(progressUpload, it.uuid))
+                            put(
+                                "business_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessName
+                                )
+                            )
+                            put("likes", getFormProgressRequestBody(progressUpload, "0"))
+                            put("product_status", getFormProgressRequestBody(progressUpload, "0"))
                         }
                     }
 
-                    addFileMultiPartBody("product_image1", productImage1)
-                    addFileMultiPartBody("product_image2", productImage2)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image1", productImage1)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image2", productImage2)
                     if (productImage3 != null)
-                        addFileMultiPartBody("product_image3", productImage3)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image3",
+                            productImage3
+                        )
                     if (productImage4 != null)
-                        addFileMultiPartBody("product_image4", productImage4)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image4",
+                            productImage4
+                        )
                     if (productImage5 != null)
-                        addFileMultiPartBody("product_image5", productImage5)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image5",
+                            productImage5
+                        )
                     try {
+                        progressUpload.apply {
+                            prepareToUpload(contentMap = contentMap, files = imageFiles)
+                            setUploadListener(listener = listener)
+                        }
                         val response =
-                            boutiqueService.postStoreProduct(formDataMap, imageFiles).execute()
+                            boutiqueService.postStoreProduct(contentMap, imageFiles).execute()
                         if (response.code() == 201) {
                             isStoreSubmissionSuccessful.postValue(true)
                             productImage1.delete()
@@ -559,7 +784,8 @@ class NewProductViewModel @Inject constructor(
         productImage3: File?,
         productImage4: File?,
         productImage5: File?,
-        productPrice: String
+        productPrice: String,
+        listener: ProgressUpload.UploadListener
     ) {
         try {
             retailer.value?.let {
@@ -590,42 +816,118 @@ class NewProductViewModel @Inject constructor(
                     )
                         return@launch
 
-                    formDataMap.apply {
+                    contentMap.apply {
                         retailer.value?.let {
-                            put("product_name", getFormRequestBody(productName))
-                            put("product_category", getFormRequestBody(productCategory))
-                            put("product_type", getFormRequestBody(productType))
-                            put("product_description", getFormRequestBody(productDescription))
-                            put("product_material", getFormRequestBody(productMaterial))
-                            put("gender", getFormRequestBody(gender))
-                            put("product_price", getFormRequestBody(productPrice))
-                            put("product_colour", getFormRequestBody(productColor))
-                            put("available_quantity", getFormRequestBody(productQuantity))
-                            put("delivery_time", getFormRequestBody(deliveryTime))
-                            put("business_category", getFormRequestBody(it.businessCategory))
+                            put(
+                                "product_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productName
+                                )
+                            )
+                            put(
+                                "product_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCategory
+                                )
+                            )
+                            put(
+                                "product_type", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productType
+                                )
+                            )
+                            put(
+                                "product_description", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productDescription
+                                )
+                            )
+                            put(
+                                "product_material", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productMaterial
+                                )
+                            )
+                            put("gender", getFormProgressRequestBody(progressUpload, gender))
+                            put(
+                                "product_price", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productPrice
+                                )
+                            )
+                            put(
+                                "product_colour", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productColor
+                                )
+                            )
+                            put(
+                                "available_quantity", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productQuantity
+                                )
+                            )
+                            put(
+                                "delivery_time", getFormProgressRequestBody(
+                                    progressUpload,
+                                    deliveryTime
+                                )
+                            )
+                            put(
+                                "business_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessCategory
+                                )
+                            )
                             put(
                                 "business_category_type",
-                                getFormRequestBody(it.specialization)
+                                getFormProgressRequestBody(progressUpload, it.specialization)
                             )
-                            put("business_id", getFormRequestBody(it.shopId.toString()))
-                            put("uuid", getFormRequestBody(it.uuid))
-                            put("business_name", getFormRequestBody(it.businessName))
-                            put("likes", getFormRequestBody("0"))
-                            put("product_status", getFormRequestBody("0"))
+                            put(
+                                "business_id", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.shopId.toString()
+                                )
+                            )
+                            put("uuid", getFormProgressRequestBody(progressUpload, it.uuid))
+                            put(
+                                "business_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessName
+                                )
+                            )
+                            put("likes", getFormProgressRequestBody(progressUpload, "0"))
+                            put("product_status", getFormProgressRequestBody(progressUpload, "0"))
                         }
                     }
 
-                    addFileMultiPartBody("product_image1", productImage1)
-                    addFileMultiPartBody("product_image2", productImage2)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image1", productImage1)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image2", productImage2)
                     if (productImage3 != null)
-                        addFileMultiPartBody("product_image3", productImage3)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image3",
+                            productImage3
+                        )
                     if (productImage4 != null)
-                        addFileMultiPartBody("product_image4", productImage4)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image4",
+                            productImage4
+                        )
                     if (productImage5 != null)
-                        addFileMultiPartBody("product_image5", productImage5)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image5",
+                            productImage5
+                        )
                     try {
+                        progressUpload.apply {
+                            prepareToUpload(contentMap = contentMap, files = imageFiles)
+                            setUploadListener(listener = listener)
+                        }
                         val response =
-                            boutiqueService.postStoreProduct(formDataMap, imageFiles).execute()
+                            boutiqueService.postStoreProduct(contentMap, imageFiles).execute()
                         if (response.code() == 201) {
                             isStoreSubmissionSuccessful.postValue(true)
                             productImage1.delete()
@@ -668,7 +970,8 @@ class NewProductViewModel @Inject constructor(
         productImage3: File?,
         productImage4: File?,
         productImage5: File?,
-        productPrice: String
+        productPrice: String,
+        listener: ProgressUpload.UploadListener
     ) {
         try {
             retailer.value?.let {
@@ -705,49 +1008,160 @@ class NewProductViewModel @Inject constructor(
                     )
                         return@launch
 
-                    formDataMap.apply {
+                    contentMap.apply {
                         retailer.value?.let {
-                            put("product_name", getFormRequestBody(productName))
-                            put("product_category", getFormRequestBody(productCategory))
-                            put("product_type", getFormRequestBody(productType))
-                            put("product_description", getFormRequestBody(productDescription))
-                            put("product_occasion", getFormRequestBody(productOccasion))
-                            put("gender", getFormRequestBody(gender))
-                            put("size_s", getFormRequestBody(isSAvailable.toInt().toString()))
-                            put("size_m", getFormRequestBody(isMAvailable.toInt().toString()))
-                            put("size_l", getFormRequestBody(isLAvailable.toInt().toString()))
-                            put("size_xl", getFormRequestBody(isXLAvailable.toInt().toString()))
-                            put("size_xxl", getFormRequestBody(isXXLAvailable.toInt().toString()))
-                            put("product_price", getFormRequestBody(productPrice))
-                            put("product_colour", getFormRequestBody(productColor))
-                            put("product_cloth", getFormRequestBody(productCloth))
-                            put("product_fabric", getFormRequestBody(productFabric))
-                            put("available_quantity", getFormRequestBody(productQuantity))
-                            put("delivery_time", getFormRequestBody(deliveryTime))
-                            put("business_category", getFormRequestBody(it.businessCategory))
+                            put(
+                                "product_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productName
+                                )
+                            )
+                            put(
+                                "product_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCategory
+                                )
+                            )
+                            put(
+                                "product_type", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productType
+                                )
+                            )
+                            put(
+                                "product_description", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productDescription
+                                )
+                            )
+                            put(
+                                "product_occasion", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productOccasion
+                                )
+                            )
+                            put("gender", getFormProgressRequestBody(progressUpload, gender))
+                            put(
+                                "size_s", getFormProgressRequestBody(
+                                    progressUpload,
+                                    isSAvailable.toInt().toString()
+                                )
+                            )
+                            put(
+                                "size_m", getFormProgressRequestBody(
+                                    progressUpload,
+                                    isMAvailable.toInt().toString()
+                                )
+                            )
+                            put(
+                                "size_l", getFormProgressRequestBody(
+                                    progressUpload,
+                                    isLAvailable.toInt().toString()
+                                )
+                            )
+                            put(
+                                "size_xl", getFormProgressRequestBody(
+                                    progressUpload,
+                                    isXLAvailable.toInt().toString()
+                                )
+                            )
+                            put(
+                                "size_xxl", getFormProgressRequestBody(
+                                    progressUpload,
+                                    isXXLAvailable.toInt().toString()
+                                )
+                            )
+                            put(
+                                "product_price", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productPrice
+                                )
+                            )
+                            put(
+                                "product_colour", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productColor
+                                )
+                            )
+                            put(
+                                "product_cloth", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productCloth
+                                )
+                            )
+                            put(
+                                "product_fabric", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productFabric
+                                )
+                            )
+                            put(
+                                "available_quantity", getFormProgressRequestBody(
+                                    progressUpload,
+                                    productQuantity
+                                )
+                            )
+                            put(
+                                "delivery_time", getFormProgressRequestBody(
+                                    progressUpload,
+                                    deliveryTime
+                                )
+                            )
+                            put(
+                                "business_category", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessCategory
+                                )
+                            )
                             put(
                                 "business_category_type",
-                                getFormRequestBody(it.specialization)
+                                getFormProgressRequestBody(progressUpload, it.specialization)
                             )
-                            put("business_id", getFormRequestBody(it.shopId.toString()))
-                            put("uuid", getFormRequestBody(it.uuid))
-                            put("business_name", getFormRequestBody(it.businessName))
-                            put("likes", getFormRequestBody("0"))
-                            put("product_status", getFormRequestBody("0"))
+                            put(
+                                "business_id", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.shopId.toString()
+                                )
+                            )
+                            put("uuid", getFormProgressRequestBody(progressUpload, it.uuid))
+                            put(
+                                "business_name", getFormProgressRequestBody(
+                                    progressUpload,
+                                    it.businessName
+                                )
+                            )
+                            put("likes", getFormProgressRequestBody(progressUpload, "0"))
+                            put("product_status", getFormProgressRequestBody(progressUpload, "0"))
                         }
                     }
 
-                    addFileMultiPartBody("product_image1", productImage1)
-                    addFileMultiPartBody("product_image2", productImage2)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image1", productImage1)
+                    addMultiPartProgressRequestBody(progressUpload, "product_image2", productImage2)
                     if (productImage3 != null)
-                        addFileMultiPartBody("product_image3", productImage3)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image3",
+                            productImage3
+                        )
                     if (productImage4 != null)
-                        addFileMultiPartBody("product_image4", productImage4)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image4",
+                            productImage4
+                        )
                     if (productImage5 != null)
-                        addFileMultiPartBody("product_image5", productImage5)
+                        addMultiPartProgressRequestBody(
+                            progressUpload,
+                            "product_image5",
+                            productImage5
+                        )
                     try {
+                        progressUpload.apply {
+                            prepareToUpload(contentMap = contentMap, files = imageFiles)
+                            setUploadListener(listener = listener)
+                        }
                         val response =
-                            boutiqueService.postStoreProduct(formDataMap, imageFiles).execute()
+                            boutiqueService.postStoreProduct(contentMap, imageFiles).execute()
                         if (response.code() == 201) {
                             isStoreSubmissionSuccessful.postValue(true)
                             productImage1.delete()
@@ -789,47 +1203,56 @@ class NewProductViewModel @Inject constructor(
         uuid: String,
         zone: String
     ): Boolean {
-        val tempDataMap = HashMap<String, RequestBody>()
+        val tempDataMap = HashMap<String, ProgressUpload.ProgressRequestBody>()
 
         isProductNameEmpty.value = productName.isEmpty()
         if (isProductNameEmpty.value!!)
             return false
-        tempDataMap["product_name"] = getFormRequestBody(productName)
+        tempDataMap["product_name"] = getFormProgressRequestBody(progressUpload, productName)
 
         isProductTypeEmpty.value = productType.isEmpty()
         if (isProductTypeEmpty.value!!)
             return false
-        tempDataMap["product_type"] = getFormRequestBody(productType)
+        tempDataMap["product_type"] = getFormProgressRequestBody(progressUpload, productType)
 
         isProductClothEmpty.value = productCloth.isEmpty()
         if (isProductClothEmpty.value!!)
             return false
-        tempDataMap["product_cloth"] = getFormRequestBody(productCloth)
+        tempDataMap["product_cloth"] = getFormProgressRequestBody(progressUpload, productCloth)
 
         isProductFabricEmpty.value = productFabric.isEmpty()
         if (isProductFabricEmpty.value!!)
             return false
-        tempDataMap["product_fabric"] = getFormRequestBody(productFabric)
+        tempDataMap["product_fabric"] = getFormProgressRequestBody(progressUpload, productFabric)
 
         isProductOccasionEmpty.value = productOccasion.isEmpty()
         if (isProductOccasionEmpty.value!!)
             return false
-        tempDataMap["product_occasion"] = getFormRequestBody(productOccasion)
+        tempDataMap["product_occasion"] = getFormProgressRequestBody(
+            progressUpload,
+            productOccasion
+        )
 
         isPreparationTimeEmpty.value = preparationTime.isEmpty()
         if (isPreparationTimeEmpty.value!!)
             return false
-        tempDataMap["preparation_time"] = getFormRequestBody(preparationTime)
+        tempDataMap["preparation_time"] = getFormProgressRequestBody(
+            progressUpload,
+            preparationTime
+        )
 
         isProductColorEmpty.value = productColor.isEmpty()
         if (isProductColorEmpty.value!!)
             return false
-        tempDataMap["product_colour"] = getFormRequestBody(productColor)
+        tempDataMap["product_colour"] = getFormProgressRequestBody(progressUpload, productColor)
 
         isProductDescriptionEmpty.value = productDescription.isEmpty()
         if (isProductDescriptionEmpty.value!!)
             return false
-        tempDataMap["product_description"] = getFormRequestBody(productDescription)
+        tempDataMap["product_description"] = getFormProgressRequestBody(
+            progressUpload,
+            productDescription
+        )
 
         isProductImage1LengthZero.value = productImage1 == null || productImage1.length() == 0L
         if (isProductImage1LengthZero.value!!)
@@ -838,62 +1261,101 @@ class NewProductViewModel @Inject constructor(
         isProductImage2LengthZero.value = productImage2 == null || productImage2.length() == 0L
         if (isProductImage2LengthZero.value!!)
             return false
-        addFileMultiPartBody("product_image1", productImage1)
-        addFileMultiPartBody("product_image2", productImage2)
-        addFileMultiPartBody("product_image3", productImage3)
-        addFileMultiPartBody("product_image4", productImage4)
-        addFileMultiPartBody("product_image5", productImage5)
+        addMultiPartProgressRequestBody(progressUpload, "product_image1", productImage1)
+        addMultiPartProgressRequestBody(progressUpload, "product_image2", productImage2)
+        addMultiPartProgressRequestBody(progressUpload, "product_image3", productImage3)
+        addMultiPartProgressRequestBody(progressUpload, "product_image4", productImage4)
+        addMultiPartProgressRequestBody(progressUpload, "product_image5", productImage5)
 
         isStartPriceZero.value = startPrice.isEmpty()
         if (isStartPriceZero.value!!)
             return false
-        tempDataMap["start_price"] = getFormRequestBody(startPrice)
+        tempDataMap["start_price"] = getFormProgressRequestBody(progressUpload, startPrice)
 
         isEndPriceZero.value = endPrice.isEmpty()
         if (isEndPriceZero.value!!)
             return false
-        tempDataMap["end_price"] = getFormRequestBody(endPrice)
+        tempDataMap["end_price"] = getFormProgressRequestBody(progressUpload, endPrice)
 
         isBusinessIdEmpty.value = businessId.isEmpty()
         if (isBusinessIdEmpty.value!!)
             return false
-        tempDataMap["business_id"] = getFormRequestBody(businessId)
+        tempDataMap["business_id"] = getFormProgressRequestBody(progressUpload, businessId)
 
         isBusinessNameEmpty.value = businessName.isEmpty()
         if (isBusinessNameEmpty.value!!)
             return false
-        tempDataMap["business_name"] = getFormRequestBody(businessName)
+        tempDataMap["business_name"] = getFormProgressRequestBody(progressUpload, businessName)
 
         isUuidEmpty.value = uuid.isEmpty()
         if (isUuidEmpty.value!!)
             return false
-        tempDataMap["uuid"] = getFormRequestBody(uuid)
+        tempDataMap["uuid"] = getFormProgressRequestBody(progressUpload, uuid)
 
         isZoneEmpty.value = zone.isEmpty()
         if (isZoneEmpty.value!!)
             return false
-        tempDataMap["zone"] = getFormRequestBody(zone)
+        tempDataMap["zone"] = getFormProgressRequestBody(progressUpload, zone)
 
-        formDataMap.putAll(tempDataMap)
+        contentMap.putAll(tempDataMap)
 
         // Clear temporary maps
         tempDataMap.clear()
         return true
     }
 
-    private fun addFileMultiPartBody(partName: String, file: File?) {
+    private fun getFormProgressRequestBody(
+        progressUpload: ProgressUpload,
+        field: String
+    ): ProgressUpload.ProgressRequestBody =
+        progressUpload.ProgressRequestBody(
+            MediaType.parse("text/plain"),
+            field
+        )
+
+    private fun addMultiPartProgressRequestBody(
+        progressUpload: ProgressUpload,
+        partName: String,
+        file: File?
+    ) {
         file?.let {
-            val requestBody = RequestBody.create(MediaType.parse("image/*"), it)
-            imageFiles.add(MultipartBody.Part.createFormData(partName, it.name, requestBody))
+            imageFiles.add(
+                MultipartBody.Part.createFormData(
+                    partName, it.name, progressUpload.ProgressRequestBody(
+                        MediaType.parse("image/*"), content = compressImage(file = it)
+                    )
+                )
+            )
         }
     }
-
-    private fun getFormRequestBody(field: String): RequestBody =
-        RequestBody.create(MediaType.parse("text/plain"), field)
 
     private fun Boolean.toInt(): Int =
         if (this)
             1
         else
             0
+
+    private fun compressImage(file: File): File {
+        // Check if fileLength is less than 3 MB, if so, simply return.
+        val fileLength = file.length()
+        if (fileLength < 3000000 || fileLength == 0L)
+            return file
+        try {
+            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+            val out = file.outputStream()
+            bitmap.compress(
+                Bitmap.CompressFormat.JPEG,
+                getCompressionRatio(fileLength = fileLength),
+                out
+            )
+            out.close()
+            return file
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return file
+    }
+
+    private fun getCompressionRatio(fileLength: Long): Int =
+        (Constants.DEFAULT_FILE_SIZE_LIMIT / fileLength).toInt()
 }
