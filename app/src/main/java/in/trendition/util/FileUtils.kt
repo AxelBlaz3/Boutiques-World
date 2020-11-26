@@ -19,6 +19,10 @@ object FileUtils {
      */
     fun copyInputStreamToFile(inputStream: InputStream, imageFile: File?) {
         try {
+            imageFile?.let {
+                if (it.exists())
+                    it.delete()
+            }
             inputStream.use { input ->
                 FileOutputStream(imageFile).use { output ->
                     val buffer = ByteArray(4 * 1024)

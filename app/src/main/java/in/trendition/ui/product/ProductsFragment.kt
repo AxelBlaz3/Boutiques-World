@@ -260,22 +260,22 @@ class ProductsFragment : Fragment(),
     private fun getListForPosition(
         position: Int,
         products: ArrayList<BaseProduct>
-    ): MutableList<BaseProduct>? {
+    ): List<BaseProduct>? {
         try {
             return when (position) {
                 4 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 1 }
-                    .sortedByDescending { product -> (product as BaseProduct.Product).productId.toInt() } as MutableList<BaseProduct>
+                    .sortedByDescending { product -> (product as BaseProduct.Product).productId.toInt() }
                 5 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 0 }
-                    .sortedByDescending { product -> (product as BaseProduct.Product).productId.toInt() } as MutableList<BaseProduct>
+                    .sortedByDescending { product -> (product as BaseProduct.Product).productId.toInt() }
                 6 -> products.filter { product -> (product as BaseProduct.Product).productStatus == 2 }
-                    .sortedByDescending { product -> (product as BaseProduct.Product).productId.toInt() } as MutableList<BaseProduct>
+                    .sortedByDescending { product -> (product as BaseProduct.Product).productId.toInt() }
                 // 10, 11, 12 position indicate D (Sketches)
                 10 -> products.filter { product -> (product as BaseProduct.Sketch).productStatus == 1 }
-                    .sortedByDescending { product -> (product as BaseProduct.Sketch).productId.toInt() } as MutableList<BaseProduct>
+                    .sortedByDescending { product -> (product as BaseProduct.Sketch).productId.toInt() }
                 11 -> products.filter { product -> (product as BaseProduct.Sketch).productStatus == 0 }
-                    .sortedByDescending { product -> (product as BaseProduct.Sketch).productId.toInt() } as MutableList<BaseProduct>
+                    .sortedByDescending { product -> (product as BaseProduct.Sketch).productId.toInt() }
                 12 -> products.filter { product -> (product as BaseProduct.Sketch).productStatus == 2 }
-                    .sortedByDescending { product -> (product as BaseProduct.Sketch).productId.toInt() } as MutableList<BaseProduct>
+                    .sortedByDescending { product -> (product as BaseProduct.Sketch).productId.toInt() }
                 else -> throw IllegalArgumentException("Unknown position $position for getting products list")
             }
         } catch (e: Exception) {

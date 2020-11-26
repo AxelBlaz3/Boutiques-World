@@ -25,11 +25,19 @@ class MainActivityViewModel @Inject constructor(private val boutiqueService: Bou
     private val isUpdateDownloaded: MutableLiveData<Boolean> = MutableLiveData(false)
     var downloadUrl = ""
 
+    // Track upload progress.
+    private val uploadProgress: MutableLiveData<Int> = MutableLiveData(0)
+
     fun getIsUpdateAvailable(): LiveData<Boolean?> = isUpdateAvailable
     fun getDownloadProgress(): LiveData<Int> = downloadProgress
     fun getIsUpdateDownloaded(): LiveData<Boolean> = isUpdateDownloaded
     fun setIsUpdateAvailable(isUpdateAvailable: Boolean) {
         this.isUpdateAvailable.postValue(isUpdateAvailable)
+    }
+
+    fun getUploadProgress(): LiveData<Int> = uploadProgress
+    fun setUploadProgress(progress: Int) {
+        uploadProgress.postValue(progress)
     }
 
     fun checkUpdate() {
@@ -45,11 +53,6 @@ class MainActivityViewModel @Inject constructor(private val boutiqueService: Bou
                                 latestVersionDate
                             )
                         ) {
-                            /*if (currentVersion[0].toInt() < latestVersion[0].toInt() ||
-                                currentVersion[1].toInt() < latestVersion[1].toInt() ||
-                                currentVersion[2].toInt() < latestVersion[2].toInt() ||
-                                currentVersion[3].toInt() < latestVersion[3].toInt()
-                            ) {*/
                             // New update
                             downloadUrl = this["url"] as String
                             setIsUpdateAvailable(isUpdateAvailable = true)
@@ -71,13 +74,13 @@ class MainActivityViewModel @Inject constructor(private val boutiqueService: Bou
                 val connection = URL(downloadUrl).openConnection() as HttpURLConnection
                 val localFile =
                     File(externalFilesDir, downloadUrl.substring(downloadUrl.lastIndexOf('/') + 1))
-                var localFileSize = 0L
+                var localFileSize: Long
                 connection.run {
                     if (!localFile.exists())
                         localFile.createNewFile()
                     localFileSize = localFile.length()
                     setRequestProperty("Range", "bytes=$localFileSize-")
-                    setRequestProperty("Accept-Encoding", "identity");
+                    setRequestProperty("Accept-Encoding", "identity")
                     connect()
                 }
 

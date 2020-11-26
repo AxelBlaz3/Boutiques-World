@@ -60,11 +60,8 @@ class BottomSheetRenewSubscriptionFragment : BottomSheetDialogFragment() {
                                     profileViewModel.makeFreeSubscription(
                                         it.id,
                                         it.planAmount,
+                                        (requireActivity() as MainActivity).getFormattedDate(),
                                         (requireActivity() as MainActivity).getFormattedDate(
-                                            needToday = true
-                                        ),
-                                        (requireActivity() as MainActivity).getFormattedDate(
-                                            needToday = false,
                                             period = it.planPeriod.toInt()
                                         ),
                                         subscriptionId = "SUBSCRIPTION_${retailer.businessCategory}${retailer.shopId}${System.currentTimeMillis()}"

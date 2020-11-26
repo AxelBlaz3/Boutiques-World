@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_newProductFragment_to_bottomSheetPalette"
             app:destination="@id/bottomSheetPalette" />
+        <action
+            android:id="@+id/action_newProductFragment_to_productPostingBottomSheetDialog"
+            app:destination="@id/productPostingBottomSheetDialog" />
     </fragment>
     <action
         android:id="@+id/action_global_newProductFragment"
@@ -203,6 +206,9 @@
         <action
             android:id="@+id/action_fabricNewProductFragment_to_bottomSheetPalette"
             app:destination="@id/bottomSheetPalette" />
+        <action
+            android:id="@+id/action_storeNewProductFragment_to_productPostingBottomSheetDialog"
+            app:destination="@id/productPostingBottomSheetDialog" />
     </fragment>
     <action
         android:id="@+id/action_global_fabricNewProductFragment"
@@ -416,4 +422,8 @@
     <action
         android:id="@+id/action_global_updateBottomSheetDialog"
         app:destination="@id/updateBottomSheetDialog" />
+    <dialog
+        android:id="@+id/productPostingBottomSheetDialog"
+        android:name="in.trendition.ui.newproduct.ProductPostingBottomSheetDialog"
+        android:label="ProductPostingBottomSheetDialog" />
 </navigation>

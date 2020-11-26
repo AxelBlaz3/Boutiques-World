@@ -2,10 +2,12 @@ package `in`.trendition.ui.newproduct
 
 import `in`.trendition.R
 import `in`.trendition.databinding.FragmentNewProductBinding
+import `in`.trendition.ui.MainActivityViewModel
 import `in`.trendition.ui.product.ProductsViewModel
 import `in`.trendition.ui.profile.ProfileViewModel
 import `in`.trendition.util.FileUtils.copyInputStreamToFile
 import `in`.trendition.util.FileUtils.getExtension
+import `in`.trendition.util.ProgressUpload
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -25,13 +27,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class NewProductFragment : Fragment() {
+class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
     private lateinit var binding: FragmentNewProductBinding
     private var imageFiles = ArrayList<File?>().apply {
         // Assign initial values to 5 images
@@ -50,6 +54,9 @@ class NewProductFragment : Fragment() {
 
     @Inject
     lateinit var productsViewModel: ProductsViewModel
+
+    @Inject
+    lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -226,6 +233,13 @@ class NewProductFragment : Fragment() {
             newProductViewModel.getIsProductSubmissionSuccessful().observe(viewLifecycleOwner) {
                 // Enable the submit product button
                 binding.submitProduct.isEnabled = true
+
+                // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                    "isSubmissionDone",
+                    it
+                )
+
                 if (it) {
                     productsViewModel.getProducts(forceRefresh = true)
                     findNavController().navigateUp()
@@ -254,6 +268,13 @@ class NewProductFragment : Fragment() {
             newProductViewModel.getIsSketchSubmissionSuccessful().observe(viewLifecycleOwner) {
                 // Enable the submit product button
                 binding.submitProduct.isEnabled = true
+
+                // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                    "isSubmissionDone",
+                    it
+                )
+
                 if (it) {
                     productsViewModel.getSketches(forceRefresh = true)
                     findNavController().navigateUp()
@@ -299,38 +320,40 @@ class NewProductFragment : Fragment() {
         val imageUri = data?.data
         imageUri?.let {
             binding.apply {
-                when (requestCode) {
-                    1 -> handleSelectedImage(
-                        productImage1,
-                        it,
-                        "image1",
-                        requestCode
-                    )
-                    2 -> handleSelectedImage(
-                        productImage2,
-                        it,
-                        "image2",
-                        requestCode
-                    )
-                    3 -> handleSelectedImage(
-                        productImage3,
-                        it,
-                        "image3",
-                        requestCode
-                    )
-                    4 -> handleSelectedImage(
-                        productImage4,
-                        it,
-                        "image4",
-                        requestCode
-                    )
-                    5 -> handleSelectedImage(
-                        productImage5,
-                        it,
-                        "image5",
-                        requestCode
-                    )
-                    else -> throw RuntimeException("Unknown request code - $requestCode when picking an image")
+                lifecycleScope.launch {
+                    when (requestCode) {
+                        1 -> handleSelectedImage(
+                            productImage1,
+                            it,
+                            "image1",
+                            requestCode
+                        )
+                        2 -> handleSelectedImage(
+                            productImage2,
+                            it,
+                            "image2",
+                            requestCode
+                        )
+                        3 -> handleSelectedImage(
+                            productImage3,
+                            it,
+                            "image3",
+                            requestCode
+                        )
+                        4 -> handleSelectedImage(
+                            productImage4,
+                            it,
+                            "image4",
+                            requestCode
+                        )
+                        5 -> handleSelectedImage(
+                            productImage5,
+                            it,
+                            "image5",
+                            requestCode
+                        )
+                        else -> throw RuntimeException("Unknown request code - $requestCode when picking an image")
+                    }
                 }
             }
         }
@@ -344,6 +367,7 @@ class NewProductFragment : Fragment() {
         lifecycleScope.launch {
             binding.apply {
                 profileViewModel.getRetailer().value?.let {
+                    findNavController().navigate(NewProductFragmentDirections.actionNewProductFragmentToProductPostingBottomSheetDialog())
                     if (it.businessCategory == "B")
                         newProductViewModel.submitProduct(
                             productName = productName.text.toString(),
@@ -360,7 +384,8 @@ class NewProductFragment : Fragment() {
                             productImage2 = imageFiles[1],
                             productImage3 = imageFiles[2],
                             productImage4 = imageFiles[3],
-                            productImage5 = imageFiles[4]
+                            productImage5 = imageFiles[4],
+                            listener = this@NewProductFragment
                         )
                     else // Sketch
                         newProductViewModel.submitSketch(
@@ -371,7 +396,8 @@ class NewProductFragment : Fragment() {
                             productImage2 = imageFiles[1],
                             productImage3 = imageFiles[2],
                             productImage4 = imageFiles[3],
-                            productImage5 = imageFiles[4]
+                            productImage5 = imageFiles[4],
+                            listener = this@NewProductFragment
                         )
                 }
             }
@@ -385,6 +411,9 @@ class NewProductFragment : Fragment() {
     private fun requestFocusForEditText(textInputEditText: TextInputEditText) {
         binding.submitProduct.isEnabled = true
         textInputEditText.requestFocus()
+
+        // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+        findNavController().currentBackStackEntry?.savedStateHandle?.set("isSubmissionDone", false)
     }
 
     /**
@@ -394,6 +423,9 @@ class NewProductFragment : Fragment() {
     private fun setEmptyDropDownError(materialAutoCompleteTextView: MaterialAutoCompleteTextView) {
         binding.submitProduct.isEnabled = true
         materialAutoCompleteTextView.requestFocus()
+
+        // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+        findNavController().currentBackStackEntry?.savedStateHandle?.set("isSubmissionDone", false)
     }
 
     /**
@@ -420,13 +452,15 @@ class NewProductFragment : Fragment() {
      * @param imageNameWithoutExt: Extension of the image file.
      * @param requestCode: Request code used when selecting an image. Here, it's used as position for access nth file in [imageFiles]
      */
-    private fun handleSelectedImage(
+    private suspend fun handleSelectedImage(
         imageView: ImageView,
         imageUri: Uri?,
         imageNameWithoutExt: String,
         requestCode: Int
-    ) {
-        imageView.setImageURI(imageUri)
+    ) = withContext(Dispatchers.IO) {
+        requireActivity().runOnUiThread {
+            imageView.setImageURI(imageUri)
+        }
         imageFiles[requestCode - 1] = File(
             requireContext().cacheDir,
             "$imageNameWithoutExt.${getExtension(requireContext(), imageUri!!)}"
@@ -436,5 +470,14 @@ class NewProductFragment : Fragment() {
                 imageUri
             )!!, imageFiles[requestCode - 1]
         )
+    }
+
+    override fun onProgressUpdate(percentage: Int) {
+        mainActivityViewModel.setUploadProgress(progress = percentage)
+    }
+
+    override fun onError(e: Exception) {
+        // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+        findNavController().currentBackStackEntry?.savedStateHandle?.set("isSubmissionDone", false)
     }
 }

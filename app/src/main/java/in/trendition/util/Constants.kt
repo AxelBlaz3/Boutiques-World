@@ -10,4 +10,7 @@ object Constants {
 
     const val REQUESTS_NOTIFICATION_ID = 50
     const val ORDERS_NOTIFICATION_ID = 51
+
+    // Set size limit to 3 MB while uploading a product
+    const val DEFAULT_FILE_SIZE_LIMIT = 2500000 * 100
 }
