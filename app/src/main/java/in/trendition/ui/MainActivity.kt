@@ -526,9 +526,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             DashboardFragmentDirections.actionGlobalUpdateBottomSheetDialog()
                         )
                     else
-                        File(getExternalFilesDir("update").toString(), "update.apk").run {
+                        File(getExternalFilesDir("update").toString()).apply {
                             if (exists())
-                                delete()
+                                deleteRecursively()
                         }
                 }
             }
