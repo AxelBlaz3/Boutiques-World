@@ -350,6 +350,13 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                         getString(R.string.choose_a_color),
                         Snackbar.LENGTH_SHORT
                     ).show()
+
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
+
                     // Enable submit product button
                     submitProduct.isEnabled = true
                 }

@@ -190,6 +190,13 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
             newProductViewModel.getIsProductColorEmpty().observe(viewLifecycleOwner) {
                 if (it) {
                     submitProduct.isEnabled = true
+
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
+
                     Snackbar.make(
                         view,
                         getString(R.string.choose_a_color),
