@@ -75,32 +75,54 @@
     </string-array>
 
     <string-array name="store_fabrics_design_array">
-        <item>Raw Silk</item>
-        <item>Cotton</item>
-        <item>Kalamkari</item>
+        <item>Ajrakh</item>
         <item>Apatani</item>
-        <item>Muga</item>
-        <item>Bhagalpuri</item>
-        <item>Kosa</item>
-        <item>Kunbi</item>
+        <item>Bagh Print</item>
         <item>Bandhani</item>
-        <item>Kuchai</item>
-        <item>Chanderi</item>
-        <item>Paithani</item>
-        <item>Eri</item>
-        <item>Sambalpuri</item>
-        <item>Phulkari</item>
-        <item>Embroidery</item>
-        <item>Kanjeevaram</item>
-        <item>Ikat</item>
-        <item>Chikankari</item>
+        <item>Benaras</item>
+        <item>Berhampuri</item>
+        <item>Bhagalpuri</item>
         <item>Blockprint</item>
+        <item>Bomkai</item>
         <item>Brocade</item>
-        <item>Mangalgiri</item>
-        <item>Bagh print</item>
-        <item>Banarasi</item>
+        <item>Chanderi</item>
+        <item>Chikankari</item>
+        <item>Cotton</item>
         <item>Dabu</item>
+        <item>Embroidery</item>
+        <item>Eri</item>
+        <item>Ikat Pochampally</item>
+        <item>Ikat Sambalpuri</item>
+        <item>Jamdani</item>
+        <item>Kalamkari</item>
+        <item>Kanchi</item>
+        <item>Kanjeevaram</item>
+        <item>Kantha</item>
+        <item>Kasavu</item>
+        <item>Khandua</item>
+        <item>Kosa</item>
+        <item>Kuchai</item>
+        <item>Kullu Shawls</item>
+        <item>Kunbi</item>
+        <item>Lepcha</item>
+        <item>Mangalgiri</item>
+        <item>Muga</item>
+        <item>Mysore</item>
+        <item>Naga Shawls</item>
+        <item>Narayanpeth</item>
+        <item>Nuapatna Khandua</item>
+        <item>Pachra</item>
+        <item>Paithani</item>
+        <item>Panchachuli</item>
+        <item>Panja Weaves</item>
+        <item>Pasapali</item>
+        <item>Pashmina</item>
         <item>Patola</item>
+        <item>Phanek</item>
+        <item>Phulkari</item>
+        <item>Puans</item>
+        <item>Raw Silk</item>
+        <item>Shisha</item>
     </string-array>
 
     <string-array name="boutique_category_type_array">
