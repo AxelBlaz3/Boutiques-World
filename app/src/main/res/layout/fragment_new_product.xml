@@ -134,6 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/product_name"
+                    android:singleLine="true"
                     android:textAppearance="?textAppearanceBody2"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -156,6 +157,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/category"
+                    android:singleLine="true"
                     android:inputType="none"
                     android:textAppearance="?textAppearanceBody2"
                     android:textCursorDrawable="@null" />
@@ -292,6 +294,7 @@
                     android:layout_height="match_parent"
                     android:hint="@string/start_price"
                     android:inputType="number"
+                    android:singleLine="true"
                     android:textAppearance="?textAppearanceBody2"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -313,6 +316,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/end_price"
+                    android:singleLine="true"
                     android:inputType="number"
                     android:textAppearance="?textAppearanceBody2"
                     android:textCursorDrawable="@null" />
