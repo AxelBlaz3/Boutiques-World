@@ -121,6 +121,7 @@ sealed class StoreCategory {
         @SerializedName("product_type") val productType: String,
         @SerializedName("set_piece") val setPiece: String,
         @SerializedName("product_description") val productDescription: String,
+        @SerializedName("gender") val gender: String,
         @SerializedName("product_price") val productPrice: String,
         @SerializedName("product_colour") val productColor: String,
         @SerializedName("product_cloth") val productCloth: String,
