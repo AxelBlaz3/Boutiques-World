@@ -9,13 +9,11 @@ import `in`.trendition.util.ProgressUpload
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import java.io.File
@@ -65,7 +63,25 @@ class NewProductViewModel @Inject constructor(
     private val isProductPriceEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
     private val isProductStoryEmpty: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    // Know if the product submission is successful
+    // Dropdown items.
+    private val designDropDownItems: MutableLiveData<Pair<Boolean, List<String>>> =
+        MutableLiveData(Pair(first = false, second = ArrayList()))
+    private val clothDropDownItems: MutableLiveData<Pair<Boolean, List<String>>> =
+        MutableLiveData(Pair(first = false, second = ArrayList()))
+    private val clothingTypeDropDownItems: MutableLiveData<Pair<Boolean, Map<String, List<String>>>> =
+        MutableLiveData(Pair(false, HashMap<String, List<String>>().apply {
+            put("Male", emptyList())
+            put("Female", emptyList())
+            put("Unisex", emptyList())
+        }))
+    private val jewelleryTypeDropDownItems: MutableLiveData<Pair<Boolean, Map<String, List<String>>>> =
+        MutableLiveData(Pair(false, HashMap<String, List<String>>().apply {
+            put("Male", emptyList())
+            put("Female", emptyList())
+            put("Unisex", emptyList())
+        }))
+
+    // Know if the product submission is successful.
     private val isProductSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
     private val isStoreSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
     private val isSketchSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
@@ -107,6 +123,15 @@ class NewProductViewModel @Inject constructor(
     fun getIsDeliveryTimeEmpty(): LiveData<Boolean> = isDeliveryTimeEmpty
     fun getIsQuantityEmpty(): LiveData<Boolean> = isQuantityEmpty
     fun getIsStoreSubmissionSuccessful(): LiveData<Boolean> = isStoreSubmissionSuccessful
+
+    // Dropdown getters.
+    fun getDesignDropDownItems(): LiveData<Pair<Boolean, List<String>>> = designDropDownItems
+    fun getClothDropDownItems(): LiveData<Pair<Boolean, List<String>>> = clothDropDownItems
+    fun getClothingTypeDropDownItems(): LiveData<Pair<Boolean, Map<String, List<String>>>> =
+        clothingTypeDropDownItems
+
+    fun getJewelleryTypeDropDownItems(): LiveData<Pair<Boolean, Map<String, List<String>>>> =
+        jewelleryTypeDropDownItems
 
     // Palette
     val paletteColors by lazy {
@@ -543,6 +568,7 @@ class NewProductViewModel @Inject constructor(
         productCategory: String = "Dress Material",
         productType: String = "Dress Material",
         setPiece: String,
+        gender: String,
         productDescription: String,
         productPrice: String,
         productColor: String,
@@ -571,6 +597,7 @@ class NewProductViewModel @Inject constructor(
                     isProductClothEmpty.postValue(productCloth.isEmpty())
                     isProductFabricEmpty.postValue(productFabric.isEmpty())
                     isProductPatternEmpty.postValue(productPattern.isEmpty())
+                    isGenderEmpty.postValue(gender.isEmpty())
                     isSetPieceEmpty.postValue(setPiece.isEmpty())
                     isTopMeasurementEmpty.postValue(topMeasurement.isEmpty())
                     isBottomMeasurementEmpty.postValue(if (setPiecePosition == 2) bottomMeasurement.isEmpty() else false)
@@ -637,6 +664,7 @@ class NewProductViewModel @Inject constructor(
                                     productPrice
                                 )
                             )
+                            put("gender", getFormProgressRequestBody(progressUpload, gender))
                             put(
                                 "product_colour", getFormProgressRequestBody(
                                     progressUpload,
@@ -1302,6 +1330,128 @@ class NewProductViewModel @Inject constructor(
         // Clear temporary maps
         tempDataMap.clear()
         return true
+    }
+
+    // Fetch Design Dropdown items.
+    private suspend fun fetchDesignDropDownItems() = withContext(Dispatchers.IO) {
+        val response = boutiqueService.getDesignDropDownItems().execute()
+        if (response.isSuccessful)
+            response.body()?.let { designDropDownItems ->
+                this@NewProductViewModel.designDropDownItems.postValue(
+                    Pair(
+                        first = true,
+                        second = designDropDownItems
+                    )
+                )
+            } ?: emptyList<String>()
+        else
+            designDropDownItems.postValue(Pair(first = true, second = emptyList()))
+    }
+
+    // Fetch Cloth Dropdown items.
+    private suspend fun fetchClothDropDownItems() = withContext(Dispatchers.IO) {
+        val response = boutiqueService.getClothDropDownItems().execute()
+        if (response.isSuccessful)
+            response.body()?.let { clothDropDownItems ->
+                this@NewProductViewModel.clothDropDownItems.postValue(
+                    Pair(
+                        first = true,
+                        second = clothDropDownItems
+                    )
+                )
+            } ?: emptyList<String>()
+        else
+            clothDropDownItems.postValue(Pair(first = true, second = emptyList()))
+    }
+
+    // Fetch Clothing Type Dropdown items.
+    private suspend fun fetchClothingTypeDropDownItems() = withContext(Dispatchers.IO) {
+        val response = boutiqueService.getClothingTypeDropDownItems().execute()
+        if (response.isSuccessful)
+            response.body()?.let { clothingTypeDropDownItems ->
+                this@NewProductViewModel.clothingTypeDropDownItems.postValue(
+                    Pair(
+                        first = true,
+                        second = clothingTypeDropDownItems
+                    )
+                )
+            } ?: emptyList<String>()
+        else
+            clothingTypeDropDownItems.postValue(
+                Pair(
+                    first = true,
+                    second = clothingTypeDropDownItems.value!!.second
+                )
+            )
+    }
+
+    // Fetch Jewellery Type Dropdown items.
+    private suspend fun fetchJewelleryTypeDropDownItems() = withContext(Dispatchers.IO) {
+        val response = boutiqueService.getJewelleryTypeDropDownItems().execute()
+        if (response.isSuccessful)
+            response.body()?.let { jewelleryTypeDropDownItems ->
+                this@NewProductViewModel.jewelleryTypeDropDownItems.postValue(
+                    Pair(
+                        first = true,
+                        second = jewelleryTypeDropDownItems
+                    )
+                )
+            } ?: emptyList<String>()
+        else
+            jewelleryTypeDropDownItems.postValue(
+                Pair(
+                    first = true,
+                    second = jewelleryTypeDropDownItems.value!!.second
+                )
+            )
+    }
+
+    // Verify and fetch design and cloth dropdown items.
+    fun verifyAndFetchDesignDropDownItems() {
+        designDropDownItems.value?.let { dropdownItems ->
+            if (!dropdownItems.first)
+                viewModelScope.launch {
+                    fetchDesignDropDownItems()
+                }
+        } ?: viewModelScope.launch {
+            fetchDesignDropDownItems()
+        }
+    }
+
+    // Verify and fetch clothing dropdown items.
+    fun verifyAndFetchClothDropDownItems() {
+        clothDropDownItems.value?.let { dropdownItems ->
+            if (!dropdownItems.first)
+                viewModelScope.launch {
+                    fetchClothDropDownItems()
+                }
+        } ?: viewModelScope.launch {
+            fetchClothDropDownItems()
+        }
+    }
+
+    // Verify and fetch clothing type dropdown items.
+    fun verifyAndFetchClothingTypeDropDownItems() {
+        clothingTypeDropDownItems.value?.let { dropdownItems ->
+            if (!dropdownItems.first)
+                viewModelScope.launch {
+                    fetchClothingTypeDropDownItems()
+                }
+        } ?: viewModelScope.launch {
+            fetchClothingTypeDropDownItems()
+        }
+    }
+
+    // Verify and fetch jewellery type dropdown items.
+    fun verifyAndFetchJewelleryTypeDropDownItems() {
+        jewelleryTypeDropDownItems.value?.let { dropdownItems ->
+            if (!dropdownItems.first)
+                viewModelScope.launch {
+                    fetchJewelleryTypeDropDownItems()
+                }
+        } ?: viewModelScope.launch {
+            fetchJewelleryTypeDropDownItems()
+        }
     }
 
     private fun getFormProgressRequestBody(

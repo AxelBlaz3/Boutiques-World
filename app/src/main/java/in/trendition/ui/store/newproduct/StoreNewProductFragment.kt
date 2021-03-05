@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
@@ -35,6 +36,22 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
     private lateinit var binding: FragmentStoreNewProductBinding
+    private val REQUEST_IMAGE = 1
+
+    // Map to keep track of index and imageView.
+    private val imageMap by lazy {
+        HashMap<Int, ShapeableImageView>().apply {
+            put(0, binding.productImage1)
+            put(1, binding.productImage2)
+            put(2, binding.productImage3)
+            put(3, binding.productImage4)
+            put(4, binding.productImage5)
+        }
+    }
+
+    // Keep track of currently clicked image selection index.
+    var currentImageSelectionIndex = 0
+
     private var imageFiles = ArrayList<File?>().apply {
         // Assign initial values to 5 images
         add(null)
@@ -69,7 +86,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentStoreNewProductBinding.inflate(inflater)
         return binding.root
     }
@@ -176,26 +193,50 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
             }
 
             // Observe gender item click listener to populate adapters
-            // Position: 0 - Male, 1 - Female
+            // Position: 0 - Male, 1 - Female, 2 - Unisex.
             gender.setOnItemClickListener { _, _, position, _ ->
                 productType.setText("", false)
                 areSizesAvailable = false
-                if (productCategory.text.toString() == "Jewellery")
-                    productType.setAdapter(
-                        ArrayAdapter(
-                            requireContext(),
-                            android.R.layout.simple_spinner_dropdown_item,
-                            resources.getStringArray(if (position == 0) R.array.store_jewellery_men_types_array else R.array.store_jewellery_women_types_array)
-                        )
-                    )
-                else if (productCategory.text.toString() == "Clothing")
-                    productType.setAdapter(
-                        ArrayAdapter(
-                            requireContext(),
-                            android.R.layout.simple_spinner_dropdown_item,
-                            resources.getStringArray(if (position == 0) R.array.store_clothing_men_types_array else R.array.store_clothing_women_types_array)
-                        )
-                    )
+                if (productCategory.text.toString() == "Jewellery") {
+                    newProductViewModel.getJewelleryTypeDropDownItems()
+                        .observe(viewLifecycleOwner) { dropDownItems ->
+                            if (dropDownItems.first)
+                                productType.setAdapter(
+                                    ArrayAdapter(
+                                        requireContext(),
+                                        android.R.layout.simple_spinner_dropdown_item,
+                                        if (position == 0) dropDownItems.second["Male"]!!.toMutableList() else if (position == 1) dropDownItems.second["Female"]!!.toMutableList() else dropDownItems.second["Unisex"]!!.toMutableList()
+                                    )
+                                )
+                            else
+                                productType.setAdapter(
+                                    ArrayAdapter(
+                                        requireContext(),
+                                        android.R.layout.simple_spinner_dropdown_item,
+                                        resources.getStringArray(if (position == 0) R.array.store_jewellery_men_types_array else R.array.store_jewellery_women_types_array)
+                                    )
+                                )
+                        }
+                } else if (productCategory.text.toString() == "Clothing")
+                    newProductViewModel.getClothingTypeDropDownItems()
+                        .observe(viewLifecycleOwner) { dropDownItems ->
+                            if (dropDownItems.first)
+                                productType.setAdapter(
+                                    ArrayAdapter(
+                                        requireContext(),
+                                        android.R.layout.simple_spinner_dropdown_item,
+                                        if (position == 0) dropDownItems.second["Male"]!!.toMutableList() else if (position == 1) dropDownItems.second["Female"]!!.toMutableList() else dropDownItems.second["Unisex"]!!.toMutableList()
+                                    )
+                                )
+                            else
+                                productType.setAdapter(
+                                    ArrayAdapter(
+                                        requireContext(),
+                                        android.R.layout.simple_spinner_dropdown_item,
+                                        resources.getStringArray(if (position == 0) R.array.store_clothing_men_types_array else R.array.store_clothing_women_types_array)
+                                    )
+                                )
+                        }
             }
 
             // Launch PaletteBottomSheet for picking a color.
@@ -206,6 +247,52 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                     )
                 )
             }
+
+            // Fetch design and cloth dropdown items as they are common for every category.
+            newProductViewModel.run {
+                verifyAndFetchDesignDropDownItems()
+                verifyAndFetchClothDropDownItems()
+            }
+            // Observe for latest dropdown items.
+            newProductViewModel.getDesignDropDownItems()
+                .observe(viewLifecycleOwner) { dropDownItems ->
+                    if (dropDownItems.first && dropDownItems.second.isNotEmpty())
+                        design.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                dropDownItems.second
+                            )
+                        )
+                    else
+                        design.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                resources.getStringArray(R.array.store_fabrics_design_array)
+                            )
+                        )
+                }
+
+            newProductViewModel.getClothDropDownItems()
+                .observe(viewLifecycleOwner) { dropDownItems ->
+                    if (dropDownItems.first && dropDownItems.second.isNotEmpty())
+                        cloth.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                dropDownItems.second
+                            )
+                        )
+                    else
+                        cloth.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                resources.getStringArray(R.array.store_fabrics_cloth_array)
+                            )
+                        )
+                }
 
             // Setup observers for invalid form data
             newProductViewModel.getIsProductTypeEmpty().observe(viewLifecycleOwner) {
@@ -269,7 +356,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
             }
 
             // Listen for category changes and update hint in quantity (TextInputEditText)
-            // Also hide/display views based on category
+            // Also hide/display views and fetch dropdown items based on category.
             // 0 - Fabric, 1 - Dress Material, 2 - Clothing, 3 - Jewellery
             productCategory.setOnItemClickListener { _, _, position, _ ->
                 when (position) {
@@ -278,12 +365,22 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                         isClothingSelected = false
                         isDressMaterialsSelected = false
                         isJewellerySelected = false
+
+                        newProductViewModel.run {
+                            verifyAndFetchDesignDropDownItems()
+                            verifyAndFetchClothDropDownItems()
+                        }
                     }
                     1 -> {
                         isDressMaterialsSelected = true
                         isFabricsSelected = false
                         isClothingSelected = false
                         isJewellerySelected = false
+
+                        newProductViewModel.run {
+                            verifyAndFetchDesignDropDownItems()
+                            verifyAndFetchClothDropDownItems()
+                        }
                     }
                     2 -> {
                         gender.setText(gender.adapter.getItem(0).toString(), false)
@@ -298,6 +395,12 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                         isFabricsSelected = false
                         isDressMaterialsSelected = false
                         isJewellerySelected = false
+
+                        newProductViewModel.run {
+                            verifyAndFetchDesignDropDownItems()
+                            verifyAndFetchClothDropDownItems()
+                            verifyAndFetchClothingTypeDropDownItems()
+                        }
                     }
                     else -> {
                         gender.setText(gender.adapter.getItem(0).toString(), false)
@@ -312,6 +415,12 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                         isFabricsSelected = false
                         isClothingSelected = false
                         isDressMaterialsSelected = false
+
+                        newProductViewModel.run {
+                            verifyAndFetchDesignDropDownItems()
+                            verifyAndFetchClothDropDownItems()
+                            verifyAndFetchJewelleryTypeDropDownItems()
+                        }
                     }
                 }
             }
@@ -442,11 +551,11 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
             }
 
             // Image click listeners.
-            productImage1.setOnClickListener { choosePhoto(requestCode = 1) }
-            productImage2.setOnClickListener { choosePhoto(requestCode = 2) }
-            productImage3.setOnClickListener { choosePhoto(requestCode = 3) }
-            productImage4.setOnClickListener { choosePhoto(requestCode = 4) }
-            productImage5.setOnClickListener { choosePhoto(requestCode = 5) }
+            productImage1.setOnClickListener { choosePhoto(0) }
+            productImage2.setOnClickListener { choosePhoto(1) }
+            productImage3.setOnClickListener { choosePhoto(2) }
+            productImage4.setOnClickListener { choosePhoto(3) }
+            productImage5.setOnClickListener { choosePhoto(4) }
 
             // Final submit button click listener.
             submitProduct.setOnClickListener {
@@ -456,52 +565,16 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == 0)
-            return
-        val imageUri = data?.data
-        imageUri?.let {
-            binding.apply {
+        if (requestCode == REQUEST_IMAGE)
+            data?.let { intentData ->
                 lifecycleScope.launch {
-                    when (requestCode) {
-                        1 -> handleSelectedImage(
-                            productImage1,
-                            it,
-                            "image1",
-                            requestCode
-                        )
-                        2 -> handleSelectedImage(
-                            productImage2,
-                            it,
-                            "image2",
-                            requestCode
-                        )
-                        3 -> handleSelectedImage(
-                            productImage3,
-                            it,
-                            "image3",
-                            requestCode
-                        )
-                        4 -> handleSelectedImage(
-                            productImage4,
-                            it,
-                            "image4",
-                            requestCode
-                        )
-                        5 -> handleSelectedImage(
-                            productImage5,
-                            it,
-                            "image5",
-                            requestCode
-                        )
-                        else -> throw RuntimeException("Unknown request code - $requestCode when picking an image")
-                    }
+                    handleSelectedImages(intentData)
                 }
             }
-        }
     }
 
     /**
-     * Handle when the submitProduct button or Retry action in Snackbar is clicked
+     * Handle when the submitProduct button or Retry action in Snackbar is clicked.
      */
     private fun onSubmitButtonClick(colorName: String) {
         binding.run {
@@ -567,6 +640,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                         productCloth = cloth.text.toString(),
                         productFabric = design.text.toString(),
                         deliveryTime = deliveryTime.text.toString(),
+                        gender = gender.text.toString(),
                         productQuantity = availableQuantity.text.toString(),
                         productColor = colorName,
                         productDescription = description.text.toString(),
@@ -635,16 +709,19 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
 
     /**
      * Launch an intent for picking an image from device storage.
-     * @param requestCode: Request code for onActivityResult.
+     * @param currentImageSelectionIndex: Index of currently selected image.
      */
-    private fun choosePhoto(requestCode: Int) {
+    private fun choosePhoto(currentImageSelectionIndex: Int) {
+        this.currentImageSelectionIndex = currentImageSelectionIndex
+
         val intent = Intent().apply {
             type = "image/*"
             action = Intent.ACTION_GET_CONTENT
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
         startActivityForResult(
             Intent.createChooser(intent, getString(R.string.select_image)),
-            requestCode
+            REQUEST_IMAGE
         )
     }
 
@@ -675,6 +752,89 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                 imageUri
             )!!, imageFiles[requestCode - 1]
         )
+    }
+
+    private suspend fun handleSelectedImages(selectedData: Intent) = withContext(Dispatchers.IO) {
+        selectedData.clipData?.let { clipData ->
+            if (clipData.itemCount > 5) {
+                requireActivity().runOnUiThread {
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.max_images_snackbar_msg),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                return@withContext
+            }
+
+            // Track maxSelectionsLeft.
+            var maxSelectionsLeft = 0
+            maxSelectionsLeft =
+                if (imageFiles[0] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[1] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[2] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[3] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[4] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+
+            // Verify if user selects more than maxSelectionsLeft.
+            if (clipData.itemCount > maxSelectionsLeft && clipData.itemCount != 5 && maxSelectionsLeft != 0) {
+                requireActivity().runOnUiThread {
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.only_x_selections_left_snackbar_msg, maxSelectionsLeft),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                return@withContext
+            }
+
+            val firstNullIndex =
+                if (imageFiles[0] == null) 0 else if (imageFiles[1] == null) 1 else if (imageFiles[2] == null) 2 else if (imageFiles[3] == null) 3 else if (imageFiles[4] == null) 4 else 0
+
+            for (i in firstNullIndex until clipData.itemCount) {
+                // Get Uri of selected image and create a file at cache dir.
+                val imageUri = clipData.getItemAt(i).uri
+                imageFiles[i] = File(
+                    requireContext().cacheDir,
+                    "image$i.${FileUtils.getExtension(requireContext(), imageUri!!)}"
+                )
+
+                // Display image in imageView.
+                requireActivity().runOnUiThread {
+                    imageMap[i]!!.setImageURI(imageUri)
+                }
+
+                // Copy input stream to file.
+                FileUtils.copyInputStreamToFile(
+                    requireContext().contentResolver.openInputStream(
+                        imageUri
+                    )!!, imageFiles[i]
+                )
+            }
+        } ?: selectedData.data?.let { uri ->
+            requireActivity().runOnUiThread {
+                imageMap[currentImageSelectionIndex]!!.setImageURI(uri)
+            }
+
+            imageFiles[currentImageSelectionIndex] = File(
+                requireContext().cacheDir,
+                "image${currentImageSelectionIndex + 1}.${
+                    FileUtils.getExtension(
+                        requireContext(),
+                        uri
+                    )
+                }"
+            )
+            FileUtils.copyInputStreamToFile(
+                requireContext().contentResolver.openInputStream(
+                    uri
+                )!!, imageFiles[currentImageSelectionIndex]
+            )
+        }
     }
 
     override fun onProgressUpdate(percentage: Int) {
