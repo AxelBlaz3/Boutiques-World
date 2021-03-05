@@ -13,4 +13,6 @@ object Constants {
 
     // Set size limit to 3 MB while uploading a product
     const val DEFAULT_FILE_SIZE_LIMIT = 2500000 * 100
+
+    const val PLAY_STORE_BASE_URL = "https://play.google.com/store/apps/details?id="
 }
