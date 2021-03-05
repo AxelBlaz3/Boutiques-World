@@ -72,6 +72,7 @@
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
+        <item>Unisex</item>
     </string-array>
 
     <string-array name="store_fabrics_design_array">
@@ -422,4 +423,6 @@
     <string name="product_uploading_summary">Please wait while your product is being uploaded. Do not close the app. Meanwhile, have a cup of coffee.</string>
     <string name="upload_in_progress">Upload in progress</string>
     <string name="finishing_up">Finishing up</string>
+    <string name="max_images_snackbar_msg">You can upload atmost 5 images</string>
+    <string name="only_x_selections_left_snackbar_msg">Only %1$d selection(s) left</string>
 </resources>
