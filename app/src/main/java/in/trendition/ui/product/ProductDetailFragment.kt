@@ -88,7 +88,7 @@ class ProductDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentProductDetailBinding.inflate(inflater)
         return binding.root
     }
@@ -502,6 +502,7 @@ class ProductDetailFragment : Fragment() {
         when (product) {
             is BaseProduct.Product -> {
                 specifications.add(Pair("Type", product.productType))
+                specifications.add(Pair("Gender", product.gender))
                 specifications.add(Pair("Cloth", product.productCloth ?: "Unknown"))
                 specifications.add(Pair("Color", product.productColor ?: "Unknown"))
                 specifications.add(Pair("Fabric", product.productFabric ?: "Unknown"))
@@ -566,6 +567,7 @@ class ProductDetailFragment : Fragment() {
                 specifications.apply {
                     add(Pair("Category", storeCategory.productCategory))
                     add(Pair("Type", storeCategory.productType))
+                    add(Pair("Gender", storeCategory.gender))
                     add(Pair("Weight", storeCategory.productWeight))
                     if (storeCategory.setPiece == "Top")
                         add(Pair("Top measurement", storeCategory.topMeasurement))

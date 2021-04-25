@@ -50,7 +50,7 @@
     <string name="empty_start_price">Start price cannot be empty</string>
     <string name="empty_end_price">End price cannot be empty</string>
     <string name="choose_a_color">Pick a color for your product</string>
-    <string name="min_image_upload_error">Upload at least 2 images</string>
+    <string name="min_image_upload_error">You must upload first 2 images</string>
     <string name="product_submitted_successfully">Success! You can now check pending status.</string>
     <string name="some_error_occured">Some error occurred</string>
     <string name="retry">Retry</string>
@@ -70,8 +70,8 @@
     </string-array>
 
     <string-array name="gender_array">
-        <item>Male</item>
-        <item>Female</item>
+        <item>Men</item>
+        <item>Women</item>
         <item>Unisex</item>
     </string-array>
 
@@ -131,6 +131,7 @@
         <item>Dresses</item>
         <item>Kurtas</item>
         <item>Lehenga Choli</item>
+        <item>Maggam</item>
     </string-array>
 
     <string-array name="store_fabrics_cloth_array">
@@ -425,4 +426,5 @@
     <string name="finishing_up">Finishing up</string>
     <string name="max_images_snackbar_msg">You can upload atmost 5 images</string>
     <string name="only_x_selections_left_snackbar_msg">Only %1$d selection(s) left</string>
+    <string name="pick_a_color">Pick a color</string>
 </resources>

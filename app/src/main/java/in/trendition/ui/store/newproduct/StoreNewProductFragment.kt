@@ -9,14 +9,12 @@ import `in`.trendition.util.FileUtils
 import `in`.trendition.util.ProgressUpload
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -205,7 +203,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                                     ArrayAdapter(
                                         requireContext(),
                                         android.R.layout.simple_spinner_dropdown_item,
-                                        if (position == 0) dropDownItems.second["Male"]!!.toMutableList() else if (position == 1) dropDownItems.second["Female"]!!.toMutableList() else dropDownItems.second["Unisex"]!!.toMutableList()
+                                        if (position == 0) dropDownItems.second["Men"]!!.toMutableList() else if (position == 1) dropDownItems.second["Women"]!!.toMutableList() else dropDownItems.second["Unisex"]!!.toMutableList()
                                     )
                                 )
                             else
@@ -225,7 +223,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                                     ArrayAdapter(
                                         requireContext(),
                                         android.R.layout.simple_spinner_dropdown_item,
-                                        if (position == 0) dropDownItems.second["Male"]!!.toMutableList() else if (position == 1) dropDownItems.second["Female"]!!.toMutableList() else dropDownItems.second["Unisex"]!!.toMutableList()
+                                        if (position == 0) dropDownItems.second["Men"]!!.toMutableList() else if (position == 1) dropDownItems.second["Women"]!!.toMutableList() else dropDownItems.second["Unisex"]!!.toMutableList()
                                     )
                                 )
                             else
@@ -240,7 +238,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
             }
 
             // Launch PaletteBottomSheet for picking a color.
-            colorPalette.setOnClickListener {
+            colorCard.setOnClickListener {
                 findNavController().navigate(
                     StoreNewProductFragmentDirections.actionFabricNewProductFragmentToBottomSheetPalette(
                         showColorsForJewellery = if (productCategory.text.isEmpty()) false else productCategory.text.toString() == "Jewellery"
@@ -372,6 +370,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
                         }
                     }
                     1 -> {
+                        gender.setText(gender.adapter.getItem(0).toString(), false)
                         isDressMaterialsSelected = true
                         isFabricsSelected = false
                         isClothingSelected = false
@@ -454,35 +453,47 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
 
             newProductViewModel.getIsProductColorEmpty().observe(viewLifecycleOwner) {
                 if (it) {
-                    Snackbar.make(
-                        view,
-                        getString(R.string.choose_a_color),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-
+                    binding.submitProduct.isEnabled = true
+                    disableBackAction.isEnabled = true
                     // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
                     findNavController().currentBackStackEntry?.savedStateHandle?.set(
                         "isSubmissionDone",
                         false
                     )
-
-                    // Enable submit product button
-                    submitProduct.isEnabled = true
+                    Snackbar.make(
+                        view,
+                        getString(R.string.choose_a_color),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             newProductViewModel.getIsProductPriceEmpty().observe(viewLifecycleOwner) {
-                if (it)
+                if (it) {
+                    disableBackAction.isEnabled = true
+                    disableBackAction.isEnabled = true
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
                     Snackbar.make(
                         view,
                         getString(R.string.price_cannot_be_zero),
                         Snackbar.LENGTH_SHORT
                     ).show()
+                }
             }
 
             newProductViewModel.getIsProductImage1LengthZero().observe(viewLifecycleOwner) {
                 if (it) {
                     binding.submitProduct.isEnabled = true
+                    disableBackAction.isEnabled = true
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
                     Snackbar.make(
                         view,
                         getString(R.string.min_image_upload_error),
@@ -493,7 +504,13 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
 
             newProductViewModel.getNoSizesAvailable().observe(viewLifecycleOwner) {
                 if (it) {
-                    submitProduct.isEnabled = true
+                    binding.submitProduct.isEnabled = true
+                    disableBackAction.isEnabled = true
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
                     Snackbar.make(
                         view,
                         getString(R.string.choose_atleast_one_size),
@@ -505,6 +522,12 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
             newProductViewModel.getIsProductImage2LengthZero().observe(viewLifecycleOwner) {
                 if (it) {
                     binding.submitProduct.isEnabled = true
+                    disableBackAction.isEnabled = true
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
                     Snackbar.make(
                         view,
                         getString(R.string.min_image_upload_error),
@@ -688,6 +711,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
     private fun requestFocusForEditText(textInputEditText: TextInputEditText) {
         if (!binding.submitProduct.isEnabled)
             binding.submitProduct.isEnabled = true
+        disableBackAction.isEnabled = true
         textInputEditText.requestFocus()
 
         // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
@@ -701,6 +725,7 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
     private fun setEmptyDropDownError(materialAutoCompleteTextView: MaterialAutoCompleteTextView) {
         if (!binding.submitProduct.isEnabled)
             binding.submitProduct.isEnabled = true
+        disableBackAction.isEnabled = true
         materialAutoCompleteTextView.requestFocus()
 
         // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
@@ -722,35 +747,6 @@ class StoreNewProductFragment : Fragment(), ProgressUpload.UploadListener {
         startActivityForResult(
             Intent.createChooser(intent, getString(R.string.select_image)),
             REQUEST_IMAGE
-        )
-    }
-
-    /**
-     * Handle the selected image. It does 2 things:
-     * 1. Set the selected image as a preview in the ImageView using Uri.
-     * 2. Copy the selected Uri stream into File for uploading
-     * @param imageView: The target for preview.
-     * @param imageUri: Source Uri for the selected file.
-     * @param imageNameWithoutExt: Extension of the image file.
-     * @param requestCode: Request code used when selecting an image. Here, it's used as position for access nth file in [imageFiles]
-     */
-    private suspend fun handleSelectedImage(
-        imageView: ImageView,
-        imageUri: Uri?,
-        imageNameWithoutExt: String,
-        requestCode: Int
-    ) = withContext(Dispatchers.IO) {
-        requireActivity().runOnUiThread {
-            imageView.setImageURI(imageUri)
-        }
-        imageFiles[requestCode - 1] = File(
-            requireContext().cacheDir,
-            "$imageNameWithoutExt.${FileUtils.getExtension(requireContext(), imageUri!!)}"
-        )
-        FileUtils.copyInputStreamToFile(
-            requireContext().contentResolver.openInputStream(
-                imageUri
-            )!!, imageFiles[requestCode - 1]
         )
     }
 

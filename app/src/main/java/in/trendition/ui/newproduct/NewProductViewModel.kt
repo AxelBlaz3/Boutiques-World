@@ -70,16 +70,18 @@ class NewProductViewModel @Inject constructor(
         MutableLiveData(Pair(first = false, second = ArrayList()))
     private val clothingTypeDropDownItems: MutableLiveData<Pair<Boolean, Map<String, List<String>>>> =
         MutableLiveData(Pair(false, HashMap<String, List<String>>().apply {
-            put("Male", emptyList())
-            put("Female", emptyList())
+            put("Men", emptyList())
+            put("Women", emptyList())
             put("Unisex", emptyList())
         }))
     private val jewelleryTypeDropDownItems: MutableLiveData<Pair<Boolean, Map<String, List<String>>>> =
         MutableLiveData(Pair(false, HashMap<String, List<String>>().apply {
-            put("Male", emptyList())
-            put("Female", emptyList())
+            put("Men", emptyList())
+            put("Women", emptyList())
             put("Unisex", emptyList())
         }))
+    private val boutiqueCategoryDropDownItems: MutableLiveData<Pair<Boolean, List<String>>> =
+        MutableLiveData(Pair(first = false, second = ArrayList()))
 
     // Know if the product submission is successful.
     private val isProductSubmissionSuccessful: MutableLiveData<Boolean> = MutableLiveData()
@@ -117,6 +119,8 @@ class NewProductViewModel @Inject constructor(
     fun getIsGenderEmpty(): LiveData<Boolean> = isGenderEmpty
     fun getIsProductMaterialEmpty(): LiveData<Boolean> = isProductMaterialEmpty
     fun getNoSizesAvailable(): LiveData<Boolean> = noSizesAvailable
+    fun getBoutiqueCategoryDropDownItems(): LiveData<Pair<Boolean, List<String>>> =
+        boutiqueCategoryDropDownItems
 
     // Store
     fun getIsProductPriceEmpty(): LiveData<Boolean> = isProductPriceEmpty
@@ -217,6 +221,7 @@ class NewProductViewModel @Inject constructor(
         productOccasion: String,
         preparationTime: String,
         productColor: String,
+        gender: String,
         productDescription: String,
         productImage1: File?,
         productImage2: File?,
@@ -237,6 +242,7 @@ class NewProductViewModel @Inject constructor(
                     productOccasion,
                     preparationTime,
                     productColor,
+                    gender,
                     productDescription,
                     productImage1,
                     productImage2,
@@ -1218,6 +1224,7 @@ class NewProductViewModel @Inject constructor(
         productOccasion: String,
         preparationTime: String,
         productColor: String,
+        gender: String,
         productDescription: String,
         productImage1: File?,
         productImage2: File?,
@@ -1273,6 +1280,11 @@ class NewProductViewModel @Inject constructor(
         if (isProductColorEmpty.value!!)
             return false
         tempDataMap["product_colour"] = getFormProgressRequestBody(progressUpload, productColor)
+
+        isGenderEmpty.value = gender.isEmpty()
+        if (gender.isEmpty())
+            return false
+        tempDataMap["gender"] = getFormProgressRequestBody(progressUpload, gender)
 
         isProductDescriptionEmpty.value = productDescription.isEmpty()
         if (isProductDescriptionEmpty.value!!)
@@ -1385,6 +1397,27 @@ class NewProductViewModel @Inject constructor(
             )
     }
 
+    // Fetch Clothing Type Dropdown items.
+    private suspend fun fetchBoutiqueCategoryDropDownItems() = withContext(Dispatchers.IO) {
+        val response = boutiqueService.getBoutiqueCategoryDropDownItems().execute()
+        if (response.isSuccessful)
+            response.body()?.let { boutiqueCategoryDropDownItems ->
+                this@NewProductViewModel.boutiqueCategoryDropDownItems.postValue(
+                    Pair(
+                        first = true,
+                        second = boutiqueCategoryDropDownItems
+                    )
+                )
+            } ?: emptyList<String>()
+        else
+            boutiqueCategoryDropDownItems.postValue(
+                Pair(
+                    first = true,
+                    second = boutiqueCategoryDropDownItems.value!!.second
+                )
+            )
+    }
+
     // Fetch Jewellery Type Dropdown items.
     private suspend fun fetchJewelleryTypeDropDownItems() = withContext(Dispatchers.IO) {
         val response = boutiqueService.getJewelleryTypeDropDownItems().execute()
@@ -1439,6 +1472,18 @@ class NewProductViewModel @Inject constructor(
                 }
         } ?: viewModelScope.launch {
             fetchClothingTypeDropDownItems()
+        }
+    }
+
+    // Verify and fetch boutique category dropdown items.
+    fun verifyAndFetchBoutiqueCategoryDropDownItems() {
+        boutiqueCategoryDropDownItems.value?.let { dropdownItems ->
+            if (!dropdownItems.first)
+                viewModelScope.launch {
+                    fetchBoutiqueCategoryDropDownItems()
+                }
+        } ?: viewModelScope.launch {
+            fetchBoutiqueCategoryDropDownItems()
         }
     }
 

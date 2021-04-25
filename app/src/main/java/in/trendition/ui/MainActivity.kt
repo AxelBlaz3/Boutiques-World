@@ -35,7 +35,6 @@ import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.action_layout_basket_badge.view.*
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -525,11 +524,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         findNavController(R.id.nav_host_fragment).navigate(
                             DashboardFragmentDirections.actionGlobalUpdateBottomSheetDialog()
                         )
-                    else
-                        File(getExternalFilesDir("update").toString()).apply {
-                            if (exists())
-                                deleteRecursively()
-                        }
                 }
             }
 

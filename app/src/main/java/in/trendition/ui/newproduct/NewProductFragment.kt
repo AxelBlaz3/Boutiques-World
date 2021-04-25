@@ -5,24 +5,21 @@ import `in`.trendition.databinding.FragmentNewProductBinding
 import `in`.trendition.ui.MainActivityViewModel
 import `in`.trendition.ui.product.ProductsViewModel
 import `in`.trendition.ui.profile.ProfileViewModel
-import `in`.trendition.util.FileUtils.copyInputStreamToFile
-import `in`.trendition.util.FileUtils.getExtension
+import `in`.trendition.util.FileUtils
 import `in`.trendition.util.ProgressUpload
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
@@ -37,6 +34,22 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
     private lateinit var binding: FragmentNewProductBinding
+    private val REQUEST_IMAGE = 1
+
+    // Map to keep track of index and imageView.
+    private val imageMap by lazy {
+        HashMap<Int, ShapeableImageView>().apply {
+            put(0, binding.productImage1)
+            put(1, binding.productImage2)
+            put(2, binding.productImage3)
+            put(3, binding.productImage4)
+            put(4, binding.productImage5)
+        }
+    }
+
+    // Keep track of currently clicked image selection index.
+    var currentImageSelectionIndex = 0
+
     private var imageFiles = ArrayList<File?>().apply {
         // Assign initial values to 5 images
         add(null)
@@ -62,7 +75,7 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNewProductBinding.inflate(inflater)
         return binding.root
     }
@@ -82,10 +95,7 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
             getLiveData<String>("colorName").observe(viewLifecycleOwner) {
                 it?.let {
                     colorName = it
-                    binding.colorNameText.apply {
-                        text = colorName
-                        visibility = View.VISIBLE
-                    }
+                    binding.colorNameText.text = colorName
                 }
             }
         }
@@ -101,13 +111,6 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
             }
 
             // Setup adapters for category, cloth, fabric, occasion, preparation time
-            productCategory.setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    resources.getStringArray(R.array.boutique_category_type_array)
-                )
-            )
             productCloth.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -137,14 +140,48 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
                 )
             )
 
+            gender.setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    resources.getStringArray(R.array.gender_array)
+                )
+            )
+
+            // Defaults to Male selection.
+            gender.setText(gender.adapter.getItem(0).toString(), false)
+
             // Launch PaletteBottomSheet for picking a color.
-            colorPalette.setOnClickListener {
+            colorCard.setOnClickListener {
                 findNavController().navigate(
                     NewProductFragmentDirections.actionNewProductFragmentToBottomSheetPalette(
                         showColorsForJewellery = false
                     )
                 )
             }
+
+            // Try fetching latest boutique category dropdown items.
+            newProductViewModel.verifyAndFetchBoutiqueCategoryDropDownItems()
+
+            newProductViewModel.getBoutiqueCategoryDropDownItems()
+                .observe(viewLifecycleOwner) { dropDownItems ->
+                    if (dropDownItems.first && dropDownItems.second.isNotEmpty())
+                        productCategory.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                dropDownItems.second
+                            )
+                        )
+                    else
+                        productCategory.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                resources.getStringArray(R.array.boutique_category_type_array)
+                            )
+                        )
+                }
 
             // Setup observers for invalid form data
             newProductViewModel.getIsProductNameEmpty().observe(viewLifecycleOwner) {
@@ -218,6 +255,11 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
             newProductViewModel.getIsProductImage1LengthZero().observe(viewLifecycleOwner) {
                 if (it) {
                     submitProduct.isEnabled = true
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
                     Snackbar.make(
                         view,
                         getString(R.string.min_image_upload_error),
@@ -229,6 +271,11 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
             newProductViewModel.getIsProductImage2LengthZero().observe(viewLifecycleOwner) {
                 if (it) {
                     submitProduct.isEnabled = true
+                    // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
+                    findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                        "isSubmissionDone",
+                        false
+                    )
                     Snackbar.make(
                         view,
                         getString(R.string.min_image_upload_error),
@@ -308,11 +355,11 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
             }
 
             // Image click listeners.
-            productImage1.setOnClickListener { choosePhoto(requestCode = 1) }
-            productImage2.setOnClickListener { choosePhoto(requestCode = 2) }
-            productImage3.setOnClickListener { choosePhoto(requestCode = 3) }
-            productImage4.setOnClickListener { choosePhoto(requestCode = 4) }
-            productImage5.setOnClickListener { choosePhoto(requestCode = 5) }
+            productImage1.setOnClickListener { choosePhoto(0) }
+            productImage2.setOnClickListener { choosePhoto(1) }
+            productImage3.setOnClickListener { choosePhoto(2) }
+            productImage4.setOnClickListener { choosePhoto(3) }
+            productImage5.setOnClickListener { choosePhoto(4) }
 
             // Final submit button click listener.
             submitProduct.setOnClickListener {
@@ -322,48 +369,12 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_CANCELED)
-            return
-        val imageUri = data?.data
-        imageUri?.let {
-            binding.apply {
+        if (requestCode == REQUEST_IMAGE)
+            data?.let { intentData ->
                 lifecycleScope.launch {
-                    when (requestCode) {
-                        1 -> handleSelectedImage(
-                            productImage1,
-                            it,
-                            "image1",
-                            requestCode
-                        )
-                        2 -> handleSelectedImage(
-                            productImage2,
-                            it,
-                            "image2",
-                            requestCode
-                        )
-                        3 -> handleSelectedImage(
-                            productImage3,
-                            it,
-                            "image3",
-                            requestCode
-                        )
-                        4 -> handleSelectedImage(
-                            productImage4,
-                            it,
-                            "image4",
-                            requestCode
-                        )
-                        5 -> handleSelectedImage(
-                            productImage5,
-                            it,
-                            "image5",
-                            requestCode
-                        )
-                        else -> throw RuntimeException("Unknown request code - $requestCode when picking an image")
-                    }
+                    handleSelectedImages(intentData)
                 }
             }
-        }
     }
 
     /**
@@ -384,6 +395,7 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
                             productOccasion = productOccasion.text.toString(),
                             preparationTime = preparationTime.text.toString(),
                             productColor = colorName,
+                            gender = gender.text.toString(),
                             productDescription = productDescription.text.toString(),
                             startPrice = startPrice.text.toString(),
                             endPrice = endPrice.text.toString(),
@@ -437,45 +449,19 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
 
     /**
      * Launch an intent for picking an image from device storage.
-     * @param requestCode: Request code for onActivityResult.
+     * @param currentImageSelectionIndex: Index of chosen image.
      */
-    private fun choosePhoto(requestCode: Int) {
+    private fun choosePhoto(currentImageSelectionIndex: Int) {
+        this.currentImageSelectionIndex = currentImageSelectionIndex
+
         val intent = Intent().apply {
             type = "image/*"
             action = Intent.ACTION_GET_CONTENT
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
         startActivityForResult(
             Intent.createChooser(intent, getString(R.string.select_image)),
-            requestCode
-        )
-    }
-
-    /**
-     * Handle the selected image. It does 2 things:
-     * 1. Set the selected image as a preview in the ImageView using Uri.
-     * 2. Copy the selected Uri stream into File for uploading
-     * @param imageView: The target for preview.
-     * @param imageUri: Source Uri for the selected file.
-     * @param imageNameWithoutExt: Extension of the image file.
-     * @param requestCode: Request code used when selecting an image. Here, it's used as position for access nth file in [imageFiles]
-     */
-    private suspend fun handleSelectedImage(
-        imageView: ImageView,
-        imageUri: Uri?,
-        imageNameWithoutExt: String,
-        requestCode: Int
-    ) = withContext(Dispatchers.IO) {
-        requireActivity().runOnUiThread {
-            imageView.setImageURI(imageUri)
-        }
-        imageFiles[requestCode - 1] = File(
-            requireContext().cacheDir,
-            "$imageNameWithoutExt.${getExtension(requireContext(), imageUri!!)}"
-        )
-        copyInputStreamToFile(
-            requireContext().contentResolver.openInputStream(
-                imageUri
-            )!!, imageFiles[requestCode - 1]
+            REQUEST_IMAGE
         )
     }
 
@@ -486,5 +472,88 @@ class NewProductFragment : Fragment(), ProgressUpload.UploadListener {
     override fun onError(e: Exception) {
         // Set isSubmissionDone for closing the ProductPostingBottomSheetDialog
         findNavController().currentBackStackEntry?.savedStateHandle?.set("isSubmissionDone", false)
+    }
+
+    private suspend fun handleSelectedImages(selectedData: Intent) = withContext(Dispatchers.IO) {
+        selectedData.clipData?.let { clipData ->
+            if (clipData.itemCount > 5) {
+                requireActivity().runOnUiThread {
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.max_images_snackbar_msg),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                return@withContext
+            }
+
+            // Track maxSelectionsLeft.
+            var maxSelectionsLeft = 0
+            maxSelectionsLeft =
+                if (imageFiles[0] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[1] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[2] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[3] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+            maxSelectionsLeft =
+                if (imageFiles[4] == null) maxSelectionsLeft + 1 else maxSelectionsLeft
+
+            // Verify if user selects more than maxSelectionsLeft.
+            if (clipData.itemCount > maxSelectionsLeft && clipData.itemCount != 5 && maxSelectionsLeft != 0) {
+                requireActivity().runOnUiThread {
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.only_x_selections_left_snackbar_msg, maxSelectionsLeft),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                return@withContext
+            }
+
+            val firstNullIndex =
+                if (imageFiles[0] == null) 0 else if (imageFiles[1] == null) 1 else if (imageFiles[2] == null) 2 else if (imageFiles[3] == null) 3 else if (imageFiles[4] == null) 4 else 0
+
+            for (i in 0 until clipData.itemCount) {
+                // Get Uri of selected image and create a file at cache dir.
+                val imageUri = clipData.getItemAt(i).uri
+                imageFiles[i] = File(
+                    requireContext().cacheDir,
+                    "image$i.${FileUtils.getExtension(requireContext(), imageUri!!)}"
+                )
+
+                // Display image in imageView.
+                requireActivity().runOnUiThread {
+                    imageMap[i]!!.setImageURI(imageUri)
+                }
+
+                // Copy input stream to file.
+                FileUtils.copyInputStreamToFile(
+                    requireContext().contentResolver.openInputStream(
+                        imageUri
+                    )!!, imageFiles[i]
+                )
+            }
+        } ?: selectedData.data?.let { uri ->
+            imageFiles[currentImageSelectionIndex] = File(
+                requireContext().cacheDir,
+                "image${currentImageSelectionIndex + 1}.${
+                    FileUtils.getExtension(
+                        requireContext(),
+                        uri
+                    )
+                }"
+            )
+            FileUtils.copyInputStreamToFile(
+                requireContext().contentResolver.openInputStream(
+                    uri
+                )!!, imageFiles[currentImageSelectionIndex]
+            )
+
+            requireActivity().runOnUiThread {
+                imageMap[currentImageSelectionIndex]!!.setImageURI(uri)
+            }
+        }
     }
 }

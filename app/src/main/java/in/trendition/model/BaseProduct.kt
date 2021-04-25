@@ -17,6 +17,7 @@ sealed class BaseProduct {
         @SerializedName("product_name") val productName: String,
         @SerializedName("product_type") val productType: String,
         @SerializedName("product_description") val productDescription: String,
+        @SerializedName("gender") val gender: String,
         @SerializedName("start_price") val startPrice: Int,
         @SerializedName("end_price") val endPrice: Int?,
         @SerializedName("product_colour") val productColor: String?,

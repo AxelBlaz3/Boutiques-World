@@ -3,7 +3,6 @@
     package="in.trendition">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name="in.trendition.BoutiquesWorldApp"
@@ -28,7 +27,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name="in.trendition.network.service.FirebaseNotificationsService">
+        <service
+            android:name="in.trendition.network.service.FirebaseNotificationsService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

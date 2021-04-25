@@ -29,6 +29,9 @@ interface BoutiqueService {
     @GET("get_clothing_type_dropdown_items.php")
     fun getClothingTypeDropDownItems(): Call<Map<String, List<String>>>
 
+    @GET("get_boutique_category_dropdown_items.php")
+    fun getBoutiqueCategoryDropDownItems(): Call<List<String>>
+
     @GET("get_jewellery_type_dropdown_items.php")
     fun getJewelleryTypeDropDownItems(): Call<Map<String, List<String>>>
 

@@ -14,7 +14,7 @@ android {
         applicationId "in.trendition"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
+        versionCode 4
         versionName getCurrentVersionName()
         vectorDrawables.useSupportLibrary = true
 
@@ -40,10 +40,10 @@ android {
             buildConfigField ("String", "RAZORPAY_API_KEY", "\"rzp_test_ZNFzkcbfMB9qsg\"")
             buildConfigField ("String", "BASE_URL", "\"https://boutiquesworld.com/new/API/\"")
         }
+    }
 
-        buildFeatures {
-            dataBinding true
-        }
+    buildFeatures {
+        dataBinding true
     }
 
     dependencies {
@@ -87,7 +87,7 @@ android {
         kapt "com.github.bumptech.glide:compiler:$glide_version"
 
         // RazorPay
-        implementation "com.razorpay:checkout:1.6.3"
+        implementation "com.razorpay:checkout:1.6.6"
 
         // Pager indicator
         implementation "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.0.6"
